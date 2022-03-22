@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ProjetMobile</string>
+    <string name="bgChessContentDescription">Beatifull backgroud of a 3D reder of a bad chess game</string>
 </resources>
