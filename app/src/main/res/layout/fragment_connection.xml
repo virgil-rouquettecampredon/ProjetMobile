@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    tools:context=".ConnectionFragment"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/avatar_content_description"
+        android:scaleType="fitCenter"
+        android:src="@drawable/default_avatar"
+        android:translationZ="1dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@color/jauneTransparent"
+        android:orientation="vertical"
+        android:translationY="-50dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:background="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="@font/permanent_marker"
+            android:gravity="center"
+            android:labelFor="@+id/editTextPseudo"
+            android:text="@string/pseudo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editTextPseudo"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_margin="16dp"
+            android:layout_weight="2"
+            android:autofillHints="DarkVirgil34"
+            android:background="@drawable/menu_edit_text"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="@font/permanent_marker"
+            android:gravity="center"
+            android:labelFor="@+id/editTextPassword"
+            android:text="@string/password"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_margin="16dp"
+            android:layout_weight="2"
+            android:autofillHints="DarkVirgil34"
+            android:background="@drawable/menu_edit_text"
+            android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="@font/permanent_marker"
+            android:text="@string/remember_me"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/connectButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="2"
+            android:backgroundTint="@color/bleu"
+            android:fontFamily="@font/permanent_marker"
+            android:text="@string/connect"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/magenta"
+        android:fontFamily="@font/permanent_marker"
+        android:text="@string/back"
+        android:textSize="20sp"
+        android:translationY="-50dp" />
+
+</LinearLayout>

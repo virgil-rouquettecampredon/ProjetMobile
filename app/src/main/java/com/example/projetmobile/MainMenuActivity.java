@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
-    public final static String fragmentTag = "FIRSTMENUFRAGMENT";
+public class MainMenuActivity extends AppCompatActivity {
+    public final static String fragmentTag = "MAINMENUFRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +18,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
 
-        FirstMenuFragment frag = (FirstMenuFragment) fm.findFragmentByTag(fragmentTag);
+        MainMenuFragment frag = (MainMenuFragment) fm.findFragmentByTag(fragmentTag);
 
         if (frag == null) {
-            frag = FirstMenuFragment.newInstance();
+            frag = MainMenuFragment.newInstance();
             transaction.add(R.id.fragment_container, frag, fragmentTag);
             transaction.commit();
         }

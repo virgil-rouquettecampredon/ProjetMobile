@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">ProjetMobile</string>
-    <string name="bgChessContentDescription">Beatifull backgroud of a 3D reder of a bad chess game</string>
+
+    <string name="bgChessContentDescription">Beatifull backgroud of a 3D render of a bad chess game</string>
     <string name="logoChessContentDescription">The amazing logo of Chessburger 2</string>
+
+    <string name="connection">connexion</string>
+    <string name="offline">hors ligne</string>
+    <string name="avatar_content_description">The avatar</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Mot de passe</string>
+    <string name="remember_me">Se souvenir de moi</string>
+    <string name="connect">Se connecter</string>
+    <string name="back">Retour</string>
+    <string name="online">En ligne</string>
+    <string name="local">Local</string>
+    <string name="profile">Profil</string>
 </resources>
