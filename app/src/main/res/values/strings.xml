@@ -29,4 +29,6 @@
     <string name="ranking">Classement</string>
     <string name="delete_account">Supprimer le compte</string>
     <string name="edit_icon_content_description">Iconne pour éditer</string>
+    <string name="confirm">Valider</string>
+    <string name="cancel">Annuler</string>
 </resources>

@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetMobile">
         <activity
-            android:name=".BlueBackgroundActivity"
+            android:name=".SetFriendPseudoActivity"
+            android:theme="@style/AppDialogTheme"
             android:exported="false" />
         <activity
             android:name=".ConnectionActivity"

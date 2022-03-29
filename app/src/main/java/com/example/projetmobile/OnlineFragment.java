@@ -1,7 +1,11 @@
 package com.example.projetmobile;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
@@ -11,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 public class OnlineFragment extends Fragment {
+    ActivityResultLauncher<Intent> setFriendPseudoLauncher;
 
     public OnlineFragment() {
         // Required empty public constructor
@@ -26,6 +31,19 @@ public class OnlineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setFriendPseudoLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        String resultString = data.getStringExtra("result");
+                        //TODO faire qqch du pseudo retourné
+                        Toast.makeText(getActivity(), "Pseudo is : "+resultString, Toast.LENGTH_SHORT).show();
+
+
+                    }
+                });
     }
 
     @Override
@@ -41,13 +59,16 @@ public class OnlineFragment extends Fragment {
 
         AppCompatButton friendButton = view.findViewById(R.id.friendButton);
         friendButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), SetFriendPseudoActivity.class);
+            intent.putExtra("currentText", getString(R.string.default_pseudo));
+            setFriendPseudoLauncher.launch(intent);
         });
         
         AppCompatButton backButton = view.findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
             getActivity().finish();
         });
+
 
         return view;
     }
