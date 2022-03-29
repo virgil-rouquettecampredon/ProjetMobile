@@ -1,6 +1,5 @@
 package com.example.projetmobile;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -11,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-public class MainMenuFragment extends Fragment {
+public class OnlineFragment extends Fragment {
 
-    public MainMenuFragment() {
+    public OnlineFragment() {
         // Required empty public constructor
     }
 
-    public static MainMenuFragment newInstance() {
-        MainMenuFragment fragment = new MainMenuFragment();
+    public static OnlineFragment newInstance() {
+        OnlineFragment fragment = new OnlineFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -33,23 +32,23 @@ public class MainMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_online, container, false);
 
-        AppCompatButton onlineButton = view.findViewById(R.id.onlineButton);
-        onlineButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), OnlineActivity.class);
-            startActivity(intent);
-        });
-
-        AppCompatButton localButton = view.findViewById(R.id.localButton);
-        localButton.setOnClickListener(v -> {
+        AppCompatButton rankedButton = view.findViewById(R.id.rankedButton);
+        rankedButton.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
         });
 
-        AppCompatButton profileButton = view.findViewById(R.id.profileButton);
-        profileButton.setOnClickListener(v -> {
+        AppCompatButton friendButton = view.findViewById(R.id.friendButton);
+        friendButton.setOnClickListener(v -> {
             Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
         });
+        
+        AppCompatButton backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> {
+            getActivity().finish();
+        });
+
         return view;
     }
 }

@@ -44,7 +44,7 @@ public class ConnectionFragment extends Fragment {
 
         Button backButton = view.findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            getActivity().finish();
         });
         return view;
     }

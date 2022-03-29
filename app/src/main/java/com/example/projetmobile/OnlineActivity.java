@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
-public class ConnectionActivity extends AppCompatActivity {
-    public final static String fragmentTag = "CONNECTIONFRAGMENT";
+public class OnlineActivity extends AppCompatActivity {
+    public final static String fragmentTag = "ONLINEFRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +17,10 @@ public class ConnectionActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
 
-        ConnectionFragment frag = (ConnectionFragment) fm.findFragmentByTag(fragmentTag);
+        OnlineFragment frag = (OnlineFragment) fm.findFragmentByTag(fragmentTag);
 
         if (frag == null) {
-            frag = ConnectionFragment.newInstance();
+            frag = OnlineFragment.newInstance();
             transaction.add(R.id.fragment_container, frag, fragmentTag);
             transaction.commit();
         }
