@@ -20,4 +20,12 @@
     <string name="ranked">classé</string>
     <string name="friend">Amical</string>
     <string name="jumble_content_description">A jumble of chess pieces</string>
+    <string name="crown_content_description">A little crown</string>
+    <string name="default_elo">1337</string>
+    <string name="default_pseudo">DarkVirgil34</string>
+    <string name="default_description">G@meur mystérieux ...</string>
+    <string name="peferences">Préférences</string>
+    <string name="games_history">Historique des parties</string>
+    <string name="ranking">Classement</string>
+    <string name="delete_account">Supprimer le compte</string>
 </resources>

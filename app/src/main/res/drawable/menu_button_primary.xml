@@ -21,7 +21,7 @@
     <!-- Background -->
     <item>
         <shape android:shape="rectangle" >
-            <solid android:color="@color/jauneTransparent" />
+            <solid android:color="?attr/colorPrimary" />
             <corners android:radius="3dp" />
         </shape>
     </item>

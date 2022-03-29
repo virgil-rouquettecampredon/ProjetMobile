@@ -48,7 +48,8 @@ public class MainMenuFragment extends Fragment {
 
         AppCompatButton profileButton = view.findViewById(R.id.profileButton);
         profileButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            startActivity(intent);
         });
         return view;
     }
