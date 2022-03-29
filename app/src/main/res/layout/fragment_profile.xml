@@ -84,12 +84,15 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/bioTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/default_description"
             android:padding="8dp"
             android:textColor="@color/white"
             android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
             android:background="@drawable/magenta_background"/>
 
         <com.google.android.material.button.MaterialButton

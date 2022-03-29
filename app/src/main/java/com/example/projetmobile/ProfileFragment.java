@@ -19,7 +19,9 @@ import com.google.android.material.button.MaterialButton;
 
 public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> setFriendPseudoLauncher;
+    ActivityResultLauncher<Intent> setBioLauncher;
     TextView textViewPseudo;
+    TextView bioTextView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -44,6 +46,17 @@ public class ProfileFragment extends Fragment {
                     String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
                     //TODO Changer le pseudo (BDD)
                     textViewPseudo.setText(resultString);
+                }
+            });
+
+        setBioLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
+                    //TODO Changer la bio (BDD)
+                    bioTextView.setText(resultString);
                 }
             });
     }
@@ -89,6 +102,15 @@ public class ProfileFragment extends Fragment {
             intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_pseudo));
             intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.pseudo));
             setFriendPseudoLauncher.launch(intent);
+        });
+
+        bioTextView = view.findViewById(R.id.bioTextView);
+        bioTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
+            //TODO récupérer la vrai bio
+            intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_description));
+            intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.biography));
+            setBioLauncher.launch(intent);
         });
 
         return view;
