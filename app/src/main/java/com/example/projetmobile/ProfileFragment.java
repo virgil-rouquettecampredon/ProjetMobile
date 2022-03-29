@@ -41,7 +41,7 @@ public class ProfileFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    String resultString = data.getStringExtra("result");
+                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
                     //TODO Changer le pseudo (BDD)
                     textViewPseudo.setText(resultString);
                 }
@@ -84,9 +84,10 @@ public class ProfileFragment extends Fragment {
 
         View editPseudoView = view.findViewById(R.id.editPseudoView);
         editPseudoView.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SetFriendPseudoActivity.class);
+            Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
             //TODO récupérer le vrai pseudo
-            intent.putExtra("currentText", getString(R.string.default_pseudo));
+            intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_pseudo));
+            intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.pseudo));
             setFriendPseudoLauncher.launch(intent);
         });
 

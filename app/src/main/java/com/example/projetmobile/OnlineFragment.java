@@ -38,7 +38,7 @@ public class OnlineFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    String resultString = data.getStringExtra("result");
+                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
                     //TODO faire qqch du pseudo retourné
                     Toast.makeText(getActivity(), "Pseudo is : "+resultString, Toast.LENGTH_SHORT).show();
 
@@ -69,9 +69,10 @@ public class OnlineFragment extends Fragment {
 
         AppCompatButton friendButton = view.findViewById(R.id.friendButton);
         friendButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SetFriendPseudoActivity.class);
+            Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
             //TODO récupérer le vrai pseudo
-            intent.putExtra("currentText", getString(R.string.default_pseudo));
+            intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_pseudo));
+            intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.pseudo));
             setFriendPseudoLauncher.launch(intent);
         });
         

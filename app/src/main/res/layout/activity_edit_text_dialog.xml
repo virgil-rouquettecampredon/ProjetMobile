@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
-    tools:context=".SetFriendPseudoActivity"
+    tools:context=".EditTextDialogActivity"
     android:layout_margin="16dp"
     android:gravity="center|top"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:translationY="25dp"

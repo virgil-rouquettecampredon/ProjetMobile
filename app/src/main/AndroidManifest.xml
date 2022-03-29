@@ -14,7 +14,7 @@
             android:exported="false"
             android:theme="@style/AppDialogTheme" />
         <activity
-            android:name=".SetFriendPseudoActivity"
+            android:name=".EditTextDialogActivity"
             android:exported="false"
             android:theme="@style/AppDialogTheme" />
         <activity
