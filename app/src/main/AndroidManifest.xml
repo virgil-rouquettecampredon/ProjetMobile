@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetMobile">
         <activity
+            android:name=".TextViewDialogActivity"
+            android:exported="false"
+            android:theme="@style/AppDialogTheme" />
+        <activity
             android:name=".FriendMatchWaitActivity"
             android:exported="false"
             android:theme="@style/AppDialogTheme" />

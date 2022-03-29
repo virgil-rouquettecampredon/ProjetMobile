@@ -20,6 +20,7 @@ import com.google.android.material.button.MaterialButton;
 public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> setFriendPseudoLauncher;
     ActivityResultLauncher<Intent> setBioLauncher;
+    ActivityResultLauncher<Intent> warnDeleteLauncher;
     TextView textViewPseudo;
     TextView bioTextView;
 
@@ -59,6 +60,17 @@ public class ProfileFragment extends Fragment {
                     bioTextView.setText(resultString);
                 }
             });
+
+        warnDeleteLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    //TODO SUPPRIMER LE COMPTE POUR TOUJOURS (un très long moment)
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+
     }
 
     @Override
@@ -86,7 +98,10 @@ public class ProfileFragment extends Fragment {
 
         MaterialButton deleteAccountButton = view.findViewById(R.id.deleteAccountButton);
         deleteAccountButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), TextViewDialogActivity.class);
+            intent.putExtra(TextViewDialogActivity.titleName, getString(R.string.warning));
+            intent.putExtra(TextViewDialogActivity.textName, getString(R.string.deleteAccountWarningSpeech));
+            warnDeleteLauncher.launch(intent);
         });
 
         MaterialButton backButton = view.findViewById(R.id.backButton);

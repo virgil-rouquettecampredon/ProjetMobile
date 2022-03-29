@@ -31,4 +31,6 @@
     <string name="confirm">Valider</string>
     <string name="cancel">Annuler</string>
     <string name="friend_match">Match amical</string>
+    <string name="warning">Attention</string>
+    <string name="deleteAccountWarningSpeech">Vous êtes sur le point de supprimer votre compte, il ne sera plus possible de retourner en arrière après ça.</string>
 </resources>
