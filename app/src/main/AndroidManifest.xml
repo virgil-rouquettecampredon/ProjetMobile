@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetMobile">
         <activity
+            android:name=".FriendMatchWaitActivity"
+            android:exported="false"
+            android:theme="@style/AppDialogTheme" />
+        <activity
             android:name=".SetFriendPseudoActivity"
-            android:theme="@style/AppDialogTheme"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppDialogTheme" />
         <activity
             android:name=".ConnectionActivity"
             android:exported="false" />

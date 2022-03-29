@@ -31,4 +31,5 @@
     <string name="edit_icon_content_description">Iconne pour éditer</string>
     <string name="confirm">Valider</string>
     <string name="cancel">Annuler</string>
+    <string name="friend_match">Match amical</string>
 </resources>

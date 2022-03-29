@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 public class OnlineFragment extends Fragment {
     ActivityResultLauncher<Intent> setFriendPseudoLauncher;
+    ActivityResultLauncher<Intent> friendMatchWaitLauncher;
 
     public OnlineFragment() {
         // Required empty public constructor
@@ -33,17 +34,26 @@ public class OnlineFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setFriendPseudoLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        String resultString = data.getStringExtra("result");
-                        //TODO faire qqch du pseudo retourné
-                        Toast.makeText(getActivity(), "Pseudo is : "+resultString, Toast.LENGTH_SHORT).show();
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    String resultString = data.getStringExtra("result");
+                    //TODO faire qqch du pseudo retourné
+                    Toast.makeText(getActivity(), "Pseudo is : "+resultString, Toast.LENGTH_SHORT).show();
 
+                    Intent friendMatchWaitIntent = new Intent(getActivity(), FriendMatchWaitActivity.class);
+                    friendMatchWaitLauncher.launch(friendMatchWaitIntent);
+                }
+            });
 
-                    }
-                });
+        friendMatchWaitLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                    Toast.makeText(getActivity(), "Cancelled friend match", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     @Override
