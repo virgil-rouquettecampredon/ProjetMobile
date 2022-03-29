@@ -70,6 +70,7 @@ public class OnlineFragment extends Fragment {
         AppCompatButton friendButton = view.findViewById(R.id.friendButton);
         friendButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SetFriendPseudoActivity.class);
+            //TODO récupérer le vrai pseudo
             intent.putExtra("currentText", getString(R.string.default_pseudo));
             setFriendPseudoLauncher.launch(intent);
         });
