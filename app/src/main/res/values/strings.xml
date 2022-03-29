@@ -28,4 +28,5 @@
     <string name="games_history">Historique des parties</string>
     <string name="ranking">Classement</string>
     <string name="delete_account">Supprimer le compte</string>
+    <string name="edit_icon_content_description">Iconne pour éditer</string>
 </resources>

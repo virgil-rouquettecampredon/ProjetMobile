@@ -21,6 +21,7 @@
             android:layout_marginBottom="50dp"
             android:background="@drawable/menu_button"
             android:fontFamily="@font/permanent_marker"
+            android:textColor="@color/white"
             android:textSize="36sp"
             android:text="@string/ranked" />
 
@@ -31,6 +32,7 @@
             android:layout_marginBottom="50dp"
             android:background="@drawable/menu_button"
             android:fontFamily="@font/permanent_marker"
+            android:textColor="@color/white"
             android:textSize="36sp"
             android:text="@string/friend" />
 
