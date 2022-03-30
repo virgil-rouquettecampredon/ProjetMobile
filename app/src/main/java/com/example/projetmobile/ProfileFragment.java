@@ -26,7 +26,6 @@ public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> setBioLauncher;
     ActivityResultLauncher<Intent> warnDeleteLauncher;
     ActivityResultLauncher<Intent> setProfilePictureLauncher;
-    ActivityResultLauncher<Intent> testSelectorLauncher;
 
     TextView textViewPseudo;
     TextView bioTextView;
@@ -91,16 +90,6 @@ public class ProfileFragment extends Fragment {
                     }
                 }
             });
-
-        testSelectorLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    int resultId = data.getIntExtra(EditTextDialogActivity.resultName, 0);
-                    Toast.makeText(getActivity(), ""+resultId, Toast.LENGTH_SHORT).show();
-                }
-            });
     }
 
     @Override
@@ -119,18 +108,7 @@ public class ProfileFragment extends Fragment {
 
         MaterialButton preferencesButton = view.findViewById(R.id.preferencesButton);
         preferencesButton.setOnClickListener(v -> {
-            //TODO PAS LE BON TRAITEMENT!
             Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getActivity(), SelectorDialogActivity.class);
-            intent.putExtra(SelectorDialogActivity.titleName, "Test selection");
-            ArrayList<String> choices = new ArrayList<>();
-            choices.add("Cochon");
-            choices.add("Renard");
-            choices.add("Cannard");
-            choices.add("Connard");
-            intent.putExtra(SelectorDialogActivity.choicesName, choices);
-            intent.putExtra(SelectorDialogActivity.checkedIdName, 3);
-            testSelectorLauncher.launch(intent);
         });
 
         MaterialButton historyButton = view.findViewById(R.id.historyButton);
