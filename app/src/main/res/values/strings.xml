@@ -59,4 +59,6 @@
     <string name="search_image">Chercher une image</string>
     <string name="directory_content_description">A folder icon</string>
     <string name="selection">Selection</string>
+    <string name="change_game_mode">Changer de\nmode de jeu</string>
+    <string name="try_again">Recommencer</string>
 </resources>

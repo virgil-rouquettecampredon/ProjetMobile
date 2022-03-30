@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 public class ProfileActivity extends AppCompatActivity {
     public final static String fragmentTag = "PROFILEFRAGMENT";
@@ -13,6 +16,12 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blue_background);
+
+        ImageView imageView = findViewById(R.id.imageView);
+        imageView.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, MenuBurgerActivity.class);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        });
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MenuBurgerActivity"
+    android:orientation="vertical"
+    android:background="@color/bleu"
+    android:gravity="center|top">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/gameModeButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/permanent_marker"
+        android:textSize="32sp"
+        android:textAlignment="center"
+        android:text="@string/change_game_mode"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/tryAgainButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/permanent_marker"
+        android:textSize="32sp"
+        android:textAlignment="center"
+        android:text="@string/try_again"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingBottom="32dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/permanent_marker"
+        android:textSize="32sp"
+        android:textAlignment="center"
+        android:text="@string/back"/>
+
+</LinearLayout>
