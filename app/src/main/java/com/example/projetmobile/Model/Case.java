@@ -35,7 +35,7 @@ public class Case extends View {
     public Case(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         dimension = (int) GameManager.convertDpToPixel(getResources().getDimension(R.dimen.case_pieces_padding),context);
-        Paint paint = new Paint();
+        paint = new Paint();
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Case, 0, 0);
         try {
@@ -46,10 +46,9 @@ public class Case extends View {
             a.recycle();
         }
 
-
-        System.out.println(column);
-        System.out.println(row);
-        System.out.println(white);
+        System.out.println("CASE COL : " + column);
+        System.out.println("CASE ROW : " + row);
+        System.out.println("CASE COUL : " + ((white)? "BLANC" : "NOIR"));
     }
 
     @Override
@@ -64,12 +63,10 @@ public class Case extends View {
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
 
-
         //Draw possible pos filter
         if(possible_pos){
 
         }
-
 
         //Draw piece
         if(piece != null){
@@ -78,7 +75,6 @@ public class Case extends View {
             d.draw(canvas);
         }
     }
-
 
 
 
@@ -91,7 +87,6 @@ public class Case extends View {
     public void setSelection_color(int selection_color) {
         this.selection_color = selection_color;
     }
-
     public void commit_changes(){
         invalidate();
     }

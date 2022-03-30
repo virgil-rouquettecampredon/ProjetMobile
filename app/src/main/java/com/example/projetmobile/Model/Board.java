@@ -1,52 +1,49 @@
 package com.example.projetmobile.Model;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.ViewGroup;
-
-import androidx.annotation.ColorInt;
-import androidx.core.content.ContextCompat;
-
+import android.widget.TableLayout;
 import com.example.projetmobile.R;
 
-public class Board extends ViewGroup {
+
+public class Board extends TableLayout {
+    private int nb_col;
+    private int nb_row;
+
     private Context context;
+    private AttributeSet attributeSet;
 
     private int white_color;
     private int black_color;
     private int selection_color;
 
-    public Board(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public Board(Context context) {
+        super(context);
         this.context = context;
+        this.attributeSet = null;
         setcolors();
     }
 
-    @Override
-    protected void onLayout(boolean b, int i, int i1, int i2, int i3) {
+    public Board(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        this.attributeSet = attrs;
+        setcolors();
     }
 
     public void setcolors() {
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(R.attr.white_case_color, typedValue, true);
-        white_color = typedValue.data;
+        white_color = GameManager.getAttributeColor(context,R.attr.white_case_color);
+        black_color = GameManager.getAttributeColor(context,R.attr.black_case_color);
+        selection_color = GameManager.getAttributeColor(context,R.attr.selection_case_color);
 
-        typedValue = new TypedValue();
-        theme = context.getTheme();
-        theme.resolveAttribute(R.attr.black_case_color, typedValue, true);
-        black_color = typedValue.data;
-
-        typedValue = new TypedValue();
-        theme = context.getTheme();
-        theme.resolveAttribute(R.attr.selection_case_color, typedValue, true);
-        selection_color = typedValue.data;
-
-
-        System.out.println(white_color);
-        System.out.println(black_color);
-        System.out.println(selection_color);
+        System.out.println("BOARD COUL BLANCHE : " + white_color);
+        System.out.println("BOARD COUL NOIRE : " + black_color);
+        System.out.println("BOARD SELECTION CASE COUL : " + selection_color);
     }
+    /*public void setdimensions() {
+        TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.Board);
+        nb_col = a.getInt(R.styleable.Board_nb_column, 0);
+        nb_row = a.getInt(R.styleable.Board_nb_row, 0);
+        a.recycle();
+    }*/
 }
