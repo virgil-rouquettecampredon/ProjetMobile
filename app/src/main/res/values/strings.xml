@@ -58,4 +58,5 @@
     <string name="profile_picture">Photo de profil</string>
     <string name="search_image">Chercher une image</string>
     <string name="directory_content_description">A folder icon</string>
+    <string name="selection">Selection</string>
 </resources>
