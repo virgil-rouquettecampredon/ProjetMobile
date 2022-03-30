@@ -117,12 +117,12 @@ public class HistoryRowFragment extends Fragment {
         ImageView winLoseImageView = view.findViewById(R.id.winLoseImageView);
         if (isAWin) {
             winLoseImageView.setImageResource(R.drawable.star);
-            winLoseImageView.setPadding(5, 5, 5, 5);
+            winLoseImageView.setPadding(0, 0, 0, 0);
             eloChangeAmountText = "+";
         }
         else {
             winLoseImageView.setImageResource(R.drawable.cross);
-            winLoseImageView.setPadding(0, 0, 0, 0);
+            winLoseImageView.setPadding(10, 10, 10, 10);
             eloChangeAmountText = "-";
         }
         eloChangeAmountText += eloChangeAmount;
