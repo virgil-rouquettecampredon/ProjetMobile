@@ -23,11 +23,8 @@
             android:theme="@style/AppDialogTheme" />
         <activity
             android:name=".Test_board"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
+
         </activity>
         <activity
             android:name=".TextViewDialogActivity"
@@ -56,13 +53,13 @@
             android:theme="@style/AppBlueActivityTheme"/>
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
-            <!--<intent-filter>
+            android:exported="true">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

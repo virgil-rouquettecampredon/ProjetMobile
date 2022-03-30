@@ -43,5 +43,6 @@
 
     <style name="AppBlueActivityTheme" parent="Theme.ProjetMobile">
         <item name="android:statusBarColor" tools:targetApi="l">@color/bleuFonce</item>
+        <item name="android:navigationBarColor">@color/bleuFonce</item>
     </style>
 </resources>
