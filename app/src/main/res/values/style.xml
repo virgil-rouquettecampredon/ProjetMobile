@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="btn_menu_default" parent="Widget.AppCompat.Button">
+        <item name="android:fontFamily">@font/permanent_marker</item>
+        <item name="android:maxHeight">@dimen/max_height_btn_menu</item>
+        <item name="android:textSize">@dimen/txt_size_btn_menu</item>'
+    </style>
+</resources>

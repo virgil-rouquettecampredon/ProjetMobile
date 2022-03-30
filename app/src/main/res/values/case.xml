@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Case">
+        <attr name="row" format="integer" />
+        <attr name="column" format="integer" />
+
+        <attr name="case_color" format="enum">
+            <enum name="white_color" value="0"/>
+            <enum name="black_color" value="1"/>
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="Board">
+        <attr name="white_case_color" format="reference" />
+        <attr name="black_case_color" format="reference" />
+        <attr name="selection_case_color" format="reference" />
+    </declare-styleable>
+</resources>
