@@ -38,4 +38,21 @@
     <string name="cup_bg_content_description">A cup in one color</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_history_dialog">HistoryDialogActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="history">Historique</string>
+    <string name="star_content_description">A star that represent a win</string>
+    <string name="blue_arrow_content_description">A blue arrow</string>
+    <string name="cross_lose_content_description">A cross that represent a lose</string>
+    <string name="time">Temps</string>
+    <string name="turn_number">Nombre de coups</string>
+    <string name="win_type">Type de victoire</string>
+    <string name="lose_type">Type de défaite</string>
 </resources>

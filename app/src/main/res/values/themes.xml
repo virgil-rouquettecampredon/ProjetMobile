@@ -30,4 +30,13 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="Theme.ProjetMobile.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ProjetMobile.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ProjetMobile.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

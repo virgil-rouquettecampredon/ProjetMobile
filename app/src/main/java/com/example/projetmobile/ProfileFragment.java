@@ -88,7 +88,8 @@ public class ProfileFragment extends Fragment {
 
         MaterialButton historyButton = view.findViewById(R.id.historyButton);
         historyButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), HistoryDialogActivity.class);
+            startActivity(intent);
         });
 
         MaterialButton rankingButton = view.findViewById(R.id.rankingButton);

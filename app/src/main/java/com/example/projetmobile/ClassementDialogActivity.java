@@ -12,18 +12,19 @@ import java.util.ArrayList;
 
 public class ClassementDialogActivity extends AppCompatActivity {
 
-    // Liste des rang :
+    // Liste des rang dans l'ordre décroissant:
     //      premier  : elo
     //      deuxième : pseudo
     private ArrayList<String[]> rankings;
 
     private void retreiveRanking() {
         //TODO BDD
-        String[] rank = {"123", "NullJoueur34"};
-        rankings.add(rank);
-
         for (int i = 0; i < 50; i++) {
-            String[] rank2 = {"1234", "UnPeuMeilleurJoueur"};
+            String[] rank2 = {"1234", "Joueur 1234"};
+            rankings.add(rank2);
+        }
+        for (int i = 0; i < 50; i++) {
+            String[] rank2 = {"123", "Joueur 123"};
             rankings.add(rank2);
         }
     }

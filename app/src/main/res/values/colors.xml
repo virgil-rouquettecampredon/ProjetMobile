@@ -11,6 +11,7 @@
     <color name="bleuFonce">#326966</color>
     <color name="jaune">#C2AF7B</color>
     <color name="jauneTransparent">#A4C2AF7B</color>
+    <color name="jauneFonce">#695b35</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

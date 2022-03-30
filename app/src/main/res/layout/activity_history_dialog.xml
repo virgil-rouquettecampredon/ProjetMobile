@@ -18,20 +18,24 @@
         android:textColor="@color/white"
         android:fontFamily="@font/permanent_marker"
         android:gravity="center"
-        android:text="@string/ranking"
+        android:text="@string/history"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="41dp"
+
+        android:paddingTop="41dp"
+        android:paddingBottom="41dp"
+        android:paddingEnd="50dp"
+
         android:layout_weight="1"
         android:scrollbarThumbVertical="@color/bleuFonce"
         android:background="@color/bleu">
 
         <LinearLayout
-            android:id="@+id/rankingFragmentReceiver"
+            android:id="@+id/historyFragmentReceiver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
