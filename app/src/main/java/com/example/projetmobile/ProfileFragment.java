@@ -2,6 +2,7 @@ package com.example.projetmobile;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +23,11 @@ public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> setFriendPseudoLauncher;
     ActivityResultLauncher<Intent> setBioLauncher;
     ActivityResultLauncher<Intent> warnDeleteLauncher;
+    ActivityResultLauncher<Intent> setProfilePictureLauncher;
+
     TextView textViewPseudo;
     TextView bioTextView;
+    ImageView imageViewAvatar;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -71,6 +76,19 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
+        setProfilePictureLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    //TODO Changer la PP (BDD)
+                    Intent data = result.getData();
+                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
+                    if (!resultString.isEmpty()) {
+                        imageViewAvatar.setImageURI(Uri.parse(resultString));
+                    }
+                }
+            });
+
     }
 
     @Override
@@ -80,6 +98,12 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         textViewPseudo = view.findViewById(R.id.textViewPseudo);
+
+        imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
+        imageViewAvatar.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SetProfilePictureDialogActivity.class);
+            setProfilePictureLauncher.launch(intent);
+        });
 
         MaterialButton preferencesButton = view.findViewById(R.id.preferencesButton);
         preferencesButton.setOnClickListener(v -> {

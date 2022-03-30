@@ -55,4 +55,7 @@
     <string name="turn_number">Nombre de coups</string>
     <string name="win_type">Type de victoire</string>
     <string name="lose_type">Type de défaite</string>
+    <string name="profile_picture">Photo de profil</string>
+    <string name="search_image">Chercher une image</string>
+    <string name="directory_content_description">A folder icon</string>
 </resources>

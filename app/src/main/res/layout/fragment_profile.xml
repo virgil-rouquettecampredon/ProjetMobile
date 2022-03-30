@@ -21,6 +21,8 @@
             android:layout_height="100dp"
             android:layout_margin="16dp"
             android:src="@drawable/dark_default_avatar"
+            android:clickable="true"
+            android:focusable="true"
             android:contentDescription="@string/avatar_content_description" />
 
         <LinearLayout
