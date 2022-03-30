@@ -9,9 +9,11 @@
             <enum name="black_color" value="1"/>
         </attr>
     </declare-styleable>
+
     <declare-styleable name="Board">
         <attr name="white_case_color" format="reference" />
         <attr name="black_case_color" format="reference" />
         <attr name="selection_case_color" format="reference" />
+
     </declare-styleable>
 </resources>

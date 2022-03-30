@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Test_board">
+
+    <!--
+    <com.example.projetmobile.Model.Board
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.example.projetmobile.Model.Case
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:column="0"
+        app:row="1"
+        app:case_color="white_color"
+        />
+
+
+    </com.example.projetmobile.Model.Board>-->
+
+</LinearLayout>
