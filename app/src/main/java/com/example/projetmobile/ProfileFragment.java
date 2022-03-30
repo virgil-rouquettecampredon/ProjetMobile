@@ -93,7 +93,8 @@ public class ProfileFragment extends Fragment {
 
         MaterialButton rankingButton = view.findViewById(R.id.rankingButton);
         rankingButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), ClassementDialogActivity.class);
+            startActivity(intent);
         });
 
         MaterialButton deleteAccountButton = view.findViewById(R.id.deleteAccountButton);

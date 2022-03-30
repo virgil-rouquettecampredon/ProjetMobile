@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="16dp"
+    tools:context=".RankingRowFragment">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cup_bg"
+        android:contentDescription="@string/cup_bg_content_description" />
+
+    <TextView
+        android:id="@+id/rankingTextView"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/magentaFonce"
+        android:fontFamily="@font/permanent_marker"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:translationX="-50dp"
+        android:text="@string/winner_elo" />
+
+    <TextView
+        android:id="@+id/pseudoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|start"
+        android:textColor="@color/bleuFonce"
+        android:textSize="16sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="16sp"
+        android:text="@string/winner_pseudo" />
+</LinearLayout>
