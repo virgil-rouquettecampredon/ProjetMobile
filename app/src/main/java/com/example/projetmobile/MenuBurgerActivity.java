@@ -9,7 +9,9 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -62,6 +64,11 @@ public class MenuBurgerActivity extends AppCompatActivity {
 
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
+            supportFinishAfterTransition();
+        });
+
+        View menuBurgerToggle = findViewById(R.id.menuBurgerToggle);
+        menuBurgerToggle.setOnClickListener(v -> {
             supportFinishAfterTransition();
         });
     }
