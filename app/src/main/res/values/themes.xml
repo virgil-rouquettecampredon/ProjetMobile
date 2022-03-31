@@ -3,14 +3,23 @@
     <style name="Theme.ProjetMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/jauneTransparent</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimaryVariant">@color/jaune</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/bleu</item>
+        <item name="colorSecondaryVariant">@color/bleuFonce</item>
+        <item name="colorOnSecondary">@color/bleuFonce</item>
+        <item name="colorOnSecondaryVariant">@color/white</item>
+
+        <item name="colorTertiary">@color/magenta</item>
+        <item name="colorTertiaryVariant">@color/magentaFonce</item>
+        <item name="colorOnTertiary">@color/white</item>
+
+        <item name="fontFamilyVariant">@font/permanent_marker</item>
+
+
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/jaune</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">@color/black</item>
         <!-- Customize your theme here. -->
 
@@ -52,6 +61,7 @@
         <item name="android:windowExitTransition">@transition/menu_burger_transition</item>
 
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/bleu</item>
 
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowBackground">@color/blackTransparent</item>

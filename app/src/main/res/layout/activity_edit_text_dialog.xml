@@ -2,38 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
+    android:layout_width="@dimen/dialog_width"
     android:layout_height="wrap_content"
     tools:context=".EditTextDialogActivity"
-    android:layout_margin="16dp"
+    android:layout_margin="@dimen/fab_margin"
     android:gravity="center|top"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/titleTextView"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:translationY="25dp"
-        android:translationZ="1dp"
-        android:background="@color/bleuFonce"
-        android:textColor="@color/white"
-        android:fontFamily="@font/permanent_marker"
-        android:gravity="center"
-        android:text="@string/pseudo"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="24sp" />
+        android:layout_width="@dimen/dialog_title_width"
+        android:layout_height="@dimen/dialog_title_height"
+        style="@style/dialog_title"
+        android:text="@string/pseudo" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="41dp"
-        android:background="@color/bleu">
+        style="@style/dialog_body">
 
         <EditText
             android:id="@+id/editTextTextPseudo"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/editText_min_height"
+            android:padding="@dimen/padding_btn_menu"
             android:background="@color/white"
             android:inputType="textPersonName"
             android:text="@string/default_pseudo" />
@@ -41,35 +34,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:translationY="-25dp"
+        android:layout_height="wrap_content"
+        style="@style/dialog_btn_row"
         android:orientation="horizontal"
         android:gravity="center">
 
         <Button
             android:id="@+id/confirmButton"
-            android:layout_width="130dp"
+            android:layout_width="@dimen/dialog_btn_width"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dialog_btn_space"
             android:backgroundTint="@color/bleuFonce"
-            android:layout_marginRight="32dp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/permanent_marker"
-            android:gravity="center"
-            android:text="@string/confirm"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp" />
+            style="@style/dialog_btn"
+            android:text="@string/confirm" />
 
         <Button
             android:id="@+id/backButton"
-            android:layout_width="130dp"
+            android:layout_width="@dimen/dialog_btn_width"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/bleuFonce"
-            android:textColor="@color/white"
-            android:fontFamily="@font/permanent_marker"
-            android:gravity="center"
-            android:text="@string/cancel"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp" />
+            style="@style/dialog_btn"
+            android:text="@string/cancel" />
 
     </LinearLayout>
 

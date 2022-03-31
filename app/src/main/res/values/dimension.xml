@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="case_pieces_padding">5dp</dimen>
-    <dimen name="max_height_btn_menu">50dp</dimen>
+    <dimen name="max_height_btn_menu">500dp</dimen>
     <dimen name="txt_size_btn_menu">36sp</dimen>
+    <dimen name="padding_btn_menu">8dp</dimen>
+    <dimen name="common_margin">16dp</dimen>
+
+    <dimen name="blue_logo_height">100dp</dimen>
+
+    <dimen name="editText_min_height">50dp</dimen>
+
+    <dimen name="dialog_width">350dp</dimen>
+    <dimen name="dialog_text_size">24sp</dimen>
+    <dimen name="dialog_title_width">300dp</dimen>
+    <dimen name="dialog_title_height">50dp</dimen>
+    <dimen name="dialog_title_translationY">25dp</dimen>
+    <dimen name="dialog_body_padding">42dp</dimen>
+    <dimen name="dialog_btn_width">130dp</dimen>
+    <dimen name="dialog_btn_space">32dp</dimen>
+    <dimen name="dialog_btn_row_translationY">-25dp</dimen>
+    <dimen name="dialog_btn_text_size">18sp</dimen>
+    <dimen name="dialog_btn_min_height">60dp</dimen>
+
+    <dimen name="picture_large">268dp</dimen>
+    <dimen name="picture_medium">100dp</dimen>
+    <dimen name="picture_small">64dp</dimen>
+
+    <dimen name="material_button_icon_size">48dp</dimen>
+
+    <dimen name="menu_burger_button_space">32dp</dimen>
+
+    <dimen name="list_dialog_space">16dp</dimen>
+    <dimen name="list_dialog_icon_size">50dp</dimen>
+    <dimen name="list_dialog_text_icon_size">24sp</dimen>
+    <dimen name="history_dialog_date_text_size">12sp</dimen>
+    <dimen name="list_dialog_versus_text_size">16sp</dimen>
+    <dimen name="history_dialog_description_padding">108dp</dimen>
+    <dimen name="history_dialog_description_text_size">12sp</dimen>
+    <dimen name="cross_padding">5dp</dimen>
+
+    <dimen name="watermark_text_size">16sp</dimen>
 </resources>

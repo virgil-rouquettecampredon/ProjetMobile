@@ -16,7 +16,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/blue_logo_height"
             android:background="@color/bleuFonce" />
 
         <View
@@ -28,7 +28,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/blue_logo_height"
         android:adjustViewBounds="true"
         android:contentDescription="@string/logoChessContentDescription"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/fab_margin"
         android:adjustViewBounds="true"
         android:contentDescription="@string/jumble_content_description"
         app:layout_constraintBottom_toBottomOf="parent"

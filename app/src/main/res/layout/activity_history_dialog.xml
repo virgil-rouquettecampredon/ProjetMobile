@@ -2,37 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
+    android:layout_width="@dimen/dialog_width"
     android:layout_height="match_parent"
-    tools:context=".ClassementDialogActivity"
-    android:layout_margin="16dp"
+    tools:context=".RankingDialogActivity"
+    android:layout_margin="@dimen/fab_margin"
     android:gravity="center|top"
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:translationY="25dp"
-        android:translationZ="1dp"
-        android:background="@color/bleuFonce"
-        android:textColor="@color/white"
-        android:fontFamily="@font/permanent_marker"
-        android:gravity="center"
-        android:text="@string/history"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="24sp" />
+        android:layout_width="@dimen/dialog_title_width"
+        android:layout_height="@dimen/dialog_title_height"
+        style="@style/dialog_title"
+        android:text="@string/history" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-
-        android:paddingTop="41dp"
-        android:paddingBottom="41dp"
-        android:paddingEnd="50dp"
-
+        style="@style/dialog_body"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/list_dialog_icon_size"
         android:layout_weight="1"
-        android:scrollbarThumbVertical="@color/bleuFonce"
-        android:background="@color/bleu">
+        android:scrollbarThumbVertical="@color/bleuFonce" >
 
         <LinearLayout
             android:id="@+id/historyFragmentReceiver"
@@ -44,22 +34,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:translationY="-25dp"
+        android:layout_height="wrap_content"
+        style="@style/dialog_btn_row"
         android:orientation="horizontal"
         android:gravity="center">
 
         <Button
             android:id="@+id/backButton"
-            android:layout_width="130dp"
+            android:layout_width="@dimen/dialog_btn_width"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/bleuFonce"
-            android:textColor="@color/white"
-            android:fontFamily="@font/permanent_marker"
-            android:gravity="center"
-            android:text="@string/back"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp" />
+            style="@style/dialog_btn"
+            android:text="@string/back" />
 
     </LinearLayout>
 

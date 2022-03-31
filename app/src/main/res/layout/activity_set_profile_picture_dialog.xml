@@ -2,33 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="350dp"
+    android:layout_width="@dimen/dialog_width"
     android:layout_height="wrap_content"
     tools:context=".SetProfilePictureDialogActivity"
-    android:layout_margin="16dp"
+    android:layout_margin="@dimen/fab_margin"
     android:gravity="center|top"
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:translationY="25dp"
-        android:translationZ="1dp"
-        android:background="@color/bleuFonce"
-        android:textColor="@color/white"
-        android:fontFamily="@font/permanent_marker"
-        android:gravity="center"
-        android:text="@string/profile_picture"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="24sp" />
+        android:layout_width="@dimen/dialog_title_width"
+        android:layout_height="@dimen/dialog_title_height"
+        style="@style/dialog_title"
+        android:text="@string/profile_picture" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        style="@style/dialog_body"
         android:orientation="vertical"
-        android:padding="41dp"
-        android:gravity="center"
-        android:background="@color/bleu">
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,33 +30,34 @@
 
             <ImageButton
                 android:id="@+id/setFileButton"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="@dimen/picture_small"
+                android:layout_height="@dimen/picture_small"
                 android:scaleType="fitCenter"
-                android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/bleuFonce"
+                android:layout_marginEnd="@dimen/common_margin"
+                android:backgroundTint="?attr/colorSecondaryVariant"
                 android:src="@drawable/directory"
                 android:contentDescription="@string/directory_content_description" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@color/white"
+                android:padding="@dimen/padding_btn_menu"
+                android:background="?attr/colorOnPrimary"
                 android:text="@string/search_image" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/previewImageView"
-            android:layout_width="268dp"
-            android:layout_height="268dp"
-            android:src="@drawable/dark_default_avatar" />
+            android:layout_width="@dimen/picture_large"
+            android:layout_height="@dimen/picture_large"
+            android:src="@drawable/dark_default_avatar"
+            android:contentDescription="@string/avatar_content_description" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:translationY="-25dp"
+        android:layout_height="wrap_content"
+        style="@style/dialog_btn_row"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -73,25 +66,17 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/bleuFonce"
-            android:layout_marginRight="32dp"
-            android:textColor="@color/white"
-            android:fontFamily="@font/permanent_marker"
-            android:gravity="center"
-            android:text="@string/confirm"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp" />
+            android:layout_marginEnd="@dimen/dialog_btn_space"
+            style="@style/dialog_btn"
+            android:text="@string/confirm" />
 
         <Button
             android:id="@+id/backButton"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/bleuFonce"
-            android:textColor="@color/white"
-            android:fontFamily="@font/permanent_marker"
-            android:gravity="center"
-            android:text="@string/cancel"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp" />
+            style="@style/dialog_btn"
+            android:text="@string/cancel" />
 
     </LinearLayout>
 

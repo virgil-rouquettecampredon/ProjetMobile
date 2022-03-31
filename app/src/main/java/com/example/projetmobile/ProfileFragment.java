@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-
 
 public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> setFriendPseudoLauncher;
@@ -119,7 +117,7 @@ public class ProfileFragment extends Fragment {
 
         MaterialButton rankingButton = view.findViewById(R.id.rankingButton);
         rankingButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ClassementDialogActivity.class);
+            Intent intent = new Intent(getActivity(), RankingDialogActivity.class);
             startActivity(intent);
         });
 

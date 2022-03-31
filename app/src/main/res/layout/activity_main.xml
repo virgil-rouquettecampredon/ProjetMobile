@@ -36,8 +36,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="16sp"
-        android:text="ADACorp™" />
+        android:textSize="@dimen/watermark_text_size"
+        android:text="@string/watermark" />
 
     <FrameLayout
         android:id="@+id/fragment_container"

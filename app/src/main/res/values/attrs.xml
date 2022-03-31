@@ -16,4 +16,8 @@
         <attr name="selection_case_color" format="reference" />
 
     </declare-styleable>
+
+    <attr name="colorOnSecondaryVariant" format="reference"/>
+    <attr name="colorTertiaryVariant" format="reference"/>
+    <attr name="fontFamilyVariant" format="reference"/>
 </resources>

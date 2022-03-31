@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:clickable="true"
     android:focusable="true"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="@dimen/list_dialog_space">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,26 +18,24 @@
 
         <ImageView
             android:id="@+id/winLoseImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/cross"
-            android:padding="5dp"
-            android:translationX="50dp"
+            android:layout_width="@dimen/list_dialog_icon_size"
+            android:layout_height="@dimen/list_dialog_icon_size"
+            android:padding="@dimen/cross_padding"
+            android:translationX="@dimen/list_dialog_icon_size"
             android:contentDescription="@string/cross_lose_content_description" />
 
         <TextView
             android:id="@+id/eloChangeAmountTextView"
-            android:layout_width="50dp"
+            android:layout_width="@dimen/list_dialog_icon_size"
             android:layout_height="match_parent"
             android:textColor="@color/magentaFonce"
             android:fontFamily="@font/permanent_marker"
             android:gravity="center"
-            android:textSize="24sp"
-            android:text="-5" />
+            android:textSize="@dimen/list_dialog_text_icon_size" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/list_dialog_icon_size"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -46,8 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|start"
-                android:textSize="12sp"
-                android:text="hier" />
+                android:textSize="@dimen/history_dialog_date_text_size" />
 
             <TextView
                 android:id="@+id/adversaryPseudoTextView"
@@ -55,19 +52,17 @@
                 android:layout_height="0dp"
                 android:textColor="@color/white"
                 android:layout_weight="1"
-                android:textSize="16sp"
+                android:textSize="@dimen/list_dialog_versus_text_size"
                 android:autoSizeTextType="uniform"
-                android:autoSizeMaxTextSize="16sp"
-                android:text="vs Player3" />
+                android:autoSizeMaxTextSize="@dimen/list_dialog_versus_text_size" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/arrowImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/list_dialog_icon_size"
+            android:layout_height="@dimen/list_dialog_icon_size"
             android:scaleType="center"
             android:src="@drawable/blue_right_arrow"
-            android:rotation="90"
             android:contentDescription="@string/blue_arrow_content_description" />
 
     </LinearLayout>
@@ -76,28 +71,25 @@
         android:id="@+id/toOpenLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="108dp"
+        android:paddingStart="@dimen/history_dialog_description_padding"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/gameTimeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="Temps : 1h35"/>
+            android:textSize="@dimen/history_dialog_description_text_size"/>
 
         <TextView
             android:id="@+id/gameTurnCountTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="Nombre de coup : 126"/>
+            android:textSize="@dimen/history_dialog_description_text_size"/>
 
         <TextView
             android:id="@+id/winTypeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="Type de défaite : time out"/>
+            android:textSize="@dimen/history_dialog_description_text_size"/>
     </LinearLayout>
 </LinearLayout>

@@ -26,7 +26,7 @@
             android:exported="false"
             android:theme="@style/AppDialogTheme" />
         <activity
-            android:name=".ClassementDialogActivity"
+            android:name=".RankingDialogActivity"
             android:exported="false"
             android:theme="@style/AppDialogTheme" />
         <activity

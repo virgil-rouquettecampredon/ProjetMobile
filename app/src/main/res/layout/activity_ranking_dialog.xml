@@ -3,31 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/dialog_width"
-    android:layout_height="wrap_content"
-    tools:context=".EditTextDialogActivity"
+    android:layout_height="match_parent"
+    tools:context=".RankingDialogActivity"
     android:layout_margin="@dimen/fab_margin"
     android:gravity="center|top"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/titleTextView"
         android:layout_width="@dimen/dialog_title_width"
         android:layout_height="@dimen/dialog_title_height"
         style="@style/dialog_title"
-        android:text="@string/selection" />
-
+        android:text="@string/ranking" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        style="@style/dialog_body">
+        android:layout_height="0dp"
+        style="@style/dialog_body"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/list_dialog_icon_size"
+        android:layout_weight="1"
+        android:scrollbarThumbVertical="@color/bleuFonce">
 
-        <RadioGroup
-            android:id="@+id/choiceRadioGroup"
+        <LinearLayout
+            android:id="@+id/rankingFragmentReceiver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        </RadioGroup>
+        </LinearLayout>
     </ScrollView>
 
     <LinearLayout
@@ -38,23 +40,15 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/confirmButton"
-            android:layout_width="@dimen/dialog_btn_width"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dialog_btn_space"
-            android:backgroundTint="@color/bleuFonce"
-            style="@style/dialog_btn"
-            android:text="@string/confirm" />
-
-        <Button
             android:id="@+id/backButton"
             android:layout_width="@dimen/dialog_btn_width"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/bleuFonce"
             style="@style/dialog_btn"
-            android:text="@string/cancel" />
+            android:text="@string/back" />
 
     </LinearLayout>
+
 
 
 
