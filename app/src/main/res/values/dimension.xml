@@ -27,6 +27,7 @@
     <dimen name="picture_small">64dp</dimen>
 
     <dimen name="material_button_icon_size">48dp</dimen>
+    <dimen name="material_button_icon_padding">32dp</dimen>
 
     <dimen name="menu_burger_button_space">32dp</dimen>
 

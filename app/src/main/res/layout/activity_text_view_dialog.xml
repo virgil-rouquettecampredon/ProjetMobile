@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_btn_menu"
             android:textAlignment="center"
-            android:textColor="@color/bleuFonce"
+            android:textColor="?attr/colorSecondaryVariant"
             android:text="@string/bgChessContentDescription" />
     </FrameLayout>
 

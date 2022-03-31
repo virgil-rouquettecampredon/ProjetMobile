@@ -28,6 +28,7 @@
             android:minHeight="@dimen/editText_min_height"
             android:padding="@dimen/padding_btn_menu"
             android:background="@color/white"
+            android:textColor="?attr/colorSecondaryVariant"
             android:inputType="textPersonName"
             android:text="@string/default_pseudo" />
     </FrameLayout>

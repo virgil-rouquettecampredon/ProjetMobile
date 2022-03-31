@@ -8,6 +8,11 @@
     tools:context=".ConnectionFragment"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,6 +50,7 @@
                 android:gravity="center"
                 android:labelFor="@+id/editTextPseudo"
                 android:text="@string/pseudo"
+                android:textColor="?attr/colorOnPrimaryVariant"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="20sp" />
 
@@ -57,6 +63,7 @@
                 android:padding="@dimen/padding_btn_menu"
                 android:layout_weight="1"
                 android:autofillHints="DarkVirgil34"
+                android:textColor="?attr/colorSecondaryVariant"
                 android:background="@drawable/menu_edit_text"
                 android:inputType="textPersonName" />
 
@@ -69,6 +76,7 @@
                 android:gravity="center"
                 android:labelFor="@+id/editTextPassword"
                 android:text="@string/password"
+                android:textColor="?attr/colorOnPrimaryVariant"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="20sp" />
 
@@ -81,6 +89,7 @@
                 android:padding="@dimen/padding_btn_menu"
                 android:layout_weight="1"
                 android:autofillHints="DarkVirgil34"
+                android:textColor="?attr/colorSecondaryVariant"
                 android:background="@drawable/menu_edit_text"
                 android:inputType="textPassword" />
 
@@ -92,7 +101,8 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/permanent_marker"
                 android:text="@string/remember_me"
-                android:buttonTint="@color/black"
+                android:textColor="?attr/colorOnPrimaryVariant"
+                android:buttonTint="?attr/colorOnPrimaryVariant"
                 android:textSize="20sp" />
 
             <Button

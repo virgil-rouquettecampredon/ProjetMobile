@@ -17,6 +17,7 @@
 
     </declare-styleable>
 
+    <attr name="colorOnPrimaryVariant" format="reference"/>
     <attr name="colorOnSecondaryVariant" format="reference"/>
     <attr name="colorTertiaryVariant" format="reference"/>
     <attr name="fontFamilyVariant" format="reference"/>

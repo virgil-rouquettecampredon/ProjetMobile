@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_btn_menu"
                 android:background="?attr/colorOnPrimary"
+                android:textColor="?attr/colorSecondaryVariant"
                 android:text="@string/search_image" />
         </LinearLayout>
 

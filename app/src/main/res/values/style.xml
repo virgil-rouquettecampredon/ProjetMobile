@@ -38,6 +38,7 @@
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_marginBottom">@dimen/common_margin</item>
+        <item name="iconPadding">@dimen/material_button_icon_padding</item>
         <item name="iconSize">@dimen/material_button_icon_size</item>
         <item name="iconTint">#FFF</item>
         <item name="iconTintMode">multiply</item>

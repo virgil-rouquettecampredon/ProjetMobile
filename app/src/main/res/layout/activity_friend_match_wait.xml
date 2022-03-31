@@ -27,6 +27,7 @@
             android:gravity="center"
             android:padding="@dimen/padding_btn_menu"
             android:background="@color/white"
+            android:textColor="?attr/colorSecondaryVariant"
             android:text="@string/waiting_for_acceptation" />
     </FrameLayout>
 

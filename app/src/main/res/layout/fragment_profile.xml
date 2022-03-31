@@ -45,6 +45,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/permanent_marker"
                     android:text="@string/default_pseudo"
+                    android:textColor="?attr/colorOnPrimaryVariant"
                     android:textAlignment="center"
                     android:autoSizeTextType="uniform"/>
 
@@ -52,8 +53,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/edit_icon_content_description" />
+                    android:contentDescription="@string/edit_icon_content_description"
+                    android:src="@android:drawable/ic_menu_edit" />
             </LinearLayout>
 
             <LinearLayout
