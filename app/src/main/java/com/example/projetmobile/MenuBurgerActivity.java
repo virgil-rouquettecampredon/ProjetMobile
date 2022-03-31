@@ -9,6 +9,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -45,7 +46,7 @@ public class MenuBurgerActivity extends AppCompatActivity {
                 }
             });
 
-        MaterialButton gameModeButton = findViewById(R.id.gameModeButton);
+        Button gameModeButton = findViewById(R.id.gameModeButton);
         gameModeButton.setOnClickListener(v -> {
             Intent intent = new Intent(MenuBurgerActivity.this, SelectorDialogActivity.class);
             intent.putExtra(SelectorDialogActivity.titleName, getString(R.string.game_mode));
@@ -54,12 +55,12 @@ public class MenuBurgerActivity extends AppCompatActivity {
             selectorLauncher.launch(intent);
         });
 
-        MaterialButton tryAgainButton = findViewById(R.id.tryAgainButton);
+        Button tryAgainButton = findViewById(R.id.tryAgainButton);
         tryAgainButton.setOnClickListener(v -> {
             Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
         });
 
-        MaterialButton backButton = findViewById(R.id.backButton);
+        Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
             supportFinishAfterTransition();
         });
