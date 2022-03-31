@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HistoryRowFragment extends Fragment {
 
@@ -122,7 +123,8 @@ public class HistoryRowFragment extends Fragment {
         }
         else {
             winLoseImageView.setImageResource(R.drawable.cross);
-            winLoseImageView.setPadding(10, 10, 10, 10);
+            int crossPading = (int) getResources().getDimension(R.dimen.cross_padding);
+            winLoseImageView.setPadding(crossPading, crossPading, crossPading, crossPading);
             eloChangeAmountText = "-";
         }
         eloChangeAmountText += eloChangeAmount;
