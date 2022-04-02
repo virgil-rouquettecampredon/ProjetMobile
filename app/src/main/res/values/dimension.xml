@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="case_pieces_padding">5dp</dimen>
+    <dimen name="case_pieces_padding">.5dp</dimen>
     <dimen name="max_height_btn_menu">500dp</dimen>
     <dimen name="txt_size_btn_menu">36sp</dimen>
     <dimen name="padding_btn_menu">8dp</dimen>
@@ -41,4 +41,5 @@
     <dimen name="cross_padding">5dp</dimen>
 
     <dimen name="watermark_text_size">16sp</dimen>
+    <dimen name="case_border_width">1dp</dimen>
 </resources>

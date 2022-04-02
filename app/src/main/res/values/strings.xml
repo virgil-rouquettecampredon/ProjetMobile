@@ -54,4 +54,6 @@
     <string name="game_mode">Mode de jeu</string>
     <string name="waiting_for_acceptation">EN ATTENTE DE L\'ACCEPTATION</string>
     <string name="watermark">ADACorp™</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

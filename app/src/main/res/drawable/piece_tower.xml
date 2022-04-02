@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="221.72179dp"
+    android:height="298.36746dp"
+    android:viewportWidth="221.72179"
+    android:viewportHeight="298.36746">
+  <group>
+    <clip-path
+        android:pathData="m0,0l221.722,0l0,298.367l-221.722,0l0,-298.367z"/>
+
+    <path
+        android:pathData="m36.545,228.211l0,0c0,-3.372 2.733,-6.105 6.105,-6.105l136.42,0c1.619,0 3.172,0.643 4.317,1.788c1.145,1.145 1.788,2.698 1.788,4.317l0,24.42c0,3.372 -2.733,6.105 -6.105,6.105l-136.42,0c-3.372,0 -6.105,-2.733 -6.105,-6.105z"
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:strokeColor="#00000000"
+        android:strokeLineCap="square"/>
+
+    <path
+        android:pathData="m67.619,102.423l0.446,13.987l0.22,17.094l0.444,10.877l-0.22,7.992l-0.667,8.436l-1.777,9.102l-2.441,9.325l-3.997,9.102l-5.772,8.879l-5.328,7.992l-2.885,4.218l-2.444,4.661l-2.218,4.218l-1.11,4.441l2.664,-0.223l138.528,0l1.777,1.333l-2.22,-6.438l-5.995,-9.325l-5.105,-6.882l-6.215,-9.546l-2.22,-5.105l-2.22,-5.772l-1.777,-7.105l-1.554,-7.769l-0.887,-8.215l-0.223,-5.772l-0.22,-7.992l0,-8.215l0.667,-33.076z"
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:strokeColor="#00000000"
+        android:strokeLineCap="square"/>
+
+    <path
+        android:pathData="m53.108,80.588l0.123,-6.126l-0.748,-4.126l-1.126,-4.499l-2,-5.375l-2.249,-4.375l-1.877,-3.499l-2.123,-3.501l-4.625,-6.874l-2.126,-3.252l-2,-3l-2.126,-3.249l-2,-3.874l5.252,-1.375l6.625,-1.501l7.375,-1.123l9.123,-0.877l10.751,-0.625l9.249,0l2.501,4.751l2.499,6.375l1.751,6l2.126,-5.249l4.375,-8.877l0.748,-2.249l38.375,0l6.625,15.249l0.501,-3.499l1.499,-3.625l4.126,-8.877l9.499,-0.123l13.375,0.874l8.877,1l7.874,1.375l9.126,2.499l-6.126,9.375l-6.249,9.375l-3.126,5l-3.874,7.375l-2.501,6.375l-1,5l-0.375,5.126l0,4.373z"
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:strokeColor="#00000000"
+        android:strokeLineCap="square"/>
+
+  </group>
+</vector>

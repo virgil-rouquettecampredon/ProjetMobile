@@ -20,9 +20,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/jaune</item>
         <!-- Customize your theme here. -->
-        <item name="white_case_color">@color/white</item>
-        <item name="black_case_color">@color/black</item>
-        <item name="selection_case_color">@color/jauneTransparent</item>
+
+        <item name="white_case_color">@color/bleu</item>
+        <item name="black_case_color">@color/bleuFonce</item>
+        <item name="selection_case_color">@color/jaune</item>
+        <item name="eat_case_color">@color/magentaFonce</item>
+        <item name="confirmation_case_color">@color/jauneFonce</item>
     </style>
 
 </resources>
