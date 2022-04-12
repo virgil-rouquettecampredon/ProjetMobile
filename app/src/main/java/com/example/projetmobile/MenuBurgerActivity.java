@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class MenuBurgerActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> selectorLauncher;
+    private ActivityResultLauncher<Intent> tryAgainWarningLauncher;
     private ArrayList<String> gameModes;
 
     private void populateGameMode() {
@@ -48,6 +49,14 @@ public class MenuBurgerActivity extends AppCompatActivity {
                 }
             });
 
+        tryAgainWarningLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         Button gameModeButton = findViewById(R.id.gameModeButton);
         gameModeButton.setOnClickListener(v -> {
             Intent intent = new Intent(MenuBurgerActivity.this, SelectorDialogActivity.class);
@@ -59,7 +68,10 @@ public class MenuBurgerActivity extends AppCompatActivity {
 
         Button tryAgainButton = findViewById(R.id.tryAgainButton);
         tryAgainButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MenuBurgerActivity.this, TextViewDialogActivity.class);
+            intent.putExtra(TextViewDialogActivity.titleName, getString(R.string.warning));
+            intent.putExtra(TextViewDialogActivity.textName, getString(R.string.try_again_warning));
+            tryAgainWarningLauncher.launch(intent);
         });
 
         Button backButton = findViewById(R.id.backButton);

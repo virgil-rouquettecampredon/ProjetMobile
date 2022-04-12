@@ -45,7 +45,8 @@ public class FirstMenuFragment extends Fragment {
         });
 
         offlineButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), GameActivity.class);
+            startActivity(intent);
         });
         return view;
     }
