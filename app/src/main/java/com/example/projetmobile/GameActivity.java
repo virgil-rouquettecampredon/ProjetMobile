@@ -5,50 +5,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.example.projetmobile.Model.Board;
 import com.example.projetmobile.Model.GameManager;
 
 public class GameActivity extends AppCompatActivity {
-    //Fragments
-    private GamePlayerOverlayFragment frag_p1;
-    private GamePlayerOverlayFragment frag_p2;
-    private GameBoardFragment frag_board;
+    public final static String fragmentTag = "GAMEFRAGMENT";
 
-    private GameManager gm;
-
-    private final static String frgTag_player1 = "PLAYERFRAGMENT1";
-    private final static String frgTag_player2 = "PLAYERFRAGMENT2";
-    private final static String frgTag_gameboard = "BOARDFRAGMENT";
-
+    private GameFragment gameFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-        System.out.println("=============> TEST BOARD ONCREATE");
+        setContentView(R.layout.activity_blue_background);
+
+        ImageView imageView = findViewById(R.id.menuBurgerToggle);
+        imageView.setOnClickListener(v -> {
+            Intent intent = new Intent(GameActivity.this, MenuBurgerActivity.class);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        });
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
 
-        frag_board = (GameBoardFragment) fm.findFragmentByTag(frgTag_gameboard);
-        if (frag_board == null) {
-            frag_board = GameBoardFragment.newInstance();
-            transaction.add(R.id.board_container, frag_board, frgTag_gameboard);
-        }
-        frag_p1 = (GamePlayerOverlayFragment) fm.findFragmentByTag(frgTag_player1);
-        if (frag_p1 == null) {
-            frag_p1 = GamePlayerOverlayFragment.newInstance();
-            transaction.add(R.id.player_1, frag_p1, frgTag_player1);
-        }
+        gameFragment = (GameFragment) fm.findFragmentByTag(fragmentTag);
 
-        frag_p2 = (GamePlayerOverlayFragment) fm.findFragmentByTag(frgTag_player2);
-        if (frag_p2 == null) {
-            frag_p2 = GamePlayerOverlayFragment.newInstance();
-            transaction.add(R.id.player_2, frag_p2, frgTag_player2);
+        if (gameFragment == null) {
+            gameFragment = GameFragment.newInstance();
+            transaction.add(R.id.fragment_container, gameFragment, fragmentTag);
+            transaction.commit();
         }
-        transaction.commit();
     }
 
     @Override
@@ -59,17 +49,17 @@ public class GameActivity extends AppCompatActivity {
 
         Board b = (Board) findViewById(R.id.board_game);
         if(b!=null) {
-            gm = new GameManager(getBaseContext(), b);
+            gameFragment.setGm(new GameManager(getBaseContext(), b));
 
-            System.out.println(frag_p1.getTVPseudo());
-            System.out.println(frag_p1.getLLDeadPieces());
-            System.out.println(frag_p2.getTVPseudo());
-            System.out.println(frag_p2.getLLDeadPieces());
+            System.out.println(gameFragment.getFrag_p1().getTVPseudo());
+            System.out.println(gameFragment.getFrag_p1().getLLDeadPieces());
+            System.out.println(gameFragment.getFrag_p2().getTVPseudo());
+            System.out.println(gameFragment.getFrag_p2().getLLDeadPieces());
 
-            gm.addPlayerInterfaceElement(frag_p1.getTVPseudo(),frag_p1.getLLDeadPieces());
-            gm.addPlayerInterfaceElement(frag_p2.getTVPseudo(),frag_p2.getLLDeadPieces());
+            gameFragment.getGm().addPlayerInterfaceElement(gameFragment.getFrag_p1().getTVPseudo(),gameFragment.getFrag_p1().getLLDeadPieces());
+            gameFragment.getGm().addPlayerInterfaceElement(gameFragment.getFrag_p2().getTVPseudo(),gameFragment.getFrag_p2().getLLDeadPieces());
 
-            gm.start();
+            gameFragment.getGm().start();
         }
     }
 }

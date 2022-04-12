@@ -45,7 +45,6 @@ public class MainMenuFragment extends Fragment {
         localButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), GameActivity.class);
             startActivity(intent);
-            //Toast.makeText(getActivity(), "Not yet implemented",Toast.LENGTH_SHORT).show();
         });
 
         AppCompatButton profileButton = view.findViewById(R.id.profileButton);
