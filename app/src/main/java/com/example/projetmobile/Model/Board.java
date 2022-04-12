@@ -84,6 +84,19 @@ public class Board extends TableLayout {
         constructXMLBoard();
     }
 
+    public Board(Board board) {
+        super(board.context);
+        this.context = board.context;
+        this.attributeSet = board.attributeSet;
+        System.out.println("CONSTRUCTEUR COPIE");
+        changedCases = new ArrayList<>();
+
+        this.cases = new Case[nb_col*nb_row];
+        for (int i = 0; i < nb_col*nb_row; i++) {
+            this.cases[i] = new Case(board.cases[i]);
+        }
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();

@@ -11,7 +11,7 @@ import com.example.projetmobile.Model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Piece implements GameObject{
+public abstract class Piece implements GameObject, Cloneable{
     public enum DIRECTION{
         UP,DOWN,LEFT,RIGHT
     }
@@ -30,6 +30,22 @@ public abstract class Piece implements GameObject{
         appearence = new ComposedDrawing();
         tastyPieces = new ArrayList<>();
     }
+
+    public Object clone()  {
+        Piece p = null;
+        try {
+            p = (Piece) super.clone();
+            p.moovedYet = this.moovedYet;
+            p.pocessor = this.pocessor;
+            p.victory = this.victory;
+            p.appearence = this.appearence;
+            p.tastyPieces = this.tastyPieces;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return p;
+    }
+
 
     /**Return the visual appearence of a piece
      * @return return all Drawables needed to be drawn**/

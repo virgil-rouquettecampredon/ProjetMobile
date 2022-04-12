@@ -61,6 +61,24 @@ public class Case extends View implements GameObject {
         pre_selected_pos = false;
     }
 
+    public Case(Case c){
+        super(c.getContext());
+        this.context = c.getContext();
+        this.paint = c.paint;
+        this.desiredDim = c.desiredDim;
+        this.stroke_width = c.stroke_width;
+        this.dimension = c.dimension;
+        this.color_black = c.color_black;
+        this.color_white = c.color_white;
+        this.piece = (Piece) c.piece.clone();
+        this.possible_pos = c.possible_pos;
+        this.pre_selected_pos = c.pre_selected_pos;
+        this.white = c.white;
+        this.column = c.column;
+        this.row = c.row;
+        this.nb_draw = c.nb_draw;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         //System.out.println("JE DESSINE : " + this);

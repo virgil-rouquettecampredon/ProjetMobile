@@ -38,7 +38,9 @@ import com.example.projetmobile.Model.Pieces.Tower;
 import com.example.projetmobile.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class GameManager {
@@ -68,6 +70,20 @@ public class GameManager {
 
         this.playerNames = new ArrayList<>();
         this.playerCimetaries = new ArrayList<>();
+    }
+
+    public GameManager(GameManager gm){
+        this.board = new Board(gm.board);
+        this.context = gm.context;
+        this.players = gm.players;
+        this.currentPlayer = gm.currentPlayer;
+        this.lastPossiblePositions = gm.lastPossiblePositions;
+        this.lastPieceSelected = gm.lastPieceSelected;
+        this.lastPosOfPieceSelected = gm.lastPosOfPieceSelected;
+        this.lastPosPreSelected = gm.lastPosPreSelected;
+        this.playerNames = gm.playerNames;
+        this.playerCimetaries = gm.playerCimetaries;
+        this.nbTurn = gm.nbTurn;
     }
 
     public void start(){
@@ -191,6 +207,41 @@ public class GameManager {
             }
         }
         return false;
+    }
+
+    private void performMenaced(Player p){
+        //Clone the GameManager
+        GameManager gm = new GameManager(this);
+        //Now we perform all the movements of the clone of the gameManager
+
+        //Get all current pos of pieces on the board
+        HashMap<Piece, Position> posPieces = new HashMap<>();
+        for (Piece piece: p.getPiecesPlayer()) {
+            posPieces.put(piece,gm.board.getPiecePosition(piece));
+        }
+
+
+        for (Piece piece: p.getPiecesPlayer()) {
+            for (Position pos: p.getPositionsPiece(piece)) {
+                //We perform the movement
+                Position startPos = posPieces.get(piece);
+                gm.board.setAPieces(startPos.getX(),startPos.getY(),null);
+                gm.board.setAPieces(pos.getX(),pos.getY(),piece);
+
+                //Now check if there is still a chess state
+                if(gm.isMenaced(p)){
+                    //Then we can't move this piece to this position
+
+                }
+            }
+        }
+    }
+
+    private void updateMovementPieceOnMenace(GameManager gm, Player p){
+
+
+
+
     }
 
     public boolean isFinished(){
