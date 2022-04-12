@@ -37,14 +37,14 @@ public class Knight extends Piece{
         mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(1,-2)));
         mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-1,2)));
 
-        mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(2,1)));
+        /*mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(2,1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(2,-1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-2,1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-2,-1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(1,2)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,-2)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(1,-2)));
-        mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,2)));
+        mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,2)));*/
         return mvt;
     }
 }
