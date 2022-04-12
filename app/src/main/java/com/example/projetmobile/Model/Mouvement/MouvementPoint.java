@@ -20,7 +20,7 @@ public class MouvementPoint extends Mouvement<Case> {
 
         Position p = start.addAndReturn(incrementation);
         Action.ActionState a = action.isValidated(b.getACase(p.getX(),p.getY()));
-        if(Action.ActionState.VALID == a){
+        if(Action.ActionState.STILLGOOD == a || Action.ActionState.VALID == a){
             res.add(p);
         }
         return res;
