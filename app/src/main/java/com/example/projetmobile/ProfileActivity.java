@@ -17,12 +17,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blue_background);
 
-        ImageView imageView = findViewById(R.id.menuBurgerToggle);
-        imageView.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, MenuBurgerActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        });
-
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
 

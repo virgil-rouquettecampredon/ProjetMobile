@@ -4,6 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/jauneTransparent</item>
         <item name="colorPrimaryVariant">@color/jaune</item>
+        <item name="colorPrimaryVariantDark">@color/jauneFonce</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnPrimaryVariant">@color/black</item>
         <!-- Secondary brand color. -->

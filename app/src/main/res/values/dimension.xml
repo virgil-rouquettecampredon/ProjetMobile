@@ -5,6 +5,7 @@
     <dimen name="txt_size_btn_menu">36sp</dimen>
     <dimen name="padding_btn_menu">8dp</dimen>
     <dimen name="common_margin">16dp</dimen>
+    <dimen name="drawable_box_margin">4dp</dimen>
 
     <dimen name="blue_logo_height">100dp</dimen>
 
