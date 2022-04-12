@@ -10,8 +10,17 @@ import java.util.List;
 
 public class MouvementPoint extends Mouvement<Case> {
 
+    //Is the action is not completly performed (ex STILL GOOD) you can still perform the movement through the emplacement
+    private boolean canStillMoove;
+
+    public MouvementPoint(Action<Case> action, Position start, Position incrementation, boolean canStillMoove) {
+        super(action, start, incrementation);
+        this.canStillMoove = canStillMoove;
+    }
+
     public MouvementPoint(Action<Case> action, Position start, Position incrementation) {
         super(action, start, incrementation);
+        this.canStillMoove = true;
     }
 
     @Override
@@ -20,7 +29,7 @@ public class MouvementPoint extends Mouvement<Case> {
 
         Position p = start.addAndReturn(incrementation);
         Action.ActionState a = action.isValidated(b.getACase(p.getX(),p.getY()));
-        if(Action.ActionState.VALID == a){
+        if(Action.ActionState.VALID == a || (canStillMoove && Action.ActionState.STILLGOOD == a)){
             res.add(p);
         }
         return res;

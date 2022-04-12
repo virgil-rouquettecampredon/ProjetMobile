@@ -40,14 +40,14 @@ public class King extends Piece{
         mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-1,0)));
         mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-1,1)));
 
-        mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(0,1)));
+        /*mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(0,1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(1,1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(1,0)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(1,-1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(0,-1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,-1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,0)));
-        mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,1)));
+        mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(-1,1)));*/
 
         return mvt;
     }

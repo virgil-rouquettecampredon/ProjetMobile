@@ -14,7 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SetProfilePictureDialogActivity extends AppCompatActivity {
+public class
+SetProfilePictureDialogActivity extends AppCompatActivity {
     public static final String resultName = "RESULT";
 
     private Uri result;
