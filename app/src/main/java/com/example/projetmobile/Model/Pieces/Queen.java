@@ -27,14 +27,14 @@ public class Queen extends Piece{
     @Override
     public List<Mouvement<? extends GameObject>> getAllPossibleMvt(int col, int row){
         List<Mouvement<? extends GameObject>> mvt = new ArrayList<>();
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(0,1)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(0,-1)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(1,0)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(-1,0)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(1,1)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(-1,-1)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(1,-1)));
-        mvt.add(new MouvementVector(new ActionEat(this.pocessor),new Position(col,row),new Position(-1,1)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(0,1)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(0,-1)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(1,0)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(-1,0)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(1,1)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(-1,-1)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(1,-1)));
+        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(-1,1)));
         return mvt;
     }
 }

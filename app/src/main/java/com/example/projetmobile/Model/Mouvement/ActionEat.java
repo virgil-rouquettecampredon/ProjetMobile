@@ -2,13 +2,14 @@ package com.example.projetmobile.Model.Mouvement;
 
 import com.example.projetmobile.Model.Case;
 import com.example.projetmobile.Model.ComposedDrawing;
+import com.example.projetmobile.Model.Pieces.Piece;
 import com.example.projetmobile.Model.Player;
 
 public class ActionEat implements Action<Case>{
-    private Player p;
+    private Piece piece;
 
-    public ActionEat(Player p){
-        this.p = p;
+    public ActionEat(Piece p){
+        this.piece = p;
     }
 
     public ComposedDrawing getGraphicVisualisation(){
@@ -19,9 +20,12 @@ public class ActionEat implements Action<Case>{
     @Override
     public ActionState isValidated(Case c) {
         if(c == null) return ActionState.INVALID;
+        Player p = this.piece.getPocessor();
         if(c.getPiece() != null){
-            if(!this.p.isAlly(c.getPiece().getPocessor())){
+            if(!p.isAlly(c.getPiece().getPocessor())){
                 //We can eat
+                //We add new TastyPieces on the current action eat pieces
+                this.piece.getTastyPieces().add(c.getPiece());
                 return ActionState.VALID;
             }else{
                 //We cant eat an ally

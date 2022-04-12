@@ -28,14 +28,14 @@ public class Knight extends Piece{
     @Override
     public List<Mouvement<? extends GameObject>> getAllPossibleMvt(int col, int row){
         List<Mouvement<? extends GameObject>> mvt = new ArrayList<>();
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(2,1)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(2,-1)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(-2,1)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(-2,-1)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(1,2)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(-1,-2)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(1,-2)));
-        mvt.add(new MouvementPoint(new ActionEat(this.pocessor),new Position(col,row),new Position(-1,2)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(2,1)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(2,-1)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-2,1)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-2,-1)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(1,2)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-1,-2)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(1,-2)));
+        mvt.add(new MouvementPoint(new ActionEat(this),new Position(col,row),new Position(-1,2)));
 
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(2,1)));
         mvt.add(new MouvementPoint(new ActionDeplacement(),new Position(col,row),new Position(2,-1)));

@@ -174,7 +174,27 @@ public class GameManager {
         });
     }
 
+    private boolean isMenaced(Player playerCurrent){
+        for (Piece piece: playerCurrent.getPiecesPlayer()) {
+            if (piece.isVictoryCondition()){
+                for (Player p: players) {
+                    if(!playerCurrent.isAlly(p)){
+                        for (Piece pieceEnnemy: p.getPiecesPlayer()) {
+                            for (Piece eatable: pieceEnnemy.getTastyPieces()) {
+                                if (eatable == piece){
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isFinished(){
+
         return false;
     }
 

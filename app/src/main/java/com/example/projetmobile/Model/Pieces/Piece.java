@@ -19,12 +19,16 @@ public abstract class Piece implements GameObject{
     protected boolean moovedYet;
     protected ComposedDrawing appearence;
     protected Player pocessor;
+    protected boolean victory;
+    private List<Piece> tastyPieces;
 
 
     public Piece(Player p){
         this.moovedYet = false;
         this.pocessor = p;
+        this.victory = false;
         appearence = new ComposedDrawing();
+        tastyPieces = new ArrayList<>();
     }
 
     /**Return the visual appearence of a piece
@@ -48,6 +52,19 @@ public abstract class Piece implements GameObject{
 
     public Player getPocessor() {
         return pocessor;
+    }
+
+    public boolean isVictoryCondition(){
+        return this.victory;
+    }
+
+    /** TASTYPIECES Gestion **/
+    public List<Piece> getTastyPieces() {
+        return tastyPieces;
+    }
+
+    public void clearTastyPieces(){
+        tastyPieces = new ArrayList<>();
     }
 }
 

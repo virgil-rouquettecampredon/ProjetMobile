@@ -67,7 +67,7 @@ public class Pawn extends Piece {
         if(!moovedYet) mvt.add(new MouvementPoint(new ActionDeplacement(),start,new Position(2*addx,2*addy)));
 
         for (Position p: pos_eat) {
-            mvt.add(new MouvementPoint(new ActionEat(this.pocessor),start,p));
+            mvt.add(new MouvementPoint(new ActionEat(this),start,p));
         }
 
         return mvt;

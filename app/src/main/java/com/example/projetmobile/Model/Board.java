@@ -266,8 +266,8 @@ public class Board extends TableLayout {
         setAPieces(2,0,p1_bishop1);
         setAPieces(3,0,p1_queen);
         setAPieces(4,0,p1_king);
-        setAPieces(5,0,p1_knight2);
-        setAPieces(6,0,p1_bishop2);
+        setAPieces(6,0,p1_knight2);
+        setAPieces(5,0,p1_bishop2);
         setAPieces(7,0,p1_tower2);
 
         setAPieces(0,6,p2_pawn1);
@@ -284,8 +284,8 @@ public class Board extends TableLayout {
         setAPieces(2,7,p2_bishop1);
         setAPieces(3,7,p2_queen);
         setAPieces(4,7,p2_king);
-        setAPieces(5,7,p2_knight2);
-        setAPieces(6,7,p2_bishop2);
+        setAPieces(6,7,p2_knight2);
+        setAPieces(5,7,p2_bishop2);
         setAPieces(7,7,p2_tower2);
         //Commit changes for displaying
         commitChanges();
