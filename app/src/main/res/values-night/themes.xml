@@ -26,6 +26,7 @@
         <item name="selection_case_color">@color/jaune</item>
         <item name="eat_case_color">@color/magentaFonce</item>
         <item name="confirmation_case_color">@color/jauneFonce</item>
+        <item name="colorTextIndicatorBoard">@color/white</item>
     </style>
 
 </resources>

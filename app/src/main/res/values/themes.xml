@@ -19,7 +19,6 @@
 
         <item name="fontFamilyVariant">@font/permanent_marker</item>
 
-
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">@color/black</item>
@@ -30,6 +29,8 @@
         <item name="selection_case_color">@color/jaune</item>
         <item name="eat_case_color">@color/magentaFonce</item>
         <item name="confirmation_case_color">@color/jauneFonce</item>
+
+        <item name="colorTextIndicatorBoard">@color/white</item>
     </style>
 
     <style name="AppDialogTheme" parent="AppBlueActivityTheme">

@@ -5,22 +5,20 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Pieces.Bishop;
@@ -56,6 +54,20 @@ public class Board extends TableLayout {
     private int eat_color;
     private int confirmation_color;
 
+    /*For the indicator gestion*/
+    private int size_text_col_lin_indicator;
+    private Paint text_indicator;
+    private List<String> horizontalBarIndicator;
+    private List<String> verticalBarIndicator;
+
+    private float horizontal_bar_offset_horizontal;
+    private float horizontal_bar_addition;
+    private float horizontal_bar_offset_vertical;
+    private float vertical_bar_offset_vertical;
+    private float vertical_bar_offset_horizontal;
+    private float vertical_bar_addition;
+
+    private Rect r = new Rect();
 
     /*For the finish screen gestion*/
     private boolean isFinishScreen;
@@ -83,7 +95,7 @@ public class Board extends TableLayout {
     private int text_y_mes;
     private int text_y_end;
 
-    private int borderSize = 50;
+    private int borderSize_finish = 50;
 
     private long globalDuration = 700;
     private long offsetTime = 200;
@@ -95,7 +107,6 @@ public class Board extends TableLayout {
         this.attributeSet = null;
         System.out.println("CONSTRUCTEUR");
         changedCases = new ArrayList<>();
-
 
         setcolors();
         setdimensions();
@@ -134,22 +145,52 @@ public class Board extends TableLayout {
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
+        //Get paddings values
+        int valuePadding = (int) getResources().getDimension(R.dimen.board_margin_max) + (int) getResources().getDimension(R.dimen.board_margin_min);
+
         //Measure Width
-        int width = widthSize;
+        int width = widthSize - valuePadding;
         //Measure Height
-        int height = heightSize;
+        int height = heightSize - valuePadding;
         int taille_case = Math.min(width/nb_col,height/nb_row);
+
         majSizeCases(taille_case);
         super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
+        //When we need to know the exact current size of the board
         setPaintFinishScreen();
+        setPaintIndicatorText();
     }
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        String aff;
+        float off_curX = horizontal_bar_offset_horizontal;
+        float off_curY = horizontal_bar_offset_vertical;
+        //Draw horizontal bar first
+        for (int i = 0; i < nb_col; i++) {
+            aff = horizontalBarIndicator.get(i);
+            text_indicator.getTextBounds(aff, 0, aff.length(), r);
+            float add_y =  + r.height() / 2f - r.bottom;
+            canvas.drawText(aff,off_curX,off_curY+add_y,text_indicator);
+            off_curX+=horizontal_bar_addition;
+        }
+
+        off_curX = vertical_bar_offset_horizontal;
+        off_curY = vertical_bar_offset_vertical;
+        //Draw vertical bar next
+        for (int i = 0; i < nb_row; i++) {
+            aff = verticalBarIndicator.get(i);
+            text_indicator.getTextBounds(aff, 0, aff.length(), r);
+            float add_y =  + r.height() / 2f - r.bottom;
+            canvas.drawText(aff,off_curX,off_curY+add_y,text_indicator);
+            off_curY+=vertical_bar_addition;
+        }
     }
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -162,84 +203,84 @@ public class Board extends TableLayout {
                 int xPos = (getWidth() / 2);
                 canvas.drawText(finishMessage_start, xPos, text_y_start, paint_text_finish_start);
                 canvas.drawText(finishMessage_players, xPos, text_y_mes, paint_text_finish_players);
-                canvas.drawText(finishMessage_end, xPos, text_y_end, paint_text_finish_start);
+                canvas.drawText(finishMessage_end, xPos, text_y_end, paint_text_finish_end);
             }
 
             if(this.animationTimingCompletion_border <= .25){
                 //Borders TOP
                 canvas.drawRect(
                         getWidth()/2.0f,
-                        -borderSize/2.0f,
-                        (this.animationTimingCompletion_border*(getWidth()+borderSize/2.0f)*2.0f) + (getWidth()/2.0f),
-                        borderSize/2.0f, paint_border_Top);
+                        -borderSize_finish /2.0f,
+                        (this.animationTimingCompletion_border*(getWidth()+ borderSize_finish /2.0f)*2.0f) + (getWidth()/2.0f),
+                        borderSize_finish /2.0f, paint_border_Top);
                 canvas.drawRect(
-                        (getWidth()/2.0f) - (this.animationTimingCompletion_border*(getWidth()+borderSize/2.0f)*2.0f),
-                        -borderSize/2.0f,
+                        (getWidth()/2.0f) - (this.animationTimingCompletion_border*(getWidth()+ borderSize_finish /2.0f)*2.0f),
+                        -borderSize_finish /2.0f,
                         getWidth()/2.0f,
-                        borderSize/2.0f, paint_border_Top);
+                        borderSize_finish /2.0f, paint_border_Top);
 
             }else if(this.animationTimingCompletion_border <= .75){
                 //Borders TOP
                 canvas.drawRect(
                         getWidth()/2.0f,
-                        -borderSize/2.0f,
-                        getWidth()+borderSize/2.0f,
-                        +borderSize/2.0f, paint_border_Top);
+                        -borderSize_finish /2.0f,
+                        getWidth()+ borderSize_finish /2.0f,
+                        +borderSize_finish /2.0f, paint_border_Top);
 
                 canvas.drawRect(
-                        borderSize/2.0f,
-                        -borderSize/2.0f,
+                        borderSize_finish /2.0f,
+                        -borderSize_finish /2.0f,
                         getWidth()/2.0f,
-                        borderSize/2.0f, paint_border_Top);
+                        borderSize_finish /2.0f, paint_border_Top);
 
                 //Borders RIGHT and LEFT
                 canvas.drawRect(
-                        -borderSize/2.0f,
-                        -borderSize/2.0f,
-                        +borderSize/2.0f,
-                        (this.animationTimingCompletion_border-0.25f)*2.0f * (getHeight() + borderSize/2.0f), paint_border_LeftRight);
+                        -borderSize_finish /2.0f,
+                        -borderSize_finish /2.0f,
+                        +borderSize_finish /2.0f,
+                        (this.animationTimingCompletion_border-0.25f)*2.0f * (getHeight() + borderSize_finish /2.0f), paint_border_LeftRight);
                 canvas.drawRect(
-                        getWidth()-borderSize/2.0f,
-                        -borderSize/2.0f,
-                        getWidth()+borderSize/2.0f,
-                        (this.animationTimingCompletion_border-0.25f)*2.0f * (getHeight() + borderSize/2.0f), paint_border_LeftRight);
+                        getWidth()- borderSize_finish /2.0f,
+                        -borderSize_finish /2.0f,
+                        getWidth()+ borderSize_finish /2.0f,
+                        (this.animationTimingCompletion_border-0.25f)*2.0f * (getHeight() + borderSize_finish /2.0f), paint_border_LeftRight);
             }else {
                 //Borders TOP
                 canvas.drawRect(
                         getWidth()/2.0f,
-                        -borderSize/2.0f,
-                        getWidth()+borderSize/2.0f,
-                        +borderSize/2.0f, paint_border_Top);
+                        -borderSize_finish /2.0f,
+                        getWidth()+ borderSize_finish /2.0f,
+                        +borderSize_finish /2.0f, paint_border_Top);
 
                 canvas.drawRect(
-                        borderSize/2.0f,
-                        -borderSize/2.0f,
+                        borderSize_finish /2.0f,
+                        -borderSize_finish /2.0f,
                         getWidth()/2.0f,
-                        borderSize/2.0f, paint_border_Top);
+                        borderSize_finish /2.0f, paint_border_Top);
 
                 //Borders RIGHT and LEFT
                 canvas.drawRect(
-                        -borderSize/2.0f,
-                        -borderSize/2.0f,
-                        borderSize/2.0f,
-                        getHeight() + borderSize/2.0f, paint_border_LeftRight);
+                        -borderSize_finish /2.0f,
+                        -borderSize_finish /2.0f,
+                        borderSize_finish /2.0f,
+                        getHeight() + borderSize_finish /2.0f, paint_border_LeftRight);
                 canvas.drawRect(
-                        getWidth()-borderSize/2.0f,
-                        -borderSize/2.0f,
-                        getWidth()+borderSize/2.0f,
-                        getHeight() + borderSize/2.0f, paint_border_LeftRight);
+                        getWidth()- borderSize_finish /2.0f,
+                        -borderSize_finish /2.0f,
+                        getWidth()+ borderSize_finish /2.0f,
+                        getHeight() + borderSize_finish /2.0f, paint_border_LeftRight);
 
                 //Borders BOTTOM
                 canvas.drawRect(
-                        -borderSize/2.0f,
-                        getHeight()-borderSize/2.0f,
-                        (this.animationTimingCompletion_border-.75f)*(getWidth()+borderSize)*2.0f - borderSize/2.0f ,
-                        getHeight()+borderSize/2.0f, paint_border_Bottom);
+                        -borderSize_finish /2.0f,
+                        getHeight()- borderSize_finish /2.0f,
+                        (this.animationTimingCompletion_border-.75f)*(getWidth()+ borderSize_finish)*2.0f - borderSize_finish /2.0f ,
+                        getHeight()+ borderSize_finish /2.0f, paint_border_Bottom);
                 canvas.drawRect(
-                        (getWidth()+borderSize/2.0f) - ((this.animationTimingCompletion_border-.75f)*(getWidth()+borderSize)*2.0f),
-                        getHeight()-borderSize/2.0f,
-                        getWidth()+borderSize/2.0f,
-                        getHeight()+borderSize/2.0f, paint_border_Bottom);
+                        (getWidth()+ borderSize_finish /2.0f) - ((this.animationTimingCompletion_border-.75f)*(getWidth()+ borderSize_finish)*2.0f),
+                        getHeight()- borderSize_finish /2.0f,
+                        getWidth()+ borderSize_finish /2.0f,
+                        getHeight()+ borderSize_finish /2.0f, paint_border_Bottom);
             }
         }
     }
@@ -269,7 +310,7 @@ public class Board extends TableLayout {
         appearence_confirmation.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),confirmation_color);
     }
     //For set the finish screen only
-    public void setPaintFinishScreen(){
+    private void setPaintFinishScreen(){
         paint_background = new Paint();
         paint_border_Bottom = new Paint();
         paint_border_Top = new Paint();
@@ -293,6 +334,7 @@ public class Board extends TableLayout {
         int color_text_top_bottom = GameManager.getAttributeColor(context,R.attr.colorSecondary);
 
         paint_background.setColor(Color.argb(200, 0, 0,0));
+        //paint_background.setColor(ContextCompat.getColor(context, R.color.blackTransparent));
         paint_border_Top.setColor(color_top);
         paint_border_Bottom.setColor(color_bottom);
         paint_border_LeftRight.setShader(new LinearGradient(0, 0, 0, getHeight(), new int[] {color_top, color_bottom},null, Shader.TileMode.CLAMP));
@@ -307,6 +349,40 @@ public class Board extends TableLayout {
         text_y_start = getHeight()/4 - (int)((paint_text_finish_start.descent() + paint_text_finish_start.ascent()) / 2);
         text_y_mes = getHeight()/2 - (int)((paint_text_finish_players.descent() + paint_text_finish_players.ascent()) / 2);
         text_y_end = 3*getHeight()/4 - (int)((paint_text_finish_end.descent() + paint_text_finish_end.ascent()) / 2);
+    }
+    private void setPaintIndicatorText(){
+        text_indicator = new Paint();
+        text_indicator.setColor(GameManager.getAttributeColor(context,R.attr.colorTextIndicatorBoard));
+        text_indicator.setTextSize(getResources().getDimension(R.dimen.text_size_board_indicator));
+        text_indicator.setTextAlign(Paint.Align.CENTER);
+
+        horizontalBarIndicator = new ArrayList<>();
+        for (int i = 0; i < nb_col; i++) {
+            horizontalBarIndicator.add("" + (char)(i+65));
+        }
+        verticalBarIndicator = new ArrayList<>();
+        for (int i = nb_row; i > 0; i--) {
+            verticalBarIndicator.add("" + i);
+        }
+
+        float offset_max = getResources().getDimension(R.dimen.board_margin_max);
+        float offset_min = getResources().getDimension(R.dimen.board_margin_min);
+
+        float x_size = getWidth() - (offset_max+offset_min);
+        float y_size = getHeight() - (offset_max+offset_min);
+
+        horizontal_bar_offset_horizontal = offset_max + (x_size/(nb_col*2.0f));
+        horizontal_bar_addition = x_size/nb_col;
+        vertical_bar_offset_vertical = offset_min + y_size/(nb_row*2.0f);
+
+        vertical_bar_addition = y_size/nb_row;
+
+        horizontal_bar_offset_vertical = y_size + offset_min + offset_max/2;
+        vertical_bar_offset_horizontal = offset_max/2;
+
+        //Font treatment
+        Typeface customTypeface = ResourcesCompat.getFont(context, R.font.permanent_marker);
+        text_indicator.setTypeface(customTypeface);
     }
 
     //Method called for initializing the board cases
@@ -336,14 +412,14 @@ public class Board extends TableLayout {
         Player p2 = new Player("JORDAN");
         players.add(p1);
         players.add(p2);
-        Piece p1_pawn1 = new Pawn(p1,this.context, Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn2 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn3 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn4 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn5 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn6 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn7 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
-        Piece p1_pawn8 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p1_pawn1 = new Pawn(p1,this.context, Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn2 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn3 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn4 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn5 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn6 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn7 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p1_pawn8 = new Pawn(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
         Piece p1_tower1 = new Tower(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
         Piece p1_knight1 = new Knight(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
         Piece p1_bishop1 = new Bishop(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK,Color.BLACK);
@@ -368,14 +444,14 @@ public class Board extends TableLayout {
         p1.addPiece(p1_tower2);
         p1.addPiece(p1_knight2);
         p1.addPiece(p1_bishop2);
-        Piece p2_pawn1 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn2 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn3 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn4 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn5 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn6 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn7 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
-        Piece p2_pawn8 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
+        Piece p2_pawn1 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn2 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn3 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn4 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn5 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn6 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn7 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
+        Piece p2_pawn8 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
         Piece p2_tower1 = new Tower(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
         Piece p2_knight1 = new Knight(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
         Piece p2_bishop1 = new Bishop(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK,Color.WHITE);
@@ -402,41 +478,41 @@ public class Board extends TableLayout {
         p2.addPiece(p2_bishop2);
 
         //Put all the pieces in the board
-        setAPieces(0,1,p1_pawn1);
-        setAPieces(1,1,p1_pawn2);
-        setAPieces(2,1,p1_pawn3);
-        setAPieces(3,1,p1_pawn4);
-        setAPieces(4,1,p1_pawn5);
-        setAPieces(5,1,p1_pawn6);
-        setAPieces(6,1,p1_pawn7);
-        setAPieces(7,1,p1_pawn8);
+        setAPieces(0,1,p2_pawn1);
+        setAPieces(1,1,p2_pawn2);
+        setAPieces(2,1,p2_pawn3);
+        setAPieces(3,1,p2_pawn4);
+        setAPieces(4,1,p2_pawn5);
+        setAPieces(5,1,p2_pawn6);
+        setAPieces(6,1,p2_pawn7);
+        setAPieces(7,1,p2_pawn8);
 
-        setAPieces(0,0,p1_tower1);
-        setAPieces(1,0,p1_knight1);
-        setAPieces(2,0,p1_bishop1);
-        setAPieces(3,0,p1_queen);
-        setAPieces(4,0,p1_king);
-        setAPieces(6,0,p1_knight2);
-        setAPieces(5,0,p1_bishop2);
-        setAPieces(7,0,p1_tower2);
+        setAPieces(0,0,p2_tower1);
+        setAPieces(1,0,p2_knight1);
+        setAPieces(2,0,p2_bishop1);
+        setAPieces(3,0,p2_queen);
+        setAPieces(4,0,p2_king);
+        setAPieces(6,0,p2_knight2);
+        setAPieces(5,0,p2_bishop2);
+        setAPieces(7,0,p2_tower2);
 
-        setAPieces(0,6,p2_pawn1);
-        setAPieces(1,6,p2_pawn2);
-        setAPieces(2,6,p2_pawn3);
-        setAPieces(3,6,p2_pawn4);
-        setAPieces(4,6,p2_pawn5);
-        setAPieces(5,6,p2_pawn6);
-        setAPieces(6,6,p2_pawn7);
-        setAPieces(7,6,p2_pawn8);
+        setAPieces(0,6,p1_pawn1);
+        setAPieces(1,6,p1_pawn2);
+        setAPieces(2,6,p1_pawn3);
+        setAPieces(3,6,p1_pawn4);
+        setAPieces(4,6,p1_pawn5);
+        setAPieces(5,6,p1_pawn6);
+        setAPieces(6,6,p1_pawn7);
+        setAPieces(7,6,p1_pawn8);
 
-        setAPieces(0,7,p2_tower1);
-        setAPieces(1,7,p2_knight1);
-        setAPieces(2,7,p2_bishop1);
-        setAPieces(3,7,p2_queen);
-        setAPieces(4,7,p2_king);
-        setAPieces(6,7,p2_knight2);
-        setAPieces(5,7,p2_bishop2);
-        setAPieces(7,7,p2_tower2);
+        setAPieces(0,7,p1_tower1);
+        setAPieces(1,7,p1_knight1);
+        setAPieces(2,7,p1_bishop1);
+        setAPieces(3,7,p1_queen);
+        setAPieces(4,7,p1_king);
+        setAPieces(6,7,p1_knight2);
+        setAPieces(5,7,p1_bishop2);
+        setAPieces(7,7,p1_tower2);
         //Commit changes for displaying
         commitChanges();
         return players;
@@ -496,26 +572,32 @@ public class Board extends TableLayout {
 
         isFinishScreen = true;
 
-        ValueAnimator animator_background = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animator_background.setDuration(this.globalDuration);
-        animator_background.addUpdateListener(animation -> {
-            animationTimingCompletion_background = (Float) animation.getAnimatedValue();
+        if(GameManager.ANIMATION_FINISH) {
+            ValueAnimator animator_background = ValueAnimator.ofFloat(0.0f, 1.0f);
+            animator_background.setDuration(this.globalDuration);
+            animator_background.addUpdateListener(animation -> {
+                animationTimingCompletion_background = (Float) animation.getAnimatedValue();
+                invalidate();
+            });
+            animator_background.setInterpolator(new BounceInterpolator());
+
+            ValueAnimator animator_border = ValueAnimator.ofFloat(0.0f, 1.0f);
+            animator_border.setDuration(this.globalDuration - this.offsetTime);
+            animator_border.addUpdateListener(animation -> {
+                animationTimingCompletion_border = (Float) animation.getAnimatedValue();
+                invalidate();
+            });
+
+            animator_border.setStartDelay(offsetTime);
+            animator_border.setInterpolator(new LinearInterpolator());
+
+            animator_background.start();
+            animator_border.start();
+        }else{
+            animationTimingCompletion_background = 1.0f;
+            animationTimingCompletion_border = 1.0f;
             invalidate();
-        });
-        animator_background.setInterpolator(new BounceInterpolator());
-
-        ValueAnimator animator_border = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animator_border.setDuration(this.globalDuration - this.offsetTime);
-        animator_border.addUpdateListener(animation -> {
-            animationTimingCompletion_border = (Float) animation.getAnimatedValue();
-            invalidate();
-        });
-
-        animator_border.setStartDelay(offsetTime);
-        animator_border.setInterpolator(new LinearInterpolator());
-
-        animator_background.start();
-        animator_border.start();
+        }
     }
 
 

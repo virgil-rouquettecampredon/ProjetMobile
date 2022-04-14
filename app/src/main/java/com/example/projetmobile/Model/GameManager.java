@@ -47,10 +47,15 @@ import java.util.Map;
 
 
 public class GameManager {
+    //For animation control
+    public static boolean ANIMATION_FINISH  = false;
+    public static boolean ANIMATION_PIECE  = true;
+
     //For console printing only
     private static boolean DEBUG_FOR_ONCLK = false;
     private static boolean DEBUG_FOR_GAME_LOGIC = true;
     private static boolean DEBUG_FOR_GAME_MENACE = false;
+
 
     //Board of the current game
     private Board board;

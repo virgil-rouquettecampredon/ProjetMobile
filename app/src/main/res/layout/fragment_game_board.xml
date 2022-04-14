@@ -5,7 +5,7 @@
     tools:context=".GameBoardFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.example.projetmobile.Model.Board
@@ -13,6 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:nb_column="8"
-        app:nb_row="8"/>
+        app:nb_row="8"
 
+        android:paddingBottom="@dimen/board_margin_max"
+        android:paddingLeft="@dimen/board_margin_max"
+        android:paddingRight="@dimen/board_margin_min"
+        android:paddingTop="@dimen/board_margin_min"
+
+        android:background="@drawable/primary_box" />
 </LinearLayout>

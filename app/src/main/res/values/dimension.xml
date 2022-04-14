@@ -43,4 +43,8 @@
 
     <dimen name="watermark_text_size">16sp</dimen>
     <dimen name="case_border_width">1dp</dimen>
+
+    <dimen name="board_margin_min">10dp</dimen>
+    <dimen name="board_margin_max">30dp</dimen>
+    <dimen name="text_size_board_indicator">20sp</dimen>
 </resources>

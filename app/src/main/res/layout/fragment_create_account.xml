@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/fab_margin"
+    tools:context=".ConnectionFragment"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/avatar_content_description"
+            android:scaleType="fitCenter"
+            android:translationY="50dp"
+            android:src="@drawable/default_avatar"
+            android:translationZ="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/editText_min_height"
+                android:layout_weight="1"
+                android:fontFamily="@font/permanent_marker"
+                android:gravity="center"
+                android:labelFor="@+id/editTextPseudo"
+                android:text="@string/pseudo"
+                android:textColor="?attr/colorOnPrimaryVariant"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/editTextPseudo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editText_min_height"
+                android:layout_marginStart="@dimen/common_margin"
+                android:layout_marginEnd="@dimen/common_margin"
+                android:padding="@dimen/padding_btn_menu"
+                android:layout_weight="1"
+                android:autofillHints="DarkVirgil34"
+                android:textColor="?attr/colorSecondaryVariant"
+                android:background="@drawable/menu_edit_text"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/editText_min_height"
+                android:layout_weight="1"
+                android:fontFamily="@font/permanent_marker"
+                android:gravity="center"
+                android:labelFor="@+id/editTextPassword"
+                android:text="@string/password"
+                android:textColor="?attr/colorOnPrimaryVariant"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editText_min_height"
+                android:layout_marginStart="@dimen/common_margin"
+                android:layout_marginEnd="@dimen/common_margin"
+                android:padding="@dimen/padding_btn_menu"
+                android:layout_weight="1"
+                android:autofillHints="DarkVirgil34"
+                android:textColor="?attr/colorSecondaryVariant"
+                android:background="@drawable/menu_edit_text"
+                android:inputType="textPassword" />
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/editText_min_height"
+                android:layout_weight="1"
+                android:fontFamily="@font/permanent_marker"
+                android:text="@string/remember_me"
+                android:textColor="?attr/colorOnPrimaryVariant"
+                android:buttonTint="?attr/colorOnPrimaryVariant"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/connectButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/common_margin"
+                android:layout_marginEnd="@dimen/common_margin"
+                android:layout_marginBottom="@dimen/common_margin"
+                style="@style/btn_menu_default"
+                android:backgroundTint="@color/bleu"
+                android:text="@string/connect"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/magenta"
+        style="@style/btn_menu_default"
+        android:text="@string/back"/>
+
+</LinearLayout>
