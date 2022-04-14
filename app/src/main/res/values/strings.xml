@@ -57,4 +57,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="try_again_warning">" Vous êtes sur le point de vous rendre, ça serait dommage de laisser votre adversaire l’emporter si facilement "</string>
+
+    <string name="finish_screen_start">Partie termininée</string>
+    <string name="finish_screen_winnerOne_end">a gagné</string>
+    <string name="finish_screen_winnerMany_end">ont gagné</string>
+    <string name="finish_screen_draw_end">égalité</string>
 </resources>

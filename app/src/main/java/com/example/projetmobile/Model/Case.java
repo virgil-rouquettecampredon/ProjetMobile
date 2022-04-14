@@ -19,7 +19,6 @@ public class Case extends View implements GameObject {
     private Context context;
     private Paint paint;
 
-
     private int desiredDim;
     private int stroke_width;
 
@@ -61,24 +60,8 @@ public class Case extends View implements GameObject {
         pre_selected_pos = false;
     }
 
-    public Case(Case c){
-        super(c.getContext());
-        this.context = c.getContext();
-        this.paint = c.paint;
-        this.desiredDim = c.desiredDim;
-        this.stroke_width = c.stroke_width;
-        this.dimension = c.dimension;
-        this.color_black = c.color_black;
-        this.color_white = c.color_white;
-        this.piece = (Piece) c.piece.clone();
-        this.possible_pos = c.possible_pos;
-        this.pre_selected_pos = c.pre_selected_pos;
-        this.white = c.white;
-        this.column = c.column;
-        this.row = c.row;
-        this.nb_draw = c.nb_draw;
-    }
 
+    /** ======== View Methods ======== **/
     @Override
     protected void onDraw(Canvas canvas) {
         //System.out.println("JE DESSINE : " + this);
@@ -124,14 +107,12 @@ public class Case extends View implements GameObject {
 
         super.onDraw(canvas);
     }
-
     @Override
     //Can be used to stop animations and to clean up resources used by the view
     protected void onDetachedFromWindow() {
         //can be used to stop animations and to clean up resources used by the view
         super.onDetachedFromWindow();
     }
-
     @Override
     //Called once the window is available
     protected void onAttachedToWindow() {
@@ -139,7 +120,6 @@ public class Case extends View implements GameObject {
         //System.out.println("JE SUIS ATTACHE : " + this);
         setWillNotDraw(false);
     }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -177,6 +157,8 @@ public class Case extends View implements GameObject {
         setMeasuredDimension(width, height);
     }
 
+
+    /** ======== SETTERS ======== **/
     public void setColor_white(int color_white) {
         this.color_white = color_white;
     }
@@ -209,29 +191,34 @@ public class Case extends View implements GameObject {
         this.desiredDim = desiredDim;
     }
 
+
+    /** ======== GETTERS ======== **/
     public int getColumn() {
         return column;
     }
-
     public int getRow() {
         return row;
     }
-
     public boolean isPre_selected_pos() {
         return pre_selected_pos;
     }
-
     public boolean isPossible_pos() {
         return possible_pos;
     }
 
+
+    /** ======== UTILITIES FUNCTION ======== **/
     public void commit_changes(){
         //System.out.println("CASE : COMMIT CHANGES ON : " + this);
         //Refresh with invalidate (from UI thread)
         //Refresh with onPostInvalidate(from non UI thread)
         invalidate();
     }
-
+    public void clear(){
+        this.piece = null;
+        this.possible_pos = false;
+        this.pre_selected_pos = false;
+    }
     @Override
     public String toString() {
         return "Case{" +

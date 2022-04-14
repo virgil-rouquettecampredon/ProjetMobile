@@ -17,8 +17,8 @@ public class GameFragment extends Fragment {
     private GamePlayerOverlayFragment frag_p2;
     private GameBoardFragment frag_board;
 
-    private GameManager gm;
 
+    //Fragments tags
     private final static String frgTag_player1 = "PLAYERFRAGMENT1";
     private final static String frgTag_player2 = "PLAYERFRAGMENT2";
     private final static String frgTag_gameboard = "BOARDFRAGMENT";
@@ -41,8 +41,7 @@ public class GameFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
 
         System.out.println("=============> TEST BOARD ONCREATE");
@@ -81,13 +80,5 @@ public class GameFragment extends Fragment {
 
     public GameBoardFragment getFrag_board() {
         return frag_board;
-    }
-
-    public GameManager getGm() {
-        return gm;
-    }
-
-    public void setGm(GameManager gm) {
-        this.gm = gm;
     }
 }

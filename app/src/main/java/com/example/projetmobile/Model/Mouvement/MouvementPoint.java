@@ -19,8 +19,7 @@ public class MouvementPoint extends Mouvement<Case> {
     }
 
     public MouvementPoint(Action<Case> action, Position start, Position incrementation) {
-        super(action, start, incrementation);
-        this.canStillMoove = true;
+        this(action, start, incrementation, true);
     }
 
     @Override

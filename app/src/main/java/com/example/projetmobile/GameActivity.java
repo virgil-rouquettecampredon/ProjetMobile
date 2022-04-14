@@ -17,6 +17,7 @@ public class GameActivity extends AppCompatActivity {
     public final static String fragmentTag = "GAMEFRAGMENT";
 
     private GameFragment gameFragment;
+    private GameManager gm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +50,19 @@ public class GameActivity extends AppCompatActivity {
 
         Board b = (Board) findViewById(R.id.board_game);
         if(b!=null) {
-            gameFragment.setGm(new GameManager(getBaseContext(), b));
+
+            this.gm = new GameManager(getBaseContext(), b);
 
             System.out.println(gameFragment.getFrag_p1().getTVPseudo());
             System.out.println(gameFragment.getFrag_p1().getLLDeadPieces());
             System.out.println(gameFragment.getFrag_p2().getTVPseudo());
             System.out.println(gameFragment.getFrag_p2().getLLDeadPieces());
 
-            gameFragment.getGm().addPlayerInterfaceElement(gameFragment.getFrag_p1().getTVPseudo(),gameFragment.getFrag_p1().getLLDeadPieces());
-            gameFragment.getGm().addPlayerInterfaceElement(gameFragment.getFrag_p2().getTVPseudo(),gameFragment.getFrag_p2().getLLDeadPieces());
+            this.gm.addPlayerInterfaceElement(gameFragment.getFrag_p1().getTVPseudo(),gameFragment.getFrag_p1().getLLDeadPieces());
+            this.gm.addPlayerInterfaceElement(gameFragment.getFrag_p2().getTVPseudo(),gameFragment.getFrag_p2().getLLDeadPieces());
 
-            gameFragment.getGm().start();
+
+            this.gm.start();
         }
     }
 }
