@@ -34,7 +34,9 @@ import android.widget.Toast;
 import com.example.projetmobile.Model.GameManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -562,6 +564,10 @@ public class ConnectionFragment extends Fragment {
         user = new User(pseudo, psw, email);
         String keyId = currUser.getUid();
         mDatabase.child("users").child(keyId).setValue(user);
+        AuthCredential credential = EmailAuthProvider.getCredential(email, psw);
+        // put the credential into a bundle
+
+        // put the bundle into an intent
         Intent intent = new Intent(getActivity(), MainMenuActivity.class);
         startActivity(intent);
     }

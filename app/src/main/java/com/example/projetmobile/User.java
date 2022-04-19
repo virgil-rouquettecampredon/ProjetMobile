@@ -5,6 +5,7 @@ public class User {
     private String pseudo;
     private String password;
     private String email;
+    private String bio;
     private Long elo;
 
     public User() {
@@ -14,8 +15,13 @@ public class User {
         this.pseudo = pseudo;
         this.password = password;
         this.email = email;
+        this.bio = "Un g@meur avec un @ à la place du a";
         this.elo = new Long(1000);
 
+    }
+
+    public String getBio() {
+        return bio;
     }
 
     public String getPseudo() {

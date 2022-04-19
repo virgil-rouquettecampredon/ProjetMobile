@@ -7,8 +7,10 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class ProfileFragment extends Fragment {
@@ -28,6 +39,14 @@ public class ProfileFragment extends Fragment {
     TextView textViewPseudo;
     TextView bioTextView;
     ImageView imageViewAvatar;
+
+    String pseudo;
+    String bio;
+
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference mDatabase;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -45,56 +64,81 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setFriendPseudoLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
-                    //TODO Changer le pseudo (BDD)
-                    textViewPseudo.setText(resultString);
-                }
-            });
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
+                        //TODO Changer le pseudo (BDD)
+                        textViewPseudo.setText(resultString);
+                        pseudo = resultString;
+                        mDatabase.child("users").child(user.getUid()).child("pseudo").setValue(resultString);
+                    }
+                });
 
         setBioLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
-                    //TODO Changer la bio (BDD)
-                    bioTextView.setText(resultString);
-                }
-            });
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
+                        //TODO Changer la bio (BDD)
+                        bioTextView.setText(resultString);
+                        bio = resultString;
+                        mDatabase.child("users").child(user.getUid()).child("bio").setValue(resultString);
+                    }
+                });
 
         warnDeleteLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    //TODO SUPPRIMER LE COMPTE POUR TOUJOURS (un très long moment)
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-        setProfilePictureLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    //TODO Changer la PP (BDD)
-                    Intent data = result.getData();
-                    String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
-                    if (!resultString.isEmpty()) {
-                        imageViewAvatar.setImageURI(Uri.parse(resultString));
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        AuthCredential credential = EmailAuthProvider.getCredential("test@gmail.com", "123456");
+                        //TODO SUPPRIMER LE COMPTE POUR TOUJOURS (un très long moment)
+                        if (user != null) {
+                            user.delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d("TAG", "User account deleted.");
+                                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                                startActivity(intent);
+                                                Toast.makeText(getContext(), "Deleted User Successfully,", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                        }
                     }
-                }
-            });
-    }
+
+                });
+
+
+    setProfilePictureLauncher =
+
+    registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+
+    result ->
+
+    {
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            //TODO Changer la PP (BDD)
+            Intent data = result.getData();
+            String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
+            if (!resultString.isEmpty()) {
+                imageViewAvatar.setImageURI(Uri.parse(resultString));
+            }
+        }
+    });
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
 
         textViewPseudo = view.findViewById(R.id.textViewPseudo);
 
@@ -139,7 +183,7 @@ public class ProfileFragment extends Fragment {
         editPseudoView.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
             //TODO récupérer le vrai pseudo
-            intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_pseudo));
+            intent.putExtra(EditTextDialogActivity.editTextPrefillName, pseudo);
             intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.pseudo));
             setFriendPseudoLauncher.launch(intent);
         });
@@ -148,9 +192,31 @@ public class ProfileFragment extends Fragment {
         bioTextView.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
             //TODO récupérer la vrai bio
-            intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_description));
+            intent.putExtra(EditTextDialogActivity.editTextPrefillName, bio);
             intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.biography));
             setBioLauncher.launch(intent);
+        });
+
+        /**Database information**/
+
+        database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
+        mDatabase = database.getReference();
+        String keyId = user.getUid();
+
+        mDatabase.child("users").child(keyId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    bio = task.getResult().getValue(User.class).getBio();
+                    pseudo = task.getResult().getValue(User.class).getPseudo();
+                    textViewPseudo.setText(task.getResult().getValue(User.class).getPseudo());
+                    bioTextView.setText(task.getResult().getValue(User.class).getBio());
+                }
+            }
         });
 
         return view;
