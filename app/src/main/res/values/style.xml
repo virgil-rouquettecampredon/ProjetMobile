@@ -6,6 +6,20 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:padding">@dimen/padding_btn_menu</item>
     </style>
+
+    <style name="sub_btn_menu_default" parent="btn_menu_default">
+        <item name="android:layout_marginStart">@dimen/common_margin</item>
+        <item name="android:layout_marginEnd">@dimen/common_margin</item>
+        <item name="android:textSize">@dimen/txt_size_sub_btn_menu</item>
+        <item name="android:backgroundTint">@color/blue</item>
+    </style>
+
+    <style name="small_sub_btn_menu_default" parent="btn_menu_default">
+        <item name="android:layout_marginStart">@dimen/big_margin</item>
+        <item name="android:layout_marginEnd">@dimen/big_margin</item>
+        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:textSize">@dimen/txt_size_small_sub_btn_menu</item>
+    </style>
     
     <style name="dialog_title">
         <item name="android:translationY">@dimen/dialog_title_translationY</item>

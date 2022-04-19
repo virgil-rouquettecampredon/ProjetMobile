@@ -17,7 +17,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/blue_logo_height"
-            android:background="@color/bleuFonce" />
+            android:background="@color/dark_blue" />
 
         <View
             android:layout_width="wrap_content"

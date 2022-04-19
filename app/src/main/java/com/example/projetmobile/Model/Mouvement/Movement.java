@@ -8,14 +8,14 @@ import com.example.projetmobile.Model.GameObject;
 
 import java.util.List;
 
-public abstract class Mouvement<T extends GameObject> {
-    Action<T> action;
-    Position start;
-    Position incrementation;
+public abstract class Movement<T extends GameObject> {
+    protected Action<T> action;
+    protected Position start;
+    protected Position incrementation;
 
     //ComposedDrawing graphic_element;
 
-    public Mouvement(Action<T> action, Position start, Position incrementation) {
+    public Movement(Action<T> action, Position start, Position incrementation) {
         this.action = action;
         this.start = start;
         this.incrementation = incrementation;

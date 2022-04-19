@@ -71,4 +71,12 @@ public class ComposedDrawing extends Drawable {
     public void addLayer(Drawable d, int color){
         layers.add(new LayerDrawing(d,color));
     }
+
+    public void clear(){
+        this.layers.clear();
+    }
+
+    public boolean isInstancied(){
+        return this.layers.size()>0;
+    }
 }

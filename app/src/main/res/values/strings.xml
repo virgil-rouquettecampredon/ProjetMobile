@@ -9,8 +9,14 @@
     <string name="avatar_content_description">The avatar</string>
     <string name="pseudo">Pseudo</string>
     <string name="password">Mot de passe</string>
+    <string name="email">Adresse email</string>
     <string name="remember_me">Se souvenir de moi</string>
     <string name="connect">Se connecter</string>
+    <string name="createAccount">créer un compte</string>
+    <string name="missing_informations">Il manque des informations</string>
+    <string name="forgot_psw">Mot de passe oublié</string>
+    <string name="forgot_psw_msgtoast">Un mail a été envoyé à l\'adresse du compte : </string>
+    <string name="forgot_psw_msgtoast_nopseudo">Veuillez renseigner un pseudo pour effectuer la récupération</string>
     <string name="back">Retour</string>
     <string name="online">En ligne</string>
     <string name="local">Local</string>
@@ -62,4 +68,5 @@
     <string name="finish_screen_winnerOne_end">a gagné</string>
     <string name="finish_screen_winnerMany_end">ont gagné</string>
     <string name="finish_screen_draw_end">égalité</string>
+    <string name="on_board_screen">Veuillez choisir une pièce</string>
 </resources>

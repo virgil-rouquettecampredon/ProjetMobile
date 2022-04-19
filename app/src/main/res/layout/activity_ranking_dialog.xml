@@ -22,7 +22,7 @@
         android:paddingStart="0dp"
         android:paddingEnd="@dimen/list_dialog_icon_size"
         android:layout_weight="1"
-        android:scrollbarThumbVertical="@color/bleuFonce">
+        android:scrollbarThumbVertical="@color/dark_blue">
 
         <LinearLayout
             android:id="@+id/rankingFragmentReceiver"
@@ -43,7 +43,7 @@
             android:id="@+id/backButton"
             android:layout_width="@dimen/dialog_btn_width"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/bleuFonce"
+            android:backgroundTint="@color/dark_blue"
             style="@style/dialog_btn"
             android:text="@string/back" />
 

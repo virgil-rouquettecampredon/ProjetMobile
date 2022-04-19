@@ -1,5 +1,6 @@
 package com.example.projetmobile.Model;
 
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.TableLayout;
@@ -20,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.projetmobile.Model.Mouvement.MovementComplex;
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Pieces.Bishop;
 import com.example.projetmobile.Model.Pieces.King;
@@ -32,12 +35,18 @@ import com.example.projetmobile.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class Board extends TableLayout {
-    //Appearence for the board case type
+    //For console printing only
+    private static boolean DEBUG_FOR_BOARD_LOGIC = false;
+
+
+    //Appearance for the board case type
     public static ComposedDrawing appearence_possiblepos = new ComposedDrawing();
     public static ComposedDrawing appearence_possiblepos_eat = new ComposedDrawing();
     public static ComposedDrawing appearence_confirmation = new ComposedDrawing();
+    public static ComposedDrawing appearence_menaced = new ComposedDrawing();
 
     private int nb_col;
     private int nb_row;
@@ -48,14 +57,15 @@ public class Board extends TableLayout {
     private Context context;
     private AttributeSet attributeSet;
 
+    //=== For the case color and effect management
     private int white_color;
     private int black_color;
     private int selection_color;
     private int eat_color;
     private int confirmation_color;
+    private int menaced_color;
 
-    /*For the indicator gestion*/
-    private int size_text_col_lin_indicator;
+    //=== For the indicator management
     private Paint text_indicator;
     private List<String> horizontalBarIndicator;
     private List<String> verticalBarIndicator;
@@ -69,7 +79,7 @@ public class Board extends TableLayout {
 
     private Rect r = new Rect();
 
-    /*For the finish screen gestion*/
+    //=== For the finish screen management
     private boolean isFinishScreen;
 
     private float animationTimingCompletion_background;
@@ -97,20 +107,34 @@ public class Board extends TableLayout {
 
     private int borderSize_finish = 50;
 
-    private long globalDuration = 700;
-    private long offsetTime = 200;
+    private long border_globalDuration = 700;
+    private long text_offsetTime = 200;
+
+    //=== For piece movement animation
+    private boolean isPieceMoving;
+
+    private Piece pieceToMove;
+    private int left_pieceToMove;
+    private int right_pieceToMove;
+    private int top_pieceToMove;
+    private int bottom_pieceToMove;
+
+    private long piece_globalDuration = 100;
+
+    //=== For the transform piece screen
+    private ChangePieceScreen onScreenView;
 
     /** ======== Constructors of the Viewgroup Board ======== **/
     public Board(Context context) {
         super(context);
         this.context = context;
         this.attributeSet = null;
-        System.out.println("CONSTRUCTEUR");
+        if(DEBUG_FOR_BOARD_LOGIC)System.out.println("CONSTRUCTEUR");
         changedCases = new ArrayList<>();
 
-        setcolors();
-        setdimensions();
-        setAppearences();
+        setColors();
+        setDimensions();
+        setAppearances();
 
         this.cases = new Case[nb_col*nb_row];
         initBoard();
@@ -121,12 +145,12 @@ public class Board extends TableLayout {
         super(context, attrs);
         this.context = context;
         this.attributeSet = attrs;
-        System.out.println("CONSTRUCTEUR avec ATTRS");
+        if(DEBUG_FOR_BOARD_LOGIC)System.out.println("CONSTRUCTEUR avec ATTRS");
         changedCases = new ArrayList<>();
 
-        setcolors();
-        setdimensions();
-        setAppearences();
+        setColors();
+        setDimensions();
+        setAppearances();
 
         this.cases = new Case[nb_col*nb_row];
         initBoard();
@@ -168,6 +192,7 @@ public class Board extends TableLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if(DEBUG_FOR_BOARD_LOGIC) System.out.println("DRAW BOARD");
 
         String aff;
         float off_curX = horizontal_bar_offset_horizontal;
@@ -194,93 +219,102 @@ public class Board extends TableLayout {
     }
     @Override
     protected void dispatchDraw(Canvas canvas) {
+        if(DEBUG_FOR_BOARD_LOGIC) System.out.println("DISPATCH DRAW BOARD");
+
         super.dispatchDraw(canvas);
-        if(isFinishScreen){
-            canvas.drawRect(0, 0, getWidth(), this.animationTimingCompletion_background*getHeight(), paint_background);
+        if(isFinishScreen) {
+            canvas.drawRect(0, 0, getWidth(), this.animationTimingCompletion_background * getHeight(), paint_background);
             //Half of the animation
 
-            if(this.animationTimingCompletion_border >= .5){
+            if (this.animationTimingCompletion_border >= .5) {
                 int xPos = (getWidth() / 2);
                 canvas.drawText(finishMessage_start, xPos, text_y_start, paint_text_finish_start);
                 canvas.drawText(finishMessage_players, xPos, text_y_mes, paint_text_finish_players);
                 canvas.drawText(finishMessage_end, xPos, text_y_end, paint_text_finish_end);
             }
 
-            if(this.animationTimingCompletion_border <= .25){
+            if (this.animationTimingCompletion_border <= .25) {
                 //Borders TOP
                 canvas.drawRect(
-                        getWidth()/2.0f,
-                        -borderSize_finish /2.0f,
-                        (this.animationTimingCompletion_border*(getWidth()+ borderSize_finish /2.0f)*2.0f) + (getWidth()/2.0f),
-                        borderSize_finish /2.0f, paint_border_Top);
+                        getWidth() / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        (this.animationTimingCompletion_border * (getWidth() + borderSize_finish / 2.0f) * 2.0f) + (getWidth() / 2.0f),
+                        borderSize_finish / 2.0f, paint_border_Top);
                 canvas.drawRect(
-                        (getWidth()/2.0f) - (this.animationTimingCompletion_border*(getWidth()+ borderSize_finish /2.0f)*2.0f),
-                        -borderSize_finish /2.0f,
-                        getWidth()/2.0f,
-                        borderSize_finish /2.0f, paint_border_Top);
+                        (getWidth() / 2.0f) - (this.animationTimingCompletion_border * (getWidth() + borderSize_finish / 2.0f) * 2.0f),
+                        -borderSize_finish / 2.0f,
+                        getWidth() / 2.0f,
+                        borderSize_finish / 2.0f, paint_border_Top);
 
-            }else if(this.animationTimingCompletion_border <= .75){
+            } else if (this.animationTimingCompletion_border <= .75) {
                 //Borders TOP
                 canvas.drawRect(
-                        getWidth()/2.0f,
-                        -borderSize_finish /2.0f,
-                        getWidth()+ borderSize_finish /2.0f,
-                        +borderSize_finish /2.0f, paint_border_Top);
+                        getWidth() / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        getWidth() + borderSize_finish / 2.0f,
+                        +borderSize_finish / 2.0f, paint_border_Top);
 
                 canvas.drawRect(
-                        borderSize_finish /2.0f,
-                        -borderSize_finish /2.0f,
-                        getWidth()/2.0f,
-                        borderSize_finish /2.0f, paint_border_Top);
+                        borderSize_finish / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        getWidth() / 2.0f,
+                        borderSize_finish / 2.0f, paint_border_Top);
 
                 //Borders RIGHT and LEFT
                 canvas.drawRect(
-                        -borderSize_finish /2.0f,
-                        -borderSize_finish /2.0f,
-                        +borderSize_finish /2.0f,
-                        (this.animationTimingCompletion_border-0.25f)*2.0f * (getHeight() + borderSize_finish /2.0f), paint_border_LeftRight);
+                        -borderSize_finish / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        +borderSize_finish / 2.0f,
+                        (this.animationTimingCompletion_border - 0.25f) * 2.0f * (getHeight() + borderSize_finish / 2.0f), paint_border_LeftRight);
                 canvas.drawRect(
-                        getWidth()- borderSize_finish /2.0f,
-                        -borderSize_finish /2.0f,
-                        getWidth()+ borderSize_finish /2.0f,
-                        (this.animationTimingCompletion_border-0.25f)*2.0f * (getHeight() + borderSize_finish /2.0f), paint_border_LeftRight);
-            }else {
+                        getWidth() - borderSize_finish / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        getWidth() + borderSize_finish / 2.0f,
+                        (this.animationTimingCompletion_border - 0.25f) * 2.0f * (getHeight() + borderSize_finish / 2.0f), paint_border_LeftRight);
+            } else {
                 //Borders TOP
                 canvas.drawRect(
-                        getWidth()/2.0f,
-                        -borderSize_finish /2.0f,
-                        getWidth()+ borderSize_finish /2.0f,
-                        +borderSize_finish /2.0f, paint_border_Top);
+                        getWidth() / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        getWidth() + borderSize_finish / 2.0f,
+                        +borderSize_finish / 2.0f, paint_border_Top);
 
                 canvas.drawRect(
-                        borderSize_finish /2.0f,
-                        -borderSize_finish /2.0f,
-                        getWidth()/2.0f,
-                        borderSize_finish /2.0f, paint_border_Top);
+                        borderSize_finish / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        getWidth() / 2.0f,
+                        borderSize_finish / 2.0f, paint_border_Top);
 
                 //Borders RIGHT and LEFT
                 canvas.drawRect(
-                        -borderSize_finish /2.0f,
-                        -borderSize_finish /2.0f,
-                        borderSize_finish /2.0f,
-                        getHeight() + borderSize_finish /2.0f, paint_border_LeftRight);
+                        -borderSize_finish / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        borderSize_finish / 2.0f,
+                        getHeight() + borderSize_finish / 2.0f, paint_border_LeftRight);
                 canvas.drawRect(
-                        getWidth()- borderSize_finish /2.0f,
-                        -borderSize_finish /2.0f,
-                        getWidth()+ borderSize_finish /2.0f,
-                        getHeight() + borderSize_finish /2.0f, paint_border_LeftRight);
+                        getWidth() - borderSize_finish / 2.0f,
+                        -borderSize_finish / 2.0f,
+                        getWidth() + borderSize_finish / 2.0f,
+                        getHeight() + borderSize_finish / 2.0f, paint_border_LeftRight);
 
                 //Borders BOTTOM
                 canvas.drawRect(
-                        -borderSize_finish /2.0f,
-                        getHeight()- borderSize_finish /2.0f,
-                        (this.animationTimingCompletion_border-.75f)*(getWidth()+ borderSize_finish)*2.0f - borderSize_finish /2.0f ,
-                        getHeight()+ borderSize_finish /2.0f, paint_border_Bottom);
+                        -borderSize_finish / 2.0f,
+                        getHeight() - borderSize_finish / 2.0f,
+                        (this.animationTimingCompletion_border - .75f) * (getWidth() + borderSize_finish) * 2.0f - borderSize_finish / 2.0f,
+                        getHeight() + borderSize_finish / 2.0f, paint_border_Bottom);
                 canvas.drawRect(
-                        (getWidth()+ borderSize_finish /2.0f) - ((this.animationTimingCompletion_border-.75f)*(getWidth()+ borderSize_finish)*2.0f),
-                        getHeight()- borderSize_finish /2.0f,
-                        getWidth()+ borderSize_finish /2.0f,
-                        getHeight()+ borderSize_finish /2.0f, paint_border_Bottom);
+                        (getWidth() + borderSize_finish / 2.0f) - ((this.animationTimingCompletion_border - .75f) * (getWidth() + borderSize_finish) * 2.0f),
+                        getHeight() - borderSize_finish / 2.0f,
+                        getWidth() + borderSize_finish / 2.0f,
+                        getHeight() + borderSize_finish / 2.0f, paint_border_Bottom);
+            }
+        }else if(isPieceMoving){
+            //Perform animation piece move
+            if(pieceToMove != null){
+                ComposedDrawing drawable = pieceToMove.getAppearances();
+                drawable.setBounds(left_pieceToMove,top_pieceToMove,right_pieceToMove,bottom_pieceToMove);
+                drawable.draw(canvas);
             }
         }
     }
@@ -291,23 +325,26 @@ public class Board extends TableLayout {
 
 
     /** ======== Init the Board Model ======== **/
-    private void setcolors() {
+    //Init basics UI
+    private void setColors() {
         white_color = GameManager.getAttributeColor(context,R.attr.white_case_color);
         black_color = GameManager.getAttributeColor(context,R.attr.black_case_color);
         selection_color = GameManager.getAttributeColor(context,R.attr.selection_case_color);
         eat_color = GameManager.getAttributeColor(context,R.attr.eat_case_color);
         confirmation_color = GameManager.getAttributeColor(context,R.attr.confirmation_case_color);
+        menaced_color = GameManager.getAttributeColor(context,R.attr.menaced_case_color);
     }
-    private void setdimensions() {
+    private void setDimensions() {
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.Board);
         nb_col = a.getInt(R.styleable.Board_nb_column, 0);
         nb_row = a.getInt(R.styleable.Board_nb_row, 0);
         a.recycle();
     }
-    private void setAppearences(){
-        appearence_possiblepos.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape), selection_color);
-        appearence_possiblepos_eat.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),eat_color);
-        appearence_confirmation.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),confirmation_color);
+    private void setAppearances(){
+        if(!appearence_possiblepos.isInstancied())      appearence_possiblepos.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape), selection_color);
+        if(!appearence_possiblepos_eat.isInstancied())  appearence_possiblepos_eat.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),eat_color);
+        if(!appearence_confirmation.isInstancied())     appearence_confirmation.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),confirmation_color);
+        if(!appearence_menaced.isInstancied())          appearence_menaced.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),menaced_color);
     }
     //For set the finish screen only
     private void setPaintFinishScreen(){
@@ -327,14 +364,16 @@ public class Board extends TableLayout {
         paint_text_finish_end.setTextAlign(Paint.Align.CENTER);
         paint_text_finish_end.setTextSize(textSizeFinish_end);
 
-        int color_top = GameManager.getAttributeColor(context,R.attr.colorTertiary);
-        int color_bottom = GameManager.getAttributeColor(context,R.attr.colorTertiaryVariant);
+        int color_top = GameManager.getAttributeColor(context,R.attr.colorBorderTopFinishScreen);
+        int color_bottom = GameManager.getAttributeColor(context,R.attr.colorBorderBottomFinishScreen);
 
-        int color_text = GameManager.getAttributeColor(context,R.attr.colorPrimaryVariant);
-        int color_text_top_bottom = GameManager.getAttributeColor(context,R.attr.colorSecondary);
+        int color_text = GameManager.getAttributeColor(context,R.attr.colorTextFinishScreen);
+        int color_text_top_bottom = GameManager.getAttributeColor(context,R.attr.colorTextTopBottomFinishScreen);
 
-        paint_background.setColor(Color.argb(200, 0, 0,0));
+        paint_background.setColor(GameManager.getAttributeColor(context,R.attr.colorBGFinishScreen));
+        //paint_background.setColor(Color.argb(200, 0, 0,0));
         //paint_background.setColor(ContextCompat.getColor(context, R.color.blackTransparent));
+
         paint_border_Top.setColor(color_top);
         paint_border_Bottom.setColor(color_bottom);
         paint_border_LeftRight.setShader(new LinearGradient(0, 0, 0, getHeight(), new int[] {color_top, color_bottom},null, Shader.TileMode.CLAMP));
@@ -408,8 +447,8 @@ public class Board extends TableLayout {
         System.out.println("GAME MANAGER INIT");
         List<Player> players = new ArrayList<>();
 
-        Player p1 = new Player("JOJO");
-        Player p2 = new Player("JORDAN");
+        Player p1 = new Player("JOJO", Color.WHITE);
+        Player p2 = new Player("JORDAN",Color.BLACK);
         players.add(p1);
         players.add(p2);
         Piece p1_pawn1 = new Pawn(p1,this.context, Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);
@@ -423,7 +462,7 @@ public class Board extends TableLayout {
         Piece p1_tower1 = new Tower(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
         Piece p1_knight1 = new Knight(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
         Piece p1_bishop1 = new Bishop(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK,Color.BLACK);
-        Piece p1_king = new King(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK,Color.BLACK);
+        King p1_king = new King(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK,Color.BLACK);
         Piece p1_queen = new Queen(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
         Piece p1_tower2 = new Tower(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
         Piece p1_knight2 = new Knight(p1,this.context,  Color.WHITE,Color.WHITE,Color.BLACK);
@@ -444,6 +483,10 @@ public class Board extends TableLayout {
         p1.addPiece(p1_tower2);
         p1.addPiece(p1_knight2);
         p1.addPiece(p1_bishop2);
+
+        p1_king.addPieceToRockWith(p1_tower1,new Position(0,-1));
+        p1_king.addPieceToRockWith(p1_tower2,new Position(0,1));
+
         Piece p2_pawn1 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
         Piece p2_pawn2 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
         Piece p2_pawn3 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
@@ -455,7 +498,7 @@ public class Board extends TableLayout {
         Piece p2_tower1 = new Tower(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
         Piece p2_knight1 = new Knight(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
         Piece p2_bishop1 = new Bishop(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK,Color.WHITE);
-        Piece p2_king = new King(p2,this.context, Color.BLACK,Color.WHITE,Color.BLACK,Color.BLACK);
+        King p2_king = new King(p2,this.context, Color.BLACK,Color.WHITE,Color.BLACK,Color.BLACK);
         Piece p2_queen = new Queen(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
         Piece p2_tower2 = new Tower(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
         Piece p2_knight2 = new Knight(p2,this.context,Color.BLACK,Color.WHITE,Color.BLACK);
@@ -476,6 +519,9 @@ public class Board extends TableLayout {
         p2.addPiece(p2_tower2);
         p2.addPiece(p2_knight2);
         p2.addPiece(p2_bishop2);
+
+        p2_king.addPieceToRockWith(p2_tower1,new Position(0,-1));
+        p2_king.addPieceToRockWith(p2_tower2,new Position(0,1));
 
         //Put all the pieces in the board
         setAPieces(0,1,p2_pawn1);
@@ -532,12 +578,12 @@ public class Board extends TableLayout {
         case_tab.setWhite(isWhite);
         case_tab.setColor_white(white_color);
         case_tab.setColor_black(black_color);
+        case_tab.setEndCase(row == 0 || row == (nb_row-1));
         return case_tab;
     }
 
-
     /** ======== Manip the Board Model ======== **/
-    //Method called for define if a position for a moove on the board is correct or not
+    //Method called for define if a position for a move on the board is correct or not
     public boolean isGoodPos(int x, int y){
         return ((x>=0 && x<nb_col) && (y>=0 && y<nb_row));
     }
@@ -563,7 +609,7 @@ public class Board extends TableLayout {
         }
     }
     //Set the end of the board
-    public void endOfGame(String start,String players, String end ){
+    public void onEndOfGame(String start, String players, String end){
         System.out.println("BOARD END OF GAME");
 
         this.finishMessage_start = start;
@@ -574,7 +620,7 @@ public class Board extends TableLayout {
 
         if(GameManager.ANIMATION_FINISH) {
             ValueAnimator animator_background = ValueAnimator.ofFloat(0.0f, 1.0f);
-            animator_background.setDuration(this.globalDuration);
+            animator_background.setDuration(this.border_globalDuration);
             animator_background.addUpdateListener(animation -> {
                 animationTimingCompletion_background = (Float) animation.getAnimatedValue();
                 invalidate();
@@ -582,13 +628,13 @@ public class Board extends TableLayout {
             animator_background.setInterpolator(new BounceInterpolator());
 
             ValueAnimator animator_border = ValueAnimator.ofFloat(0.0f, 1.0f);
-            animator_border.setDuration(this.globalDuration - this.offsetTime);
+            animator_border.setDuration(this.border_globalDuration - this.text_offsetTime);
             animator_border.addUpdateListener(animation -> {
                 animationTimingCompletion_border = (Float) animation.getAnimatedValue();
                 invalidate();
             });
 
-            animator_border.setStartDelay(offsetTime);
+            animator_border.setStartDelay(text_offsetTime);
             animator_border.setInterpolator(new LinearInterpolator());
 
             animator_background.start();
@@ -599,10 +645,34 @@ public class Board extends TableLayout {
             invalidate();
         }
     }
+    //Set the UI for choice in game board changing
+    public void onChangePieceShape(Player curP,Function<Piece,Void> fnc_oclk_choices){
+        //First set the screen to be visible
+        this.onScreenView.setVisibility(VISIBLE);
+
+        //Next compute onclick for the game changing piece
+        this.onScreenView.setOclkPerformedFunctionPieces(fnc_oclk_choices);
+
+        //Then MAJ all components for UI interfaces
+        this.onScreenView.clearChoices();
+        int color_primary = curP.getColor();
+        int color_secondary = (color_primary == Color.BLACK)? Color.WHITE : Color.BLACK;
+        int color_base = Color.WHITE;
+        int color_border = Color.BLACK;
+
+        this.onScreenView.addElementForChoice(new Tower(curP,this.context,  color_primary,color_base,color_border));
+        this.onScreenView.addElementForChoice(new Queen(curP,this.context,  color_primary,color_base,color_border));
+        this.onScreenView.addElementForChoice(new Knight(curP,this.context,  color_primary,color_base,color_border));
+        this.onScreenView.addElementForChoice(new Bishop(curP,this.context,  color_primary,color_base,color_border,color_secondary));
+        this.onScreenView.commitChanges();
+    }
+    public void restart_no_screen_view(){
+        this.onScreenView.setVisibility(INVISIBLE);
+    }
 
 
     /** ======== For layout rendering ======== **/
-    //Init the board XML appaerence
+    //Init the board XML appearance
     public void constructXMLBoard(){
         TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
         this.setLayoutParams(tableParams);
@@ -622,6 +692,10 @@ public class Board extends TableLayout {
             c.setDessiredDimention(taille_case);
         }
     }
+    public void setOnScreenView(ChangePieceScreen onScreenView) {
+        this.onScreenView = onScreenView;
+    }
+
 
 
     /** ======== Methods for performing changes on the board and MAJ Model and Layout ======== **/
@@ -666,7 +740,87 @@ public class Board extends TableLayout {
         }
         caseInCase.setPre_selected_pos(pos);
     }
+    //Set a possible dangerous position (true or false)
+    //Assuming this position to be correct
+    public void setPossibleCaseWithMenaceOnIt(int col, int row, boolean men){
+        //Log.i(log_tag,"BOARD : SET A PRESELECTED POS ON : (" +col+","+row+") : " + pos);
+        Case caseInCase = cases[col+row*nb_col];
+        if(!changedCases.contains(caseInCase)){
+            changedCases.add(caseInCase);
+        }
+        caseInCase.setWith_menace_on_it(men);
+    }
+    //Set a possible ComplexMovement on a Case
+    //Assuming this position to be correct
+    public void setComplexMovementCase(int col, int row, MovementComplex mc){
+        Case caseInCase = cases[col+row*nb_col];
+        if(!changedCases.contains(caseInCase)){
+            changedCases.add(caseInCase);
+        }
+        caseInCase.setMv_complex(mc);
+    }
 
+
+    /*ANIMATION TREATMENT*/
+    //Set a piece on place with a continuous displacement on the board
+    public void animatedDisplacement(Case start, Case end, AnimatorListenerAdapter onTheEnd){
+        //In this func, we will only perform animation visual effect on the board, the gameplay mecanism is performed by onTheEnd
+        Piece p_dep = start.getPiece();
+
+        System.out.println("ANIMATED DISPLACEMENT : " + p_dep);
+        System.out.println("CASE START : " + start);
+        System.out.println("CASE END : " + end);
+
+        if(p_dep != null) {
+            //Now we can perform the continuous movement of the piece
+            isPieceMoving = true;
+            pieceToMove = p_dep;
+
+            //Get the current size of the piece
+            //Need to consider the padding with the current case
+            int dimension = (int) GameManager.convertDpToPixel(getResources().getDimension(R.dimen.case_pieces_padding),context);
+            int w_piece = start.getWidth() - 2*dimension;
+            int h_piece = start.getHeight() - 2*dimension;
+
+
+            //Get the position of the two cases depending on their positions in the current Board
+            Rect ovb_start = new Rect();
+            start.getDrawingRect(ovb_start);
+            this.offsetDescendantRectToMyCoords(start, ovb_start);
+            int start_y = ovb_start.top + dimension;
+            int start_x = ovb_start.left + dimension;
+            Rect ovb_end = new Rect();
+            end.getDrawingRect(ovb_end);
+            this.offsetDescendantRectToMyCoords(end, ovb_end);
+            int end_y = ovb_end.top+dimension;
+            int end_x = ovb_end.left+dimension;
+
+            System.out.println("=>WIDTH P : " + w_piece);
+            System.out.println("=>HEIGHT P : " + h_piece);
+            System.out.println("=>POS START : " + start_x + "," + start_y);
+            System.out.println("=>POS END : " + end_x + "," + end_y);
+
+            //Now we can perform all the animation
+            ValueAnimator anim_piece = ValueAnimator.ofFloat(0.0f, 1.0f);
+            anim_piece.setDuration(this.piece_globalDuration);
+            anim_piece.addUpdateListener(animation -> {
+                float value = (Float) animation.getAnimatedValue();
+                top_pieceToMove = (int) (start_y + (end_y - start_y)*value);
+                left_pieceToMove = (int) (start_x + (end_x - start_x)*value);
+                bottom_pieceToMove = top_pieceToMove+h_piece;
+                right_pieceToMove = left_pieceToMove+w_piece;
+                invalidate();
+            });
+            anim_piece.addListener(onTheEnd);
+
+            anim_piece.setInterpolator(new AccelerateInterpolator());
+            anim_piece.start();
+        }
+    }
+    public void restart_no_animation_context(){
+        isPieceMoving = false;
+        pieceToMove = null;
+    }
 
     @Override
     public String toString() {

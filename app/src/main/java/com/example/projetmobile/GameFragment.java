@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.example.projetmobile.Model.GameManager;
 
@@ -16,6 +17,8 @@ public class GameFragment extends Fragment {
     private GamePlayerOverlayFragment frag_p1;
     private GamePlayerOverlayFragment frag_p2;
     private GameBoardFragment frag_board;
+    private FrameLayout frameLayout_p1;
+    private FrameLayout frameLayout_p2;
 
 
     //Fragments tags
@@ -67,6 +70,8 @@ public class GameFragment extends Fragment {
         }
         transaction.commit();
 
+        frameLayout_p1 = view.findViewById(R.id.player_1);
+        frameLayout_p2 = view.findViewById(R.id.player_2);
         return view;
     }
 
@@ -80,5 +85,13 @@ public class GameFragment extends Fragment {
 
     public GameBoardFragment getFrag_board() {
         return frag_board;
+    }
+
+    public FrameLayout getFrameLayout_p1() {
+        return frameLayout_p1;
+    }
+
+    public FrameLayout getFrameLayout_p2() {
+        return frameLayout_p2;
     }
 }

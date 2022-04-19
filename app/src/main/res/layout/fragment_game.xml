@@ -9,10 +9,10 @@
     android:layout_margin="@dimen/fab_margin">
 
     <FrameLayout
-        android:id="@+id/player_1"
+        android:id="@+id/player_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/primary_box"
+        android:background="@drawable/game_box"
         android:padding="@dimen/drawable_box_margin"
         android:layout_marginBottom="@dimen/common_margin" />
 
@@ -24,11 +24,11 @@
         />
 
     <FrameLayout
-        android:id="@+id/player_2"
+        android:id="@+id/player_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/drawable_box_margin"
-        android:background="@drawable/primary_box"
+        android:background="@drawable/game_box"
         />
 
 </LinearLayout>

@@ -6,9 +6,10 @@ import com.example.projetmobile.Model.Case;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MouvementVector extends Mouvement<Case>{
+@Deprecated
+public class MovementVector extends Movement<Case> {
 
-    public MouvementVector(Action<Case> action, Position start, Position incrementation) {
+    public MovementVector(Action<Case> action, Position start, Position incrementation) {
         super(action, start, incrementation);
     }
 

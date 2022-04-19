@@ -20,9 +20,9 @@ public class ActionEat implements Action<Case>{
     @Override
     public ActionState isValidated(Case c) {
         if(c == null) return ActionState.INVALID;
-        Player p = this.piece.getPocessor();
+        Player p = this.piece.getPossessor();
         if(c.getPiece() != null){
-            if(!p.isAlly(c.getPiece().getPocessor())){
+            if(!p.isAlly(c.getPiece().getPossessor())){
                 //We can eat
                 //We add new TastyPieces on the current action eat pieces
                 this.piece.getTastyPieces().add(c.getPiece());

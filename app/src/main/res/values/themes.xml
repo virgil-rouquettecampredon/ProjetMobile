@@ -2,19 +2,19 @@
     <!-- Base application theme. -->
     <style name="Theme.ProjetMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/jauneTransparent</item>
-        <item name="colorPrimaryVariant">@color/jaune</item>
-        <item name="colorPrimaryVariantDark">@color/jauneFonce</item>
+        <item name="colorPrimary">@color/alpha_yellow</item>
+        <item name="colorPrimaryVariant">@color/yellow</item>
+        <item name="colorPrimaryVariantDark">@color/dark_yellow</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnPrimaryVariant">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/bleu</item>
-        <item name="colorSecondaryVariant">@color/bleuFonce</item>
-        <item name="colorOnSecondary">@color/bleuFonce</item>
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/dark_blue</item>
+        <item name="colorOnSecondary">@color/dark_blue</item>
         <item name="colorOnSecondaryVariant">@color/white</item>
 
         <item name="colorTertiary">@color/magenta</item>
-        <item name="colorTertiaryVariant">@color/magentaFonce</item>
+        <item name="colorTertiaryVariant">@color/dark_magenta</item>
         <item name="colorOnTertiary">@color/white</item>
 
         <item name="fontFamilyVariant">@font/permanent_marker</item>
@@ -22,15 +22,32 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">@color/black</item>
-        <!-- Customize your theme here. -->
 
-        <item name="white_case_color">@color/bleu</item>
-        <item name="black_case_color">@color/bleuFonce</item>
-        <item name="selection_case_color">@color/jaune</item>
-        <item name="eat_case_color">@color/magentaFonce</item>
-        <item name="confirmation_case_color">@color/jauneFonce</item>
+        <!-- For the color theme game -->
+        <item name="white_case_color">@color/blue</item>
+        <item name="black_case_color">@color/dark_blue</item>
+        <item name="selection_case_color">@color/yellow</item>
+        <item name="eat_case_color">@color/dark_magenta</item>
+        <item name="confirmation_case_color">@color/dark_yellow</item>
+        <item name="menaced_case_color">@color/red</item>
 
+        <item name="GameMainColor">@color/yellow</item>
+        <item name="GameSecondColor">@color/dark_yellow</item>
+        <item name="GameColorPlayerTurn">@color/brown</item>
         <item name="colorTextIndicatorBoard">@color/white</item>
+
+        <item name="changePiece_bgColorScreen">@color/alpha_black</item>
+        <item name="changePiece_textColor">@color/white</item>
+
+        <item name="colorBorderTopFinishScreen">?attr/colorTertiary</item>
+        <item name="colorBorderBottomFinishScreen">?attr/colorTertiaryVariant</item>
+        <item name="colorTextTopBottomFinishScreen">?attr/colorSecondary</item>
+        <item name="colorTextFinishScreen">?attr/colorPrimaryVariant</item>
+        <item name="colorBGFinishScreen">@color/alpha_black</item>
+
+
+        <item name="colorBGStartScreen">@color/blue</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="AppDialogTheme" parent="AppBlueActivityTheme">
@@ -55,8 +72,8 @@
     <style name="Theme.ProjetMobile.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppBlueActivityTheme" parent="Theme.ProjetMobile">
-        <item name="android:statusBarColor" tools:targetApi="l">@color/bleuFonce</item>
-        <item name="android:navigationBarColor">@color/bleuFonce</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue</item>
+        <item name="android:navigationBarColor">@color/dark_blue</item>
     </style>
 
     <style name="MenuBurgerTheme" parent="AppBlueActivityTheme">
@@ -68,7 +85,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
 
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:windowBackground">@color/blackTransparent</item>
+        <item name="android:windowBackground">@color/alpha_black</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>

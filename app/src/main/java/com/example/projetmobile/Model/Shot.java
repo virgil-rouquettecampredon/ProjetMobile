@@ -18,6 +18,9 @@ public class Shot {
         this.startPos = startPos;
         this.endPos = endPos;
         this.eatedPiece = eatedPiece;
+
+        this.firstMoove = firstMoove;
+        this.majAff = majAff;
     }
 
     public Shot(Piece pieceConcerned, Position startPos, Position endPos, boolean majAff, boolean firstMoove) {

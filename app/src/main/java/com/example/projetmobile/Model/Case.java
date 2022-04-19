@@ -10,8 +10,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.example.projetmobile.Model.Mouvement.ActionDeplacement;
-import com.example.projetmobile.Model.Mouvement.ActionEat;
+import com.example.projetmobile.Model.Mouvement.MovementComplex;
 import com.example.projetmobile.Model.Pieces.Piece;
 import com.example.projetmobile.R;
 
@@ -32,6 +31,9 @@ public class Case extends View implements GameObject {
     private Piece piece;
     private boolean possible_pos;
     private boolean pre_selected_pos;
+    private boolean is_end_case;
+    private boolean is_case_with_menace_on_it;
+    private MovementComplex mv_complex;
 
     private boolean white;
     private int column;
@@ -58,6 +60,7 @@ public class Case extends View implements GameObject {
         color_black = Color.BLACK;
         color_white = Color.WHITE;
         pre_selected_pos = false;
+        mv_complex = null;
     }
 
 
@@ -76,30 +79,38 @@ public class Case extends View implements GameObject {
         //paint.setStyle(Paint.Style.FILL);
         //canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
 
-        if(pre_selected_pos){
-            //System.out.println("DRAW PRE SELECTED POS");
-            //Draw pre selected pos
-            Board.appearence_confirmation.setBounds(0, 0, getWidth(), getHeight());
-            Board.appearence_confirmation.draw(canvas);
-        }else {
-            //Draw possible pos filter
-            if (possible_pos) {
-                //System.out.println("DRAW POSSIBLE POS");
-                if(piece!=null){
-                    Board.appearence_possiblepos_eat.setBounds(0, 0, getWidth(), getHeight());
-                    Board.appearence_possiblepos_eat.draw(canvas);
-                }else{
-                    Board.appearence_possiblepos.setBounds(0, 0, getWidth(), getHeight());
-                    Board.appearence_possiblepos.draw(canvas);
-                }
+        //Try first to draw the possible menace that a case can possibly contain
 
+            if (pre_selected_pos) {
+                //System.out.println("DRAW PRE SELECTED POS");
+                //Draw pre selected pos
+                Board.appearence_confirmation.setBounds(0, 0, getWidth(), getHeight());
+                Board.appearence_confirmation.draw(canvas);
+            } else {
+                //Draw possible pos filter
+                if (possible_pos) {
+                    //System.out.println("DRAW POSSIBLE POS");
+                    if (piece != null) {
+                        Board.appearence_possiblepos_eat.setBounds(0, 0, getWidth(), getHeight());
+                        Board.appearence_possiblepos_eat.draw(canvas);
+                    } else {
+                        Board.appearence_possiblepos.setBounds(0, 0, getWidth(), getHeight());
+                        Board.appearence_possiblepos.draw(canvas);
+                    }
+
+                } else {
+                    if (is_case_with_menace_on_it) {
+                        Board.appearence_menaced.setBounds(0, 0, getWidth(), getHeight());
+                        Board.appearence_menaced.draw(canvas);
+                    }
+                }
             }
-        }
+
 
         //Draw piece
         if(piece != null){
             //System.out.println("DRAW A PIECE : " + piece);
-            ComposedDrawing drawable = piece.getAppearences();
+            ComposedDrawing drawable = piece.getAppearances();
             drawable.setBounds(dimension, dimension, getWidth()-dimension, getHeight()-dimension);
             drawable.draw(canvas);
         }
@@ -171,6 +182,9 @@ public class Case extends View implements GameObject {
     public void setPre_selected_pos(boolean pre_selected_pos) {
         this.pre_selected_pos = pre_selected_pos;
     }
+    public void setWith_menace_on_it(boolean is_case_with_menace_on_it) {
+        this.is_case_with_menace_on_it = is_case_with_menace_on_it;
+    }
     public void setWhite(boolean white) {
         this.white = white;
     }
@@ -190,6 +204,12 @@ public class Case extends View implements GameObject {
         this.stroke_width = desiredDim/8;
         this.desiredDim = desiredDim;
     }
+    public void setEndCase(boolean is_end_case) {
+        this.is_end_case = is_end_case;
+    }
+    public void setMv_complex(MovementComplex mv_complex) {
+        this.mv_complex = mv_complex;
+    }
 
 
     /** ======== GETTERS ======== **/
@@ -204,6 +224,12 @@ public class Case extends View implements GameObject {
     }
     public boolean isPossible_pos() {
         return possible_pos;
+    }
+    public boolean is_end_case() {
+        return is_end_case;
+    }
+    public MovementComplex getMv_complex() {
+        return mv_complex;
     }
 
 

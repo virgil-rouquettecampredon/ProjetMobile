@@ -11,7 +11,7 @@ public class ActionDeplacement implements Action<Case>{
     public ActionState isValidated(Case c) {
         if(c == null) return ActionState.INVALID;
         if (c.getPiece() == null){
-            return ActionState.VALID;
+            return ActionState.STILLGOOD;
         }
         return ActionState.INVALID;
     }

@@ -113,7 +113,7 @@
                 android:layout_marginEnd="@dimen/common_margin"
                 android:layout_marginBottom="@dimen/common_margin"
                 style="@style/btn_menu_default"
-                android:backgroundTint="@color/bleu"
+                android:backgroundTint="@color/blue"
                 android:text="@string/connect"
                 android:textSize="20sp" />
         </LinearLayout>

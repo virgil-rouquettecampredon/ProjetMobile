@@ -18,9 +18,12 @@ public class ConnectionActivity extends AppCompatActivity {
         FragmentTransaction transaction = fm.beginTransaction();
 
         ConnectionFragment frag = (ConnectionFragment) fm.findFragmentByTag(fragmentTag);
+        //CreateAccountFragment frag = (CreateAccountFragment) fm.findFragmentByTag(fragmentTag);
 
         if (frag == null) {
             frag = ConnectionFragment.newInstance();
+            //frag = CreateAccountFragment.newInstance();
+
             transaction.add(R.id.fragment_container, frag, fragmentTag);
             transaction.commit();
         }

@@ -29,6 +29,23 @@
     <attr name="colorOnSecondaryVariant" format="reference"/>
     <attr name="colorTertiaryVariant" format="reference"/>
     <attr name="fontFamilyVariant" format="reference"/>
+    <attr name="colorBGStartScreen" format="reference"/>
+
+
+    <!--FOR THE GAME LAYOUT-->
+    <attr name="GameMainColor" format="reference"/>
+    <attr name="GameSecondColor" format="reference"/>
+    <attr name="GameColorPlayerTurn" format="reference"/>
+    <attr name="menaced_case_color" format="reference"/>
+    <attr name="changePiece_bgColorScreen" format="reference"/>
+    <attr name="changePiece_textColor" format="reference"/>
 
     <attr name="colorTextIndicatorBoard" format="reference"/>
+
+    <attr name="colorBorderTopFinishScreen" format="reference"/>
+    <attr name="colorBorderBottomFinishScreen" format="reference"/>
+    <attr name="colorTextTopBottomFinishScreen" format="reference"/>
+    <attr name="colorTextFinishScreen" format="reference"/>
+    <attr name="colorBGFinishScreen" format="reference"/>
+
 </resources>

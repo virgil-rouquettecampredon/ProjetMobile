@@ -4,10 +4,12 @@ import android.content.Context;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.projetmobile.Model.ComposedDrawing;
 import com.example.projetmobile.Model.GameObject;
 import com.example.projetmobile.Model.Mouvement.ActionEat;
-import com.example.projetmobile.Model.Mouvement.Mouvement;
-import com.example.projetmobile.Model.Mouvement.MouvementVector;
+import com.example.projetmobile.Model.Mouvement.Movement;
+import com.example.projetmobile.Model.Mouvement.MovementPiece;
+import com.example.projetmobile.Model.Mouvement.MovementVector;
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Player;
 import com.example.projetmobile.R;
@@ -19,22 +21,35 @@ public class Queen extends Piece{
 
     public Queen(Player p, Context c, int color_fill, int color_plate, int color_stroke) {
         super(p);
-        this.appearence.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_queen),color_fill);
-        this.appearence.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_queen_plate),color_plate);
-        this.appearence.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_queen_border), color_stroke);
+        this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_queen),color_fill);
+        this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_queen_plate),color_plate);
+        this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_queen_border), color_stroke);
+    }
+    public Queen(boolean deapCloneOnGame, Piece p, ComposedDrawing appearance) {
+        super(deapCloneOnGame,p);
+        this.appearance = appearance;
     }
 
     @Override
-    public List<Mouvement<? extends GameObject>> getAllPossibleMvt(int col, int row){
-        List<Mouvement<? extends GameObject>> mvt = new ArrayList<>();
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(0,1)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(0,-1)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(1,0)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(-1,0)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(1,1)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(-1,-1)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(1,-1)));
-        mvt.add(new MouvementVector(new ActionEat(this),new Position(col,row),new Position(-1,1)));
+    public List<Movement<? extends GameObject>> getAllPossibleMvt(int col, int row){
+        List<Movement<? extends GameObject>> mvt = new ArrayList<>();
+        /*mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(0,1)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(0,-1)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(1,0)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(-1,0)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(1,1)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(-1,-1)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(1,-1)));
+        mvt.add(new MovementVector(new ActionEat(this),new Position(col,row),new Position(-1,1)));*/
+
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(0,1)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(0,-1)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(1,0)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(-1,0)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(1,1)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(-1,-1)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(1,-1)));
+        mvt.add(new MovementPiece(new ActionEat(this),new Position(col,row),new Position(-1,1)));
         return mvt;
     }
 }

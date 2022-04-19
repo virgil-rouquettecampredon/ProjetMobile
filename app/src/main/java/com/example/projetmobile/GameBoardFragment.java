@@ -9,15 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.projetmobile.Model.Board;
-import com.example.projetmobile.Model.GameManager;
+import com.example.projetmobile.Model.ChangePieceScreen;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameBoardFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameBoardFragment extends Fragment {
-    private GameManager gm;
+    private Board b;
+    private ChangePieceScreen screenGameWrapper;
 
     public GameBoardFragment() {}
 
@@ -36,6 +32,16 @@ public class GameBoardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_game_board, container, false);
+        b = (Board) v.findViewById(R.id.board_game);
+        screenGameWrapper = v.findViewById(R.id.transform_screen);
         return v;
+    }
+
+    public Board getBoard() {
+        return b;
+    }
+
+    public ChangePieceScreen getScreenGameWrapper() {
+        return screenGameWrapper;
     }
 }

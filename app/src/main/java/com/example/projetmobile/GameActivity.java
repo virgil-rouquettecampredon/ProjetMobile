@@ -8,16 +8,18 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.projetmobile.Model.Board;
+import com.example.projetmobile.Model.ChangePieceScreen;
 import com.example.projetmobile.Model.GameManager;
 
 public class GameActivity extends AppCompatActivity {
     public final static String fragmentTag = "GAMEFRAGMENT";
 
     private GameFragment gameFragment;
-    private GameManager gm;
+    private static GameManager gm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +50,24 @@ public class GameActivity extends AppCompatActivity {
         //Lunch the game
         System.out.println("=============> LUNCH THE GAME");
 
-        Board b = (Board) findViewById(R.id.board_game);
+        //Board b = (Board) findViewById(R.id.board_game);
+        Board b = gameFragment.getFrag_board().getBoard();
+        ChangePieceScreen wrapper = gameFragment.getFrag_board().getScreenGameWrapper();
+        b.setOnScreenView(wrapper);
+
         if(b!=null) {
 
-            this.gm = new GameManager(getBaseContext(), b);
+            gm = new GameManager(getBaseContext(), b);
 
-            System.out.println(gameFragment.getFrag_p1().getTVPseudo());
-            System.out.println(gameFragment.getFrag_p1().getLLDeadPieces());
-            System.out.println(gameFragment.getFrag_p2().getTVPseudo());
-            System.out.println(gameFragment.getFrag_p2().getLLDeadPieces());
+            System.out.println("FR Player 1 pseudo : "  + gameFragment.getFrag_p1().getTVPseudo());
+            System.out.println("FR Player 1 dead : "    + gameFragment.getFrag_p1().getLLDeadPieces());
+            System.out.println("FR Player 2 pseudo : "  + gameFragment.getFrag_p2().getTVPseudo());
+            System.out.println("FR Player 2 dead : "    + gameFragment.getFrag_p2().getLLDeadPieces());
 
-            this.gm.addPlayerInterfaceElement(gameFragment.getFrag_p1().getTVPseudo(),gameFragment.getFrag_p1().getLLDeadPieces());
-            this.gm.addPlayerInterfaceElement(gameFragment.getFrag_p2().getTVPseudo(),gameFragment.getFrag_p2().getLLDeadPieces());
+            gm.addPlayerInterfaceElement(gameFragment.getFrag_p1(), gameFragment.getFrameLayout_p1());
+            gm.addPlayerInterfaceElement(gameFragment.getFrag_p2(), gameFragment.getFrameLayout_p2());
 
-
-            this.gm.start();
+            gm.start();
         }
     }
 }
