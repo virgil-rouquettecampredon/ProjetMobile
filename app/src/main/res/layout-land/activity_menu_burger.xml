@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuBurgerActivity"
+    android:orientation="horizontal"
+    android:gravity="center|top">
+
+    <FrameLayout
+        android:id="@+id/menuBurgerToggle"
+        android:layout_width="@dimen/blue_logo_height"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true" >
+    </FrameLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="?attr/colorSecondary"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/gameModeButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            style="@style/btn_menu_default"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="@dimen/menu_burger_button_space"
+            android:text="@string/change_game_mode"/>
+
+        <Button
+            android:id="@+id/tryAgainButton"
+            style="@style/btn_menu_default"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/menu_burger_button_space"
+            android:text="@string/try_again"/>
+
+        <Button
+            android:id="@+id/backButton"
+            style="@style/btn_menu_default"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/menu_burger_button_space"
+            android:layout_marginBottom="@dimen/menu_burger_button_space"
+            android:text="@string/back"/>
+
+    </LinearLayout>
+
+</LinearLayout>

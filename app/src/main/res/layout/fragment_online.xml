@@ -18,7 +18,7 @@
             android:id="@+id/rankedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="@dimen/menu_btn_spacing"
             style="@style/btn_menu_default"
             android:text="@string/ranked" />
 
@@ -26,7 +26,7 @@
             android:id="@+id/friendButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="@dimen/menu_btn_spacing"
             style="@style/btn_menu_default"
             android:text="@string/friend" />
 

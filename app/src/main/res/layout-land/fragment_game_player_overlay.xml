@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".GamePlayerOverlayFragment"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="@dimen/picture_medium"
+        android:layout_height="@dimen/picture_medium"
+        android:src="@drawable/dark_default_avatar"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="@string/avatar_content_description" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textViewPseudo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/permanent_marker"
+            android:text="@string/default_pseudo"
+            android:textColor="?attr/colorOnPrimaryVariant"
+            android:textAlignment="center"
+            android:autoSizeTextType="uniform"
+            android:layout_marginTop="@dimen/common_margin" />
+        <LinearLayout
+            android:id="@+id/dead_pieces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center|start"
+            android:layout_marginBottom="@dimen/common_margin"
+            android:layout_marginLeft="@dimen/common_margin">
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

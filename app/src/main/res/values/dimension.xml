@@ -3,11 +3,15 @@
     <dimen name="case_pieces_padding">.5dp</dimen>
     <dimen name="max_height_btn_menu">500dp</dimen>
     <dimen name="txt_size_btn_menu">36sp</dimen>
+    <dimen name="txt_size_btn_menu_small">18sp</dimen>
 
     <dimen name="txt_size_sub_btn_menu">20sp</dimen>
     <dimen name="txt_size_small_sub_btn_menu">15sp</dimen>
 
     <dimen name="padding_btn_menu">8dp</dimen>
+    <dimen name="padding_btn_menu_small">4dp</dimen>
+
+    <dimen name="menu_btn_spacing">50dp</dimen>
 
     <dimen name="common_margin">16dp</dimen>
     <dimen name="big_margin">30dp</dimen>

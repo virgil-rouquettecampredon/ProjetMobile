@@ -7,6 +7,11 @@
         <item name="android:padding">@dimen/padding_btn_menu</item>
     </style>
 
+    <style name="btn_menu_small" parent="btn_menu_default">
+        <item name="android:textSize">@dimen/txt_size_btn_menu_small</item>
+        <item name="android:padding">@dimen/padding_btn_menu_small</item>
+    </style>
+
     <style name="sub_btn_menu_default" parent="btn_menu_default">
         <item name="android:layout_marginStart">@dimen/common_margin</item>
         <item name="android:layout_marginEnd">@dimen/common_margin</item>

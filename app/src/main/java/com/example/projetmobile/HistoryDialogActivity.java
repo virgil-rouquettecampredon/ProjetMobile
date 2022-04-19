@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -45,10 +46,16 @@ public class HistoryDialogActivity extends AppCompatActivity {
     private void populate() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        for (HistoryData data :
-                allHistoryData) {
-            HistoryRowFragment frag = HistoryRowFragment.newInstance(data);
+        boolean land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        for (int i = 0, size = allHistoryData.size(); i < size; i++) {
+            HistoryRowFragment frag = HistoryRowFragment.newInstance(allHistoryData.get(i));
             transaction.add(R.id.historyFragmentReceiver, frag);
+
+            if (land && i+1 < size) {
+                HistoryRowFragment frag2 = HistoryRowFragment.newInstance(allHistoryData.get(i+1));
+                transaction.add(R.id.historyFragmentReceiver2, frag2);
+                i++;
+            }
         }
         transaction.commit();
     }

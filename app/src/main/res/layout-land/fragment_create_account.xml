@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/fab_margin"
+    android:layout_marginEnd="@dimen/fab_margin"
+    android:layout_marginTop="@dimen/common_margin"
+    android:layout_marginBottom="@dimen/common_margin"
+    tools:context=".ConnectionFragment"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/container_form"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/picture_small"
+            android:contentDescription="@string/avatar_content_description"
+            android:scaleType="fitCenter"
+            android:src="@drawable/default_avatar"
+            android:translationZ="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/avatar"
+            android:layout_marginTop="-30dp"
+            android:background="?attr/colorPrimary"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|top"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:id="@+id/container_questions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|top"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/permanent_marker"
+                        android:gravity="center"
+                        android:labelFor="@+id/editTextPseudo"
+                        android:minHeight="@dimen/editText_min_height"
+                        android:text="@string/pseudo"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="?attr/colorOnPrimaryVariant"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/editTextPseudo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_min_height"
+                        android:layout_marginStart="@dimen/common_margin"
+                        android:layout_marginEnd="@dimen/common_margin"
+                        android:layout_weight="1"
+                        android:autofillHints="DarkVirgil34"
+                        android:background="@drawable/menu_edit_text"
+                        android:inputType="textPersonName"
+                        android:padding="@dimen/padding_btn_menu"
+                        android:textColor="?attr/colorSecondaryVariant" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/permanent_marker"
+                        android:gravity="center"
+                        android:labelFor="@+id/editTextPassword"
+                        android:minHeight="@dimen/editText_min_height"
+                        android:text="@string/password"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="?attr/colorOnPrimaryVariant"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/editTextPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_min_height"
+                        android:layout_marginStart="@dimen/common_margin"
+                        android:layout_marginEnd="@dimen/common_margin"
+                        android:layout_weight="1"
+                        android:autofillHints="DarkVirgil34"
+                        android:background="@drawable/menu_edit_text"
+                        android:inputType="textPassword"
+                        android:padding="@dimen/padding_btn_menu"
+                        android:textColor="?attr/colorSecondaryVariant" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <View
+                        android:id="@+id/view_bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+
+                    <TextView
+                        android:id="@+id/textEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/permanent_marker"
+                        android:gravity="center"
+                        android:labelFor="@+id/editTextEmail"
+                        android:minHeight="@dimen/editText_min_height"
+                        android:text="@string/email"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="?attr/colorOnPrimaryVariant"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/editTextEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/editText_min_height"
+                        android:layout_marginStart="@dimen/common_margin"
+                        android:layout_marginEnd="@dimen/common_margin"
+                        android:layout_weight="1"
+                        android:autofillHints="DarkVirgil34@gmail.com"
+                        android:background="@drawable/menu_edit_text"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/padding_btn_menu"
+                        android:textColor="?attr/colorSecondaryVariant" />
+
+                    <LinearLayout
+                        android:id="@+id/container_options"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center|top"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/backupAccount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/permanent_marker"
+                            android:gravity="center"
+                            android:labelFor="@+id/editTextEmail"
+                            android:minHeight="@dimen/editText_min_height"
+                            android:text="@string/forgot_psw"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textColor="?attr/colorOnPrimaryVariant" />
+
+                        <CheckBox
+                            android:id="@+id/checkBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:buttonTint="?attr/colorOnPrimaryVariant"
+                            android:fontFamily="@font/permanent_marker"
+                            android:minHeight="@dimen/editText_min_height"
+                            android:text="@string/remember_me"
+                            android:textColor="?attr/colorOnPrimaryVariant"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/connectButton"
+                    style="@style/sub_btn_menu_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connect" />
+
+                <Button
+                    android:id="@+id/createAccountButton"
+                    style="@style/small_sub_btn_menu_default"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/createAccount" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorTertiary"
+        style="@style/btn_menu_small"
+        android:text="@string/back"/>
+
+</LinearLayout>

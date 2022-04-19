@@ -1,3 +1,12 @@
 <resources>
-    <dimen name="fab_margin">48dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="logo_max_height">100dp</dimen>
+    <dimen name="editText_min_height">45dp</dimen>
+    <dimen name="menu_btn_spacing">0dp</dimen>
+
+    <dimen name="dialog_width">500dp</dimen>
+    <dimen name="list_dialog_icon_size">40dp</dimen>
+    <dimen name="list_dialog_text_icon_size">18sp</dimen>
+
+    <dimen name="menu_burger_button_space">0dp</dimen>
 </resources>

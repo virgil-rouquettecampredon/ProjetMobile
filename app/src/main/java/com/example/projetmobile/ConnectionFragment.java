@@ -8,6 +8,7 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
@@ -106,12 +107,14 @@ public class ConnectionFragment extends Fragment {
 
         EditText et_psw = view.findViewById(R.id.editTextPassword);
 
-        LinearLayout ll_form_container = view.findViewById(R.id.container_form);
+        ViewGroup ll_form_container = view.findViewById(R.id.container_form);
         LinearLayout ll_questions_container = view.findViewById(R.id.container_questions);
         LinearLayout ll_options = view.findViewById(R.id.container_options);
         View v_bottom = view.findViewById(R.id.view_bottom);
 
         TextView tv_mdp_forget = view.findViewById(R.id.backupAccount);
+
+        boolean land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         /** ============ EDIT TEXT WATCHER ============ **/
         et_email.addTextChangedListener(new TextWatcher() {
@@ -236,13 +239,15 @@ public class ConnectionFragment extends Fragment {
                     f_params.weight = weight_start_form_container + ((weight_end_form_container - weight_start_form_container) * value);
                     ll_form_container.setLayoutParams(f_params);
 
-                    //weight sum question container
-                    ll_questions_container.setWeightSum(weightSum_start_question_container + (weightSum_end_question_container - weightSum_start_question_container) * value);
+                    if (!land) {
+                        //weight sum question container
+                        ll_questions_container.setWeightSum(weightSum_start_question_container + (weightSum_end_question_container - weightSum_start_question_container) * value);
 
-                    //Bottom
-                    LinearLayout.LayoutParams params_bt = (LinearLayout.LayoutParams) v_bottom.getLayoutParams();
-                    params_bt.weight = weight_start_bottom_view + ((weight_end_bottom_view - weight_start_bottom_view) * value);
-                    v_bottom.setLayoutParams(params_bt);
+                        //Bottom
+                        LinearLayout.LayoutParams params_bt = (LinearLayout.LayoutParams) v_bottom.getLayoutParams();
+                        params_bt.weight = weight_start_bottom_view + ((weight_end_bottom_view - weight_start_bottom_view) * value);
+                        v_bottom.setLayoutParams(params_bt);
+                    }
 
 
                     //BUTTONS maj size
@@ -310,7 +315,7 @@ public class ConnectionFragment extends Fragment {
                 et_pseudo_empty = false;
                 et_psw_empty = false;
 
-                /**Animation to make options disappeared**/
+                /**Animation to make options disappear**/
                 ll_options.animate()
                         .translationY(ll_options.getHeight())
                         .alpha(0.0f)
@@ -364,14 +369,16 @@ public class ConnectionFragment extends Fragment {
                     LinearLayout.LayoutParams f_params = (LinearLayout.LayoutParams) ll_form_container.getLayoutParams();
                     f_params.weight = weight_start_form_container + ((weight_end_form_container - weight_start_form_container) * value);
                     ll_form_container.setLayoutParams(f_params);
+                    if (!land) {
 
-                    //weight sum question container
-                    ll_questions_container.setWeightSum(weightSum_start_question_container + (weightSum_end_question_container - weightSum_start_question_container) * value);
+                        //weight sum question container
+                        ll_questions_container.setWeightSum(weightSum_start_question_container + (weightSum_end_question_container - weightSum_start_question_container) * value);
 
-                    //Bottom
-                    LinearLayout.LayoutParams params_bt = (LinearLayout.LayoutParams) v_bottom.getLayoutParams();
-                    params_bt.weight = weight_start_bottom_view + ((weight_end_bottom_view - weight_start_bottom_view) * value);
-                    v_bottom.setLayoutParams(params_bt);
+                        //Bottom
+                        LinearLayout.LayoutParams params_bt = (LinearLayout.LayoutParams) v_bottom.getLayoutParams();
+                        params_bt.weight = weight_start_bottom_view + ((weight_end_bottom_view - weight_start_bottom_view) * value);
+                        v_bottom.setLayoutParams(params_bt);
+                    }
 
                     //BUTTONS maj size
                     LinearLayout.LayoutParams btn_min_params = (LinearLayout.LayoutParams) connectButton.getLayoutParams();

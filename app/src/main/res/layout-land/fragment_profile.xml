@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment"
     android:orientation="vertical"
-    android:layout_margin="@dimen/fab_margin"
+    android:layout_margin="@dimen/common_margin"
     android:gravity="top">
 
     <LinearLayout
@@ -19,14 +19,13 @@
             android:id="@+id/imageViewAvatar"
             android:layout_width="@dimen/picture_medium"
             android:layout_height="@dimen/picture_medium"
-            android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/dark_default_avatar"
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="@string/avatar_content_description" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -78,59 +77,80 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
 
         <TextView
             android:id="@+id/bioTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_marginStart="@dimen/common_margin"
             android:background="@drawable/magenta_background"
             android:clickable="true"
             android:focusable="true"
             android:padding="@dimen/padding_btn_menu"
             android:text="@string/default_description"
             android:textColor="?attr/colorOnTertiary" />
-
-        <Button
-            android:id="@+id/preferencesButton"
-            style="@style/profile_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/peferences"
-            app:icon="@drawable/gear" />
-
-        <Button
-            android:id="@+id/historyButton"
-            style="@style/profile_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/games_history"
-            app:icon="@drawable/book" />
-
-        <Button
-            android:id="@+id/rankingButton"
-            style="@style/profile_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ranking"
-            app:icon="@drawable/cup" />
-
-        <Button
-            android:id="@+id/deleteAccountButton"
-            style="@style/profile_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/delete_account"
-            app:icon="@drawable/no" />
-
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/preferencesButton"
+                    style="@style/profile_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/peferences"
+                    app:icon="@drawable/gear" />
+
+                <Button
+                    android:id="@+id/historyButton"
+                    style="@style/profile_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/games_history"
+                    app:icon="@drawable/book" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/rankingButton"
+                    style="@style/profile_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ranking"
+                    app:icon="@drawable/cup" />
+
+                <Button
+                    android:id="@+id/deleteAccountButton"
+                    style="@style/profile_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/delete_account"
+                    app:icon="@drawable/no" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/backButton"
