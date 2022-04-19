@@ -1,6 +1,7 @@
 package com.example.projetmobile;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthCredential;
@@ -28,6 +31,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.net.URI;
 
 
 public class ProfileFragment extends Fragment {
@@ -47,6 +56,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference mDatabase;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -114,24 +125,27 @@ public class ProfileFragment extends Fragment {
                 });
 
 
-    setProfilePictureLauncher =
+        setProfilePictureLauncher =
 
-    registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
+                registerForActivityResult(
+                        new ActivityResultContracts.StartActivityForResult(),
 
-    result ->
+                        result ->
 
-    {
-        if (result.getResultCode() == Activity.RESULT_OK) {
-            //TODO Changer la PP (BDD)
-            Intent data = result.getData();
-            String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
-            if (!resultString.isEmpty()) {
-                imageViewAvatar.setImageURI(Uri.parse(resultString));
-            }
-        }
-    });
-}
+                        {
+                            if (result.getResultCode() == Activity.RESULT_OK) {
+                                //TODO Changer la PP (BDD)
+                                Intent data = result.getData();
+                                String resultString = data.getStringExtra(EditTextDialogActivity.resultName);
+                                Uri filePath = Uri.parse(resultString);
+                                if (!resultString.isEmpty()) {
+                                    imageViewAvatar.setImageURI(Uri.parse(resultString));
+                                    Log.d("TAG", "onActivityResult: " + resultString);
+                                    uploadFile(filePath);
+                                }
+                            }
+                        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -199,6 +213,11 @@ public class ProfileFragment extends Fragment {
 
         /**Database information**/
 
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
+        Log.d("BDD*", "onCreateView: " + storageRef);
+
         database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
         mDatabase = database.getReference();
         String keyId = user.getUid();
@@ -208,8 +227,7 @@ public class ProfileFragment extends Fragment {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
+                } else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                     bio = task.getResult().getValue(User.class).getBio();
                     pseudo = task.getResult().getValue(User.class).getPseudo();
@@ -220,5 +238,15 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void uploadFile(Uri filePath) {
+        Log.d("BDD*", "uploadFile: " + filePath);
+        // Create a storage reference from our app
+        if (filePath != null) {
+            StorageReference storageReference = storage.getReference().child("images/" + user.getUid()+".jpg");
+            System.out.println(storageReference.getPath());
+            storageReference.putFile(filePath);
+        }
     }
 }
