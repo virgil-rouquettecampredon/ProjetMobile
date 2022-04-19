@@ -11,13 +11,13 @@
         <item name="android:layout_marginStart">@dimen/common_margin</item>
         <item name="android:layout_marginEnd">@dimen/common_margin</item>
         <item name="android:textSize">@dimen/txt_size_sub_btn_menu</item>
-        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:backgroundTint">?attr/colorSecondary</item>
     </style>
 
     <style name="small_sub_btn_menu_default" parent="btn_menu_default">
         <item name="android:layout_marginStart">@dimen/big_margin</item>
         <item name="android:layout_marginEnd">@dimen/big_margin</item>
-        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:backgroundTint">?attr/colorSecondary</item>
         <item name="android:textSize">@dimen/txt_size_small_sub_btn_menu</item>
     </style>
     

@@ -44,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnSecondaryVariant"
         android:textAlignment="center"
         android:textSize="@dimen/watermark_text_size"
         android:text="@string/watermark" />

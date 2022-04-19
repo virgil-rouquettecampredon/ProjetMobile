@@ -113,7 +113,7 @@
                 android:layout_marginEnd="@dimen/common_margin"
                 android:layout_marginBottom="@dimen/common_margin"
                 style="@style/btn_menu_default"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/colorSecondary"
                 android:text="@string/connect"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -128,7 +128,7 @@
         android:id="@+id/backButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/magenta"
+        android:backgroundTint="?attr/colorTertiary"
         style="@style/btn_menu_default"
         android:text="@string/back"/>
 

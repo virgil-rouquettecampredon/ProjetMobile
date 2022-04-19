@@ -28,7 +28,7 @@
             android:id="@+id/eloChangeAmountTextView"
             android:layout_width="@dimen/list_dialog_icon_size"
             android:layout_height="match_parent"
-            android:textColor="@color/dark_magenta"
+            android:textColor="?attr/colorTertiaryVariant"
             android:fontFamily="@font/permanent_marker"
             android:gravity="center"
             android:textSize="@dimen/list_dialog_text_icon_size" />
@@ -50,7 +50,7 @@
                 android:id="@+id/adversaryPseudoTextView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorOnSecondaryVariant"
                 android:layout_weight="1"
                 android:textSize="@dimen/list_dialog_versus_text_size"
                 android:autoSizeTextType="uniform"

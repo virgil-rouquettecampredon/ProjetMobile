@@ -26,7 +26,7 @@
             android:layout_height="@dimen/editText_min_height"
             android:gravity="center"
             android:padding="@dimen/padding_btn_menu"
-            android:background="@color/white"
+            android:background="?attr/colorOnSecondaryVariant"
             android:textColor="?attr/colorSecondaryVariant"
             android:text="@string/waiting_for_acceptation" />
     </FrameLayout>
@@ -42,7 +42,7 @@
             android:id="@+id/backButton"
             android:layout_width="@dimen/dialog_btn_width"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/dark_blue"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             style="@style/dialog_btn"
             android:text="@string/cancel" />
 

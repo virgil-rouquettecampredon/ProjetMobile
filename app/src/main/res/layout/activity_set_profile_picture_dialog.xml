@@ -66,7 +66,7 @@
             android:id="@+id/confirmButton"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/dark_blue"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             android:layout_marginEnd="@dimen/dialog_btn_space"
             style="@style/dialog_btn"
             android:text="@string/confirm" />
@@ -75,7 +75,7 @@
             android:id="@+id/backButton"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/dark_blue"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             style="@style/dialog_btn"
             android:text="@string/cancel" />
 

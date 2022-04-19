@@ -24,17 +24,17 @@
         <item name="android:navigationBarColor">@color/black</item>
 
         <!-- For the color theme game -->
-        <item name="white_case_color">@color/blue</item>
-        <item name="black_case_color">@color/dark_blue</item>
-        <item name="selection_case_color">@color/yellow</item>
-        <item name="eat_case_color">@color/dark_magenta</item>
-        <item name="confirmation_case_color">@color/dark_yellow</item>
-        <item name="menaced_case_color">@color/red</item>
+        <item name="white_case_color">?attr/colorSecondary</item>
+        <item name="black_case_color">?attr/colorSecondaryVariant</item>
+        <item name="selection_case_color">?attr/colorPrimaryVariant</item>
+        <item name="eat_case_color">?attr/colorTertiaryVariant</item>
+        <item name="confirmation_case_color">?attr/colorPrimaryVariantDark</item>
+        <item name="menaced_case_color">?attr/colorTertiary</item>
 
-        <item name="GameMainColor">@color/yellow</item>
-        <item name="GameSecondColor">@color/dark_yellow</item>
-        <item name="GameColorPlayerTurn">@color/brown</item>
-        <item name="colorTextIndicatorBoard">@color/white</item>
+        <item name="GameMainColor">?attr/colorPrimaryVariant</item>
+        <item name="GameSecondColor">?attr/colorPrimaryVariantDark</item>
+        <item name="GameColorPlayerTurn">?attr/colorOnPrimaryVariant</item>
+        <item name="colorTextIndicatorBoard">?attr/colorOnPrimary</item>
 
         <item name="changePiece_bgColorScreen">@color/alpha_black</item>
         <item name="changePiece_textColor">@color/white</item>
