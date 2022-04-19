@@ -1,5 +1,7 @@
 package com.example.projetmobile;
 
+import static android.content.ContentValues.TAG;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -11,11 +13,13 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +32,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projetmobile.Model.GameManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +53,13 @@ public class ConnectionFragment extends Fragment {
     private boolean et_mail_empty = false;
     private boolean et_pseudo_empty = false;
     private boolean et_psw_empty = false;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private FirebaseDatabase database;
+    private final static String USER = "user";
+    private final static String TAG = "ConnectionFragment";
+    private User user;
 
     public ConnectionFragment() {
         // Required empty public constructor
@@ -63,18 +82,26 @@ public class ConnectionFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
+        /** Initialize Firebase Auth **/
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
+        mDatabase = database.getReference();
+
         /** ============ GET ALL VIEWs ============ **/
         Button connectButton = view.findViewById(R.id.connectButton);
         Button createAccoutButton = view.findViewById(R.id.createAccountButton);
         Button backButton = view.findViewById(R.id.backButton);
 
-        TextView tv_email = view.findViewById(R.id.textEmail);
+        TextView tv_pseudo = view.findViewById(R.id.textViewPseudo);
+        tv_pseudo.setAlpha(0.0f);
+        EditText et_pseudo = view.findViewById(R.id.editTextPseudo);
+        et_pseudo.setAlpha(0.0f);
+
         EditText et_email = view.findViewById(R.id.editTextEmail);
 
-        tv_email.setAlpha(0.0f);
-        et_email.setAlpha(0.0f);
 
-        EditText et_pseudo = view.findViewById(R.id.editTextPseudo);
+
+
         EditText et_psw = view.findViewById(R.id.editTextPassword);
 
         LinearLayout ll_form_container = view.findViewById(R.id.container_form);
@@ -90,15 +117,17 @@ public class ConnectionFragment extends Fragment {
             public void afterTextChanged(Editable s) {
 
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // TODO Auto-generated method stub
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_mail_empty && et_email.getText().toString().equals("")){
+                if (et_mail_empty && et_email.getText().toString().equals("")) {
                     set_missing_editText(et_email, view.getContext());
-                }else{
+                } else {
                     set_normal_editText(et_email, view.getContext());
                 }
             }
@@ -116,9 +145,9 @@ public class ConnectionFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_pseudo_empty && et_pseudo.getText().toString().equals("")){
+                if (et_pseudo_empty && et_pseudo.getText().toString().equals("")) {
                     set_missing_editText(et_pseudo, view.getContext());
-                }else{
+                } else {
                     set_normal_editText(et_pseudo, view.getContext());
                 }
             }
@@ -136,9 +165,9 @@ public class ConnectionFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_psw_empty && et_psw.getText().toString().equals("")){
+                if (et_psw_empty && et_psw.getText().toString().equals("")) {
                     set_missing_editText(et_psw, view.getContext());
-                }else{
+                } else {
                     set_normal_editText(et_psw, view.getContext());
                 }
             }
@@ -147,7 +176,7 @@ public class ConnectionFragment extends Fragment {
 
         /** ============ BUTTON ONCLICK ============ **/
         connectButton.setOnClickListener(v -> {
-            if(affCreate){
+            if (affCreate) {
                 affCreate = false;
                 /**Reset UI edit text missing statement**/
                 set_normal_editText(et_email, view.getContext());
@@ -172,7 +201,7 @@ public class ConnectionFragment extends Fragment {
                         });*/;
 
                 /**Start the animation**/
-                ValueAnimator slideAnimator = ValueAnimator.ofFloat(0.0f,1.0f).setDuration(animation_create_account_duration);
+                ValueAnimator slideAnimator = ValueAnimator.ofFloat(0.0f, 1.0f).setDuration(animation_create_account_duration);
 
                 LinearLayout.LayoutParams params_form_container = (LinearLayout.LayoutParams) ll_form_container.getLayoutParams();
                 float weight_start_form_container = params_form_container.weight;
@@ -217,22 +246,22 @@ public class ConnectionFragment extends Fragment {
                     //BUTTONS maj size
                     LinearLayout.LayoutParams btn_min_params = (LinearLayout.LayoutParams) createAccoutButton.getLayoutParams();
                     float m_min_maj = btn_min_params.leftMargin + (margin_max - btn_min_params.leftMargin) * value;
-                    btn_min_params.setMarginStart((int)m_min_maj);
-                    btn_min_params.setMarginEnd((int)m_min_maj);
-                    createAccoutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,createAccoutButton.getTextSize() + (textSize_min - createAccoutButton.getTextSize()) * value);
+                    btn_min_params.setMarginStart((int) m_min_maj);
+                    btn_min_params.setMarginEnd((int) m_min_maj);
+                    createAccoutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, createAccoutButton.getTextSize() + (textSize_min - createAccoutButton.getTextSize()) * value);
 
                     LinearLayout.LayoutParams btn_max_params = (LinearLayout.LayoutParams) connectButton.getLayoutParams();
                     float m_max_maj = btn_max_params.leftMargin + (margin_min - btn_max_params.leftMargin) * value;
-                    btn_max_params.setMarginStart((int)m_max_maj);
-                    btn_max_params.setMarginEnd((int)m_max_maj);
-                    connectButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,connectButton.getTextSize() + (textSize_max - connectButton.getTextSize()) * value);
+                    btn_max_params.setMarginStart((int) m_max_maj);
+                    btn_max_params.setMarginEnd((int) m_max_maj);
+                    connectButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, connectButton.getTextSize() + (textSize_max - connectButton.getTextSize()) * value);
 
                     LinearLayout.LayoutParams opt_param = (LinearLayout.LayoutParams) ll_options.getLayoutParams();
-                    opt_param.weight = w_option_start + ((w_option_end - w_option_start)*value);
+                    opt_param.weight = w_option_start + ((w_option_end - w_option_start) * value);
                     ll_options.setLayoutParams(opt_param);
 
-                    tv_email.setAlpha(1.0f - value);
-                    et_email.setAlpha(1.0f - value);
+                    tv_pseudo.setAlpha(1.0f - value);
+                    et_pseudo.setAlpha(1.0f - value);
 
                     v_bottom.requestLayout();
                     ll_questions_container.requestLayout();
@@ -245,35 +274,31 @@ public class ConnectionFragment extends Fragment {
                 animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
                 animationSet.play(slideAnimator);
                 animationSet.start();
-            }else {
-                if (verification) {
-                    //Check if all the datas are mentionned
-                    if (!et_pseudo.getText().toString().equals("") && !et_psw.getText().toString().equals("")) {
-                        connection_next();
-                    } else {
-                        Toast.makeText(view.getContext(), getString(R.string.missing_informations), Toast.LENGTH_SHORT).show();
-
-                        if (et_pseudo.getText().toString().equals("")) {
-                            et_pseudo_empty = true;
-                            set_missing_editText(et_pseudo, v.getContext());
-                        } else {
-                            et_pseudo_empty = false;
-                        }
-
-                        if (et_psw.getText().toString().equals("")) {
-                            et_psw_empty = true;
-                            set_missing_editText(et_psw, v.getContext());
-                        } else {
-                            et_psw_empty = false;
-                        }
-                    }
+            } else {
+                //Check if all the datas are mentionned
+                if (!et_email.getText().toString().isEmpty() && !et_psw.getText().toString().isEmpty()) {
+                    connection_next(et_email.getText().toString(), et_psw.getText().toString());
                 } else {
-                    connection_next();
+                    Toast.makeText(view.getContext(), getString(R.string.missing_informations), Toast.LENGTH_SHORT).show();
+
+                    if (et_email.getText().toString().equals("")) {
+                        et_mail_empty = true;
+                        set_missing_editText(et_email, v.getContext());
+                    } else {
+                        et_mail_empty = false;
+                    }
+
+                    if (et_psw.getText().toString().equals("")) {
+                        et_psw_empty = true;
+                        set_missing_editText(et_psw, v.getContext());
+                    } else {
+                        et_psw_empty = false;
+                    }
                 }
             }
         });
         createAccoutButton.setOnClickListener(v -> {
-            if(!affCreate){
+            if (!affCreate) {
                 affCreate = true;
                 /**Reset UI edit text missing statement**/
                 set_normal_editText(et_email, view.getContext());
@@ -296,16 +321,16 @@ public class ConnectionFragment extends Fragment {
                             }
                         });
 
-                tv_email.animate()
+                tv_pseudo.animate()
                         .alpha(1.0f)
                         .setDuration(animation_create_account_duration);
 
-                et_email.animate()
+                et_pseudo.animate()
                         .alpha(1.0f)
                         .setDuration(animation_create_account_duration);
 
                 /**Start the animation**/
-                ValueAnimator slideAnimator = ValueAnimator.ofFloat(0.0f,1.0f).setDuration(animation_create_account_duration);
+                ValueAnimator slideAnimator = ValueAnimator.ofFloat(0.0f, 1.0f).setDuration(animation_create_account_duration);
 
                 LinearLayout.LayoutParams params_form_container = (LinearLayout.LayoutParams) ll_form_container.getLayoutParams();
                 float weight_start_form_container = params_form_container.weight;
@@ -335,7 +360,7 @@ public class ConnectionFragment extends Fragment {
 
                     //Layout general of all the form
                     LinearLayout.LayoutParams f_params = (LinearLayout.LayoutParams) ll_form_container.getLayoutParams();
-                    f_params .weight = weight_start_form_container + ((weight_end_form_container - weight_start_form_container) * value);
+                    f_params.weight = weight_start_form_container + ((weight_end_form_container - weight_start_form_container) * value);
                     ll_form_container.setLayoutParams(f_params);
 
                     //weight sum question container
@@ -349,18 +374,18 @@ public class ConnectionFragment extends Fragment {
                     //BUTTONS maj size
                     LinearLayout.LayoutParams btn_min_params = (LinearLayout.LayoutParams) connectButton.getLayoutParams();
                     float m_min_maj = btn_min_params.leftMargin + (margin_max - btn_min_params.leftMargin) * value;
-                    btn_min_params.setMarginStart((int)m_min_maj);
-                    btn_min_params.setMarginEnd((int)m_min_maj);
-                    connectButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,connectButton.getTextSize() + (textSize_min - connectButton.getTextSize()) * value);
+                    btn_min_params.setMarginStart((int) m_min_maj);
+                    btn_min_params.setMarginEnd((int) m_min_maj);
+                    connectButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, connectButton.getTextSize() + (textSize_min - connectButton.getTextSize()) * value);
 
                     LinearLayout.LayoutParams btn_max_params = (LinearLayout.LayoutParams) createAccoutButton.getLayoutParams();
                     float m_max_maj = btn_max_params.leftMargin + (margin_min - btn_max_params.leftMargin) * value;
-                    btn_max_params.setMarginStart((int)m_max_maj);
-                    btn_max_params.setMarginEnd((int)m_max_maj);
-                    createAccoutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,createAccoutButton.getTextSize() + (textSize_max - createAccoutButton.getTextSize()) * value);
+                    btn_max_params.setMarginStart((int) m_max_maj);
+                    btn_max_params.setMarginEnd((int) m_max_maj);
+                    createAccoutButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, createAccoutButton.getTextSize() + (textSize_max - createAccoutButton.getTextSize()) * value);
 
                     LinearLayout.LayoutParams opt_param = (LinearLayout.LayoutParams) ll_options.getLayoutParams();
-                    opt_param.weight = w_option_start + ((w_option_end - w_option_start)*value);
+                    opt_param.weight = w_option_start + ((w_option_end - w_option_start) * value);
                     ll_options.setLayoutParams(opt_param);
 
                     v_bottom.requestLayout();
@@ -374,39 +399,35 @@ public class ConnectionFragment extends Fragment {
                 animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
                 animationSet.play(slideAnimator);
                 animationSet.start();
-            }else {
-                if (verification) {
-                    if (!et_pseudo.getText().toString().equals("") && !et_psw.getText().toString().equals("") && !et_email.getText().toString().equals("")) {
-                        create_account_next();
+            } else {
+                if (!et_pseudo.getText().toString().isEmpty() && !et_psw.getText().toString().isEmpty() && !et_email.getText().toString().isEmpty()) {
+                    create_account_next(et_email.getText().toString(), et_pseudo.getText().toString(), et_psw.getText().toString(), view.getContext());
+                } else {
+                    Toast.makeText(view.getContext(), getString(R.string.missing_informations), Toast.LENGTH_SHORT).show();
+                    if (et_pseudo.getText().toString().equals("")) {
+                        et_pseudo_empty = true;
+                        set_missing_editText(et_pseudo, v.getContext());
                     } else {
-                        Toast.makeText(view.getContext(), getString(R.string.missing_informations), Toast.LENGTH_SHORT).show();
-                        if (et_pseudo.getText().toString().equals("")) {
-                            et_pseudo_empty = true;
-                            set_missing_editText(et_pseudo, v.getContext());
-                        } else {
-                            et_pseudo_empty = false;
-                        }
-                        if (et_psw.getText().toString().equals("")) {
-                            et_psw_empty = true;
-                            set_missing_editText(et_psw, v.getContext());
-                        } else {
-                            et_psw_empty = false;
-                        }
-                        if (et_email.getText().toString().equals("")) {
-                            et_mail_empty = true;
-                            set_missing_editText(et_email, v.getContext());
-                        } else {
-                            et_mail_empty = false;
-                        }
+                        et_pseudo_empty = false;
                     }
-                }else{
-                    create_account_next();
+                    if (et_psw.getText().toString().equals("")) {
+                        et_psw_empty = true;
+                        set_missing_editText(et_psw, v.getContext());
+                    } else {
+                        et_psw_empty = false;
+                    }
+                    if (et_email.getText().toString().equals("")) {
+                        et_mail_empty = true;
+                        set_missing_editText(et_email, v.getContext());
+                    } else {
+                        et_mail_empty = false;
+                    }
                 }
             }
         });
 
         //MDP FORGET
-        tv_mdp_forget.setOnClickListener(v->{
+        tv_mdp_forget.setOnClickListener(v -> {
             mdp_forget_next(view.getContext(), et_pseudo);
         });
 
@@ -416,8 +437,10 @@ public class ConnectionFragment extends Fragment {
         return view;
     }
 
-    /**UI changing functions on missing informations**/
-    private void set_missing_editText(EditText et, Context ct){
+    /**
+     * UI changing functions on missing informations
+     **/
+    private void set_missing_editText(EditText et, Context ct) {
         et.setBackground(ContextCompat.getDrawable(ct, R.drawable.menu_edit_text_missing));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             InsetDrawable insetDrawable = null;
@@ -426,44 +449,74 @@ public class ConnectionFragment extends Fragment {
             et.setTextCursorDrawable(insetDrawable);
         }
     }
-    private void set_normal_editText(EditText et, Context ct){
+
+    private void set_normal_editText(EditText et, Context ct) {
         et.setBackground(ContextCompat.getDrawable(ct, R.drawable.menu_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             InsetDrawable insetDrawable = null;
             insetDrawable = (InsetDrawable) et.getTextCursorDrawable();
-            insetDrawable.setColorFilter(GameManager.getAttributeColor(ct,R.attr.colorSecondary), PorterDuff.Mode.SRC_ATOP);
+            insetDrawable.setColorFilter(GameManager.getAttributeColor(ct, R.attr.colorSecondary), PorterDuff.Mode.SRC_ATOP);
             et.setTextCursorDrawable(insetDrawable);
         }
     }
 
-    /**Next mecanism after verifications**/
-    private void connection_next(){
+    /**
+     * Next mecanism after verifications
+     **/
+    private void connection_next(String email, String psw) {
         //TODO upload and save data
-        Intent intent = new Intent(getActivity(), MainMenuActivity.class);
-        startActivity(intent);
+
+        mAuth.signInWithEmailAndPassword(email, psw).addOnCompleteListener(
+                new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "loginUser:success");
+                            Intent intent = new Intent(getActivity(), MainMenuActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
     }
-    private void create_account_next(){
+
+    private void create_account_next(String email, String pseudo, String psw, Context ct) {
         //TODO upload and save data
-        Intent intent = new Intent(getActivity(), MainMenuActivity.class);
-        startActivity(intent);
+        mAuth.createUserWithEmailAndPassword(email, psw).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "createUserWithEmail:success");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    updateUI(user, email, pseudo, psw);
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                    Toast.makeText(ct, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
-    private void mdp_forget_next(Context c, EditText edt_pseudo){
+
+    private void mdp_forget_next(Context c, EditText edt_pseudo) {
         String pseudo = edt_pseudo.getText().toString();
 
-        if(pseudo.equals("")){
+        if (pseudo.equals("")) {
             Toast.makeText(c, getString(R.string.forgot_psw_msgtoast_nopseudo), Toast.LENGTH_SHORT).show();
             et_mail_empty = true;
-            set_missing_editText(edt_pseudo,c);
-        }else{
+            set_missing_editText(edt_pseudo, c);
+        } else {
             Toast.makeText(c, getString(R.string.forgot_psw_msgtoast) + " " + pseudo, Toast.LENGTH_SHORT).show();
             et_mail_empty = false;
-            set_normal_editText(edt_pseudo,c);
+            set_normal_editText(edt_pseudo, c);
         }
     }
 
 
-
-    /**EMAIL VERIFICATION parsing**/
+    /**
+     * EMAIL VERIFICATION parsing
+     **/
     private static int email_nb_carac_max = 64;
     private static int email_nb_carac_min = 1;
     private static int email_nb_carac_max_domain = 64;
@@ -473,36 +526,44 @@ public class ConnectionFragment extends Fragment {
     private static boolean email_dashes_carac = false;
     private static boolean email_maj_carac_domain_name = false;
 
-    private boolean email_checking(String email){
-        String elem_post = "[" + ((email_maj_carac)? "A-Za-z" : "a-z") + ((email_digit_carac)? "0-9" : "") + ((email_dashes_carac)? "_-" : "") + "]";
-        String elem_pre = "[" + ((email_maj_carac)? "A-Za-z" : "a-z") + ((email_digit_carac)? "0-9" : "") + ((email_dashes_carac)? "-" : "") + "]";
-        String domain_name = "[" + ((email_maj_carac_domain_name)? "A-Za-z" : "a-z")  + "]";
+    private boolean email_checking(String email) {
+        String elem_post = "[" + ((email_maj_carac) ? "A-Za-z" : "a-z") + ((email_digit_carac) ? "0-9" : "") + ((email_dashes_carac) ? "_-" : "") + "]";
+        String elem_pre = "[" + ((email_maj_carac) ? "A-Za-z" : "a-z") + ((email_digit_carac) ? "0-9" : "") + ((email_dashes_carac) ? "-" : "") + "]";
+        String domain_name = "[" + ((email_maj_carac_domain_name) ? "A-Za-z" : "a-z") + "]";
 
         String EMAIL_PATTERN =
                 "^(?=.{"
                         + email_nb_carac_min
                         + ","
-                        + ((email_nb_carac_max<0)?"":email_nb_carac_max+"")
-                        +"}@)"
+                        + ((email_nb_carac_max < 0) ? "" : email_nb_carac_max + "")
+                        + "}@)"
                         + elem_post
                         + "+(\\."
                         + elem_post
                         + "+)*@"
-                        +"[^-]"
-                        +elem_pre
-                        +"+(\\."
-                        +elem_pre
-                        +"+)*(\\."
+                        + "[^-]"
+                        + elem_pre
+                        + "+(\\."
+                        + elem_pre
+                        + "+)*(\\."
                         + domain_name
                         + "{"
                         + email_nb_carac_min_domain
-                        +","
-                        + ((email_nb_carac_max_domain<0)? "" : email_maj_carac_domain_name+"")
-                        +"})$";
+                        + ","
+                        + ((email_nb_carac_max_domain < 0) ? "" : email_maj_carac_domain_name + "")
+                        + "})$";
 
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private void updateUI(FirebaseUser currUser, String email, String pseudo, String psw) {
+        user = new User(pseudo, psw, email);
+        String keyId = currUser.getUid();
+        mDatabase.child("users").child(keyId).setValue(user);
+        Intent intent = new Intent(getActivity(), MainMenuActivity.class);
+        startActivity(intent);
     }
 
 }

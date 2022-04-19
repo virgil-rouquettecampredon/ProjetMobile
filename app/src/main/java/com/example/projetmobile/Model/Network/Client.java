@@ -41,5 +41,16 @@ public class Client {
         return socket.isConnected();
     }
 
-
+    public static void main(String[] args) {
+        try {
+            Client client = new Client("XXX", 12345);
+            client.connect();
+            client.send("Hello");
+            System.out.println(client.receive());
+            client.disconnect();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

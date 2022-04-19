@@ -17,6 +17,7 @@ import android.widget.TextView;
  * Use the {@link CreateAccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@Deprecated
 public class CreateAccountFragment extends Fragment {
 
     public CreateAccountFragment() {
@@ -40,7 +41,7 @@ public class CreateAccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_account, container, false);
 
-        TextView tv_email = view.findViewById(R.id.textEmail);
+        TextView tv_email = view.findViewById(R.id.textViewPseudo);
         EditText et_email = view.findViewById(R.id.editTextEmail);
 
         Button connectButton = view.findViewById(R.id.connectButton);

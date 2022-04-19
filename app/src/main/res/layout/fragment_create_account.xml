@@ -52,31 +52,31 @@
                 android:layout_weight="6"
                 android:weightSum="10">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/editText_min_height"
-                android:layout_weight="1"
-                android:fontFamily="@font/permanent_marker"
-                android:gravity="center"
-                android:labelFor="@+id/editTextPseudo"
-                android:text="@string/pseudo"
-                android:textColor="?attr/colorOnPrimaryVariant"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="20sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/editText_min_height"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/permanent_marker"
+                    android:gravity="center"
+                    android:labelFor="@+id/editTextEmail"
+                    android:text="@string/email"
+                    android:textColor="?attr/colorOnPrimaryVariant"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/editTextPseudo"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/editText_min_height"
-                android:layout_marginStart="@dimen/common_margin"
-                android:layout_marginEnd="@dimen/common_margin"
-                android:padding="@dimen/padding_btn_menu"
-                android:layout_weight="1"
-                android:autofillHints="DarkVirgil34"
-                android:textColor="?attr/colorSecondaryVariant"
-                android:background="@drawable/menu_edit_text"
-                android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/editText_min_height"
+                    android:layout_marginStart="@dimen/common_margin"
+                    android:layout_marginEnd="@dimen/common_margin"
+                    android:padding="@dimen/padding_btn_menu"
+                    android:layout_weight="1"
+                    android:autofillHints="DarkVirgil34@gmail.com"
+                    android:textColor="?attr/colorSecondaryVariant"
+                    android:background="@drawable/menu_edit_text"
+                    android:inputType="textEmailAddress" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -104,32 +104,34 @@
                 android:background="@drawable/menu_edit_text"
                 android:inputType="textPassword" />
 
+
                 <TextView
-                    android:id="@+id/textEmail"
+                    android:id="@+id/textViewPseudo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/editText_min_height"
                     android:layout_weight="1"
                     android:fontFamily="@font/permanent_marker"
                     android:gravity="center"
-                    android:labelFor="@+id/editTextEmail"
-                    android:text="@string/email"
+                    android:labelFor="@+id/editTextPseudo"
+                    android:text="@string/pseudo"
                     android:textColor="?attr/colorOnPrimaryVariant"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/editTextEmail"
+                    android:id="@+id/editTextPseudo"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/editText_min_height"
                     android:layout_marginStart="@dimen/common_margin"
                     android:layout_marginEnd="@dimen/common_margin"
                     android:padding="@dimen/padding_btn_menu"
                     android:layout_weight="1"
-                    android:autofillHints="DarkVirgil34@gmail.com"
+                    android:autofillHints="DarkVirgil34"
                     android:textColor="?attr/colorSecondaryVariant"
                     android:background="@drawable/menu_edit_text"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textPersonName" />
+
             </LinearLayout>
 
             <LinearLayout
