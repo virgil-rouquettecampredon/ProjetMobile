@@ -50,6 +50,7 @@ public class ProfileFragment extends Fragment {
 
     TextView textViewPseudo;
     TextView bioTextView;
+    TextView textViewPoints;
     ImageView imageViewAvatar;
 
     String pseudo;
@@ -159,12 +160,15 @@ public class ProfileFragment extends Fragment {
 
 
         textViewPseudo = view.findViewById(R.id.textViewPseudo);
+        textViewPoints = view.findViewById(R.id.textViewPoints);
 
         imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
         imageViewAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SetProfilePictureDialogActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putString("imagePath", Uri.fromFile(localFile).toString());
+            if (localFile != null) {
+                bundle.putString("imagePath", Uri.fromFile(localFile).toString());
+            }
             intent.putExtras(bundle);
             setProfilePictureLauncher.launch(intent);
         });
@@ -242,6 +246,7 @@ public class ProfileFragment extends Fragment {
                     pseudo = task.getResult().getValue(User.class).getPseudo();
                     textViewPseudo.setText(task.getResult().getValue(User.class).getPseudo());
                     bioTextView.setText(task.getResult().getValue(User.class).getBio());
+                    textViewPoints.setText(task.getResult().getValue(User.class).getElo().toString());
                 }
             }
         });
@@ -285,6 +290,7 @@ public class ProfileFragment extends Fragment {
             public void onFailure(@NonNull Exception exception) {
                 Log.d("BDD*", "onFailure: " + exception.getMessage());
                 // Handle any errors
+                localFile = null;
             }
         });
     }

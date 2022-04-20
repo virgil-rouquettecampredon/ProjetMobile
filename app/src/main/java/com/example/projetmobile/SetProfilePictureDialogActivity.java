@@ -34,7 +34,9 @@ SetProfilePictureDialogActivity extends AppCompatActivity {
         previewImageView = findViewById(R.id.previewImageView);
         Log.d("SetProfilePictureDialogActivity", "filePath: " + filePath);
 
-        previewImageView.setImageURI(Uri.parse(filePath));
+        if (filePath != null && !filePath.isEmpty()) {
+            previewImageView.setImageURI(Uri.parse(filePath));
+        }
         //TODO mettre la vraie image de profil (BDD ?)
         ActivityResultLauncher<String> getImage = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 resultURI -> {
