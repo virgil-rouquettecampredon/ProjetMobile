@@ -12,11 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CreateAccountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 @Deprecated
 public class CreateAccountFragment extends Fragment {
 

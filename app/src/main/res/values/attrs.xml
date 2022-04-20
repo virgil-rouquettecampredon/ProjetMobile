@@ -48,4 +48,5 @@
     <attr name="colorTextFinishScreen" format="reference"/>
     <attr name="colorBGFinishScreen" format="reference"/>
 
+    <attr name="rock_case_color" format="reference"/>
 </resources>

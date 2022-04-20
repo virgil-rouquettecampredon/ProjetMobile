@@ -21,10 +21,14 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ChangePieceScreen extends LinearLayout {
-    private List<Piece> piecesForChange;
 
+    //List of Pieces for performing the choice
+    private List<Piece> piecesForChange;
+    //If we need to draw the screen
     private boolean drawScreen;
+    //Elements for the drawing part
     private Paint paint_background;
+    //Function performed when user click on a Piece in the ChangePieceScreen
     private Function<Piece, Void> clk_pieces;
 
     public ChangePieceScreen(Context context, @Nullable AttributeSet attrs) {
@@ -37,12 +41,13 @@ public class ChangePieceScreen extends LinearLayout {
         //paint_background.setColor(ContextCompat.getColor(context, R.color.blackTransparent));
     }
 
+
+    /** ======== View Methods ======== **/
     @Override
     public void setVisibility(int visibility) {
         super.setVisibility(visibility);
         drawScreen = visibility == VISIBLE;
     }
-
     @Override
     protected void dispatchDraw(Canvas canvas) {
         if(drawScreen) {
@@ -51,6 +56,8 @@ public class ChangePieceScreen extends LinearLayout {
         super.dispatchDraw(canvas);
     }
 
+
+    /** ======== View manipulation Methods (Model behavior) ======== **/
     public void setOclkPerformedFunctionPieces(Function<Piece, Void> onclk_performedFunction) {
         this.clk_pieces = onclk_performedFunction;
     }
@@ -113,6 +120,4 @@ public class ChangePieceScreen extends LinearLayout {
     public String toString() {
         return "onBoardScreen{}";
     }
-
-
 }

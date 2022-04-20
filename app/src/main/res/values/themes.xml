@@ -30,6 +30,8 @@
         <item name="eat_case_color">?attr/colorTertiaryVariant</item>
         <item name="confirmation_case_color">?attr/colorPrimaryVariantDark</item>
         <item name="menaced_case_color">?attr/colorTertiary</item>
+        <item name="rock_case_color">@color/light_green</item>
+
 
         <item name="GameMainColor">?attr/colorPrimaryVariant</item>
         <item name="GameSecondColor">?attr/colorPrimaryVariantDark</item>

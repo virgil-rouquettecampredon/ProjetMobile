@@ -1,9 +1,5 @@
 package com.example.projetmobile.Model;
 
-import android.util.Pair;
-
-import com.example.projetmobile.Model.Mouvement.Movement;
-import com.example.projetmobile.Model.Mouvement.MovementComplex;
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Pieces.Piece;
 
@@ -12,22 +8,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+//TODO destroy all complexmovement operator if needed
 public class Player implements GameObject{
-    public class Association{
-        Boolean isAlive;
-        Map<MovementComplex,List<Position>> positionsForAComplexMovement;
-
-        public Association(Boolean isAlive, Map<MovementComplex, List<Position>> positionsForAComplexMovement) {
-            this.isAlive = isAlive;
-            this.positionsForAComplexMovement = positionsForAComplexMovement;
-        }
-    }
 
     private String pseudo;
     private Map<Piece, List<Position>> piecesPlayer;
 
-    private Map<Piece, Association> piecesComplexPlayer;
+    private Map<Piece, List<Association_rock>> rockPieces;
 
     private List<Piece> cimetary;
     private int color;
@@ -35,7 +24,9 @@ public class Player implements GameObject{
 
     public Player(String pseudo,int color){
         this.piecesPlayer = new HashMap<>();
-        this.piecesComplexPlayer = new HashMap<>();
+        //this.piecesComplexPlayer = new HashMap<>();
+
+        this.rockPieces = new HashMap<>();
 
         this.pseudo = pseudo;
         this.color = color;
@@ -52,19 +43,19 @@ public class Player implements GameObject{
     }
     public void addPiece(Piece p){
         this.piecesPlayer.put(p, new ArrayList<>());
-        Association a = this.piecesComplexPlayer.get(p);
+        /*Association a = this.piecesComplexPlayer.get(p);
         if(a!=null){
             a.isAlive = true;
         }else{
             this.piecesComplexPlayer.put(p,new Association(true,new HashMap<>()));
-        }
+        }*/
     }
     public void removePiece(Piece p){
         this.piecesPlayer.remove(p);
-        Association a = this.piecesComplexPlayer.get(p);
+        /*Association a = this.piecesComplexPlayer.get(p);
         if(a!=null){
             a.isAlive = false;
-        }
+        }*/
     }
     public void killAPiece(Piece p){
         this.removePiece(p);
@@ -72,7 +63,7 @@ public class Player implements GameObject{
     }
     public void destroyAPiece(Piece p){
         this.piecesPlayer.remove(p);
-        this.piecesComplexPlayer.remove(p);
+        //this.piecesComplexPlayer.remove(p);
         this.cimetary.remove(p);
     }
     public void reviveAPiece(Piece p){
@@ -101,28 +92,24 @@ public class Player implements GameObject{
         return color;
     }
 
-    //For complex movements structure
-    public void resetPossibleComplexMove(){
-        for (Piece p : piecesComplexPlayer.keySet()) {
-            piecesComplexPlayer.get(p).positionsForAComplexMovement.clear();
+
+    public void addRockPieces(Piece rock, Association_rock as){
+        List<Association_rock> list = this.rockPieces.get(rock);
+        if(list!=null){
+            list.add(as);
+        }else{
+            List<Association_rock> l = new ArrayList<>();
+            l.add(as);
+            this.rockPieces.put(rock,l);
         }
     }
-    public void setPossibleMoveComplex(Piece p,MovementComplex m, List<Position> pos){
-        Association a = piecesComplexPlayer.get(p);
-        if(a!=null){
-            a.positionsForAComplexMovement.replace(m,pos);
-        }
+    public Set<Piece> getPiecesToRock(){
+        return this.rockPieces.keySet();
     }
-    public List<Pair<MovementComplex, List<Position>>> getPositionsPieceComplexMovement(Piece p){
-        List<Pair<MovementComplex, List<Position>>> res = new ArrayList<>();
-        Association a = piecesComplexPlayer.get(p);
-        if(a!=null){
-            for (MovementComplex mv: a.positionsForAComplexMovement.keySet()) {
-                res.add(new Pair<>(mv,a.positionsForAComplexMovement.get(mv)));
-            }
-        }
-        return res;
+    public List<Association_rock> getAssoToRockWithPiece(Piece p){
+        return this.rockPieces.get(p);
     }
+
 
 
     @Override
