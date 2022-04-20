@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private ImageView logoImageView;
     private View backgroundView;
 
+    private boolean land;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         logoImageView = (ImageView) findViewById(R.id.logo);
         backgroundView = findViewById(R.id.background);
         backgroundView.setAlpha(1.0f);
+
+        land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
         //At the end of all the timer, we launch the main activity
         new Handler().postDelayed(new Runnable() {
@@ -79,10 +84,18 @@ public class SplashScreenActivity extends AppCompatActivity {
                 .setDuration(BG_ANIM_DURATION_ALPHA).setInterpolator(
                 new DecelerateInterpolator(1.2f)).start();
 
-        ViewCompat.animate(logoImageView)
-                .translationY(0)
-                .setStartDelay(LOGO_STARTUP_DELAY_DROPDOWN)
-                .setDuration(LOGO_ANIM_DURATION_DROPDOWN).setInterpolator(
-                new AccelerateDecelerateInterpolator()).start();
+        if (land) {
+            ViewCompat.animate(logoImageView)
+                    .translationY(0)
+                    .setStartDelay(LOGO_STARTUP_DELAY_DROPDOWN)
+                    .setDuration(LOGO_ANIM_DURATION_DROPDOWN).setInterpolator(
+                    new AccelerateDecelerateInterpolator()).start();
+        } else {
+            ViewCompat.animate(logoImageView)
+                    .translationY(0)
+                    .setStartDelay(LOGO_STARTUP_DELAY_DROPDOWN)
+                    .setDuration(LOGO_ANIM_DURATION_DROPDOWN).setInterpolator(
+                    new AccelerateDecelerateInterpolator()).start();
+        }
     }
 }
