@@ -22,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.example.projetmobile.Model.Mouvement.MovementComplex;
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Pieces.Bishop;
 import com.example.projetmobile.Model.Pieces.King;
@@ -40,20 +39,24 @@ import java.util.function.Function;
 public class Board extends TableLayout {
     //For console printing only
     private static boolean DEBUG_FOR_BOARD_LOGIC = false;
+    private static boolean DEBUG_FOR_BOARD_ANIMATION = false;
 
 
-    //Appearance for the board case type
-    public static ComposedDrawing appearence_possiblepos = new ComposedDrawing();
-    public static ComposedDrawing appearence_possiblepos_eat = new ComposedDrawing();
-    public static ComposedDrawing appearence_confirmation = new ComposedDrawing();
-    public static ComposedDrawing appearence_menaced = new ComposedDrawing();
+    //=== Appearance for the board case type
+    public static ComposedDrawing appearance_possiblepos = new ComposedDrawing();
+    public static ComposedDrawing appearance_possiblepos_eat = new ComposedDrawing();
+    public static ComposedDrawing appearance_confirmation = new ComposedDrawing();
+    public static ComposedDrawing appearance_menaced = new ComposedDrawing();
+    public static ComposedDrawing appearance_rock = new ComposedDrawing();
 
+    /** ====== BASIC MODEL DATAS ====== **/
     private int nb_col;
     private int nb_row;
 
     private Case[] cases;
     private List<Case> changedCases;
 
+    //ViewGroup data
     private Context context;
     private AttributeSet attributeSet;
 
@@ -64,6 +67,7 @@ public class Board extends TableLayout {
     private int eat_color;
     private int confirmation_color;
     private int menaced_color;
+    private int rock_color;
 
     //=== For the indicator management
     private Paint text_indicator;
@@ -110,6 +114,7 @@ public class Board extends TableLayout {
     private long border_globalDuration = 700;
     private long text_offsetTime = 200;
 
+
     //=== For piece movement animation
     private boolean isPieceMoving;
 
@@ -123,6 +128,7 @@ public class Board extends TableLayout {
 
     //=== For the transform piece screen
     private ChangePieceScreen onScreenView;
+
 
     /** ======== Constructors of the Viewgroup Board ======== **/
     public Board(Context context) {
@@ -159,7 +165,7 @@ public class Board extends TableLayout {
     }
 
 
-    /** ======== Viewgroup Methods ======== **/
+    /** ======== ViewGroup Methods ======== **/
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -176,9 +182,9 @@ public class Board extends TableLayout {
         int width = widthSize - valuePadding;
         //Measure Height
         int height = heightSize - valuePadding;
-        int taille_case = Math.min(width/nb_col,height/nb_row);
+        int size_case = Math.min(width/nb_col,height/nb_row);
 
-        majSizeCases(taille_case);
+        majSizeCases(size_case);
         super.onMeasure(widthMeasureSpec,heightMeasureSpec);
     }
     @Override
@@ -221,11 +227,13 @@ public class Board extends TableLayout {
     protected void dispatchDraw(Canvas canvas) {
         if(DEBUG_FOR_BOARD_LOGIC) System.out.println("DISPATCH DRAW BOARD");
 
+        //For the drawing of the finish screen
         super.dispatchDraw(canvas);
         if(isFinishScreen) {
+            //Draw the background
             canvas.drawRect(0, 0, getWidth(), this.animationTimingCompletion_background * getHeight(), paint_background);
-            //Half of the animation
 
+            //Half of the animation
             if (this.animationTimingCompletion_border >= .5) {
                 int xPos = (getWidth() / 2);
                 canvas.drawText(finishMessage_start, xPos, text_y_start, paint_text_finish_start);
@@ -327,26 +335,30 @@ public class Board extends TableLayout {
     /** ======== Init the Board Model ======== **/
     //Init basics UI
     private void setColors() {
-        white_color = GameManager.getAttributeColor(context,R.attr.white_case_color);
-        black_color = GameManager.getAttributeColor(context,R.attr.black_case_color);
-        selection_color = GameManager.getAttributeColor(context,R.attr.selection_case_color);
-        eat_color = GameManager.getAttributeColor(context,R.attr.eat_case_color);
-        confirmation_color = GameManager.getAttributeColor(context,R.attr.confirmation_case_color);
-        menaced_color = GameManager.getAttributeColor(context,R.attr.menaced_case_color);
+        white_color =           GameManager.getAttributeColor(context,R.attr.white_case_color);
+        black_color =           GameManager.getAttributeColor(context,R.attr.black_case_color);
+        selection_color =       GameManager.getAttributeColor(context,R.attr.selection_case_color);
+        eat_color =             GameManager.getAttributeColor(context,R.attr.eat_case_color);
+        confirmation_color =    GameManager.getAttributeColor(context,R.attr.confirmation_case_color);
+        menaced_color =         GameManager.getAttributeColor(context,R.attr.menaced_case_color);
+        rock_color =            GameManager.getAttributeColor(context,R.attr.rock_case_color);
     }
+    //Get the dimensions from the Board view in XML file
     private void setDimensions() {
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.Board);
         nb_col = a.getInt(R.styleable.Board_nb_column, 0);
         nb_row = a.getInt(R.styleable.Board_nb_row, 0);
         a.recycle();
     }
+    //Set the appearances for the board
     private void setAppearances(){
-        if(!appearence_possiblepos.isInstancied())      appearence_possiblepos.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape), selection_color);
-        if(!appearence_possiblepos_eat.isInstancied())  appearence_possiblepos_eat.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),eat_color);
-        if(!appearence_confirmation.isInstancied())     appearence_confirmation.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),confirmation_color);
-        if(!appearence_menaced.isInstancied())          appearence_menaced.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),menaced_color);
+        if(!appearance_possiblepos.isInstancied())      appearance_possiblepos.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape), selection_color);
+        if(!appearance_possiblepos_eat.isInstancied())  appearance_possiblepos_eat.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),eat_color);
+        if(!appearance_confirmation.isInstancied())     appearance_confirmation.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),confirmation_color);
+        if(!appearance_menaced.isInstancied())          appearance_menaced.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),menaced_color);
+        if(!appearance_rock.isInstancied())             appearance_rock.addLayer(ContextCompat.getDrawable(context, R.drawable.board_simple_shape),rock_color);
     }
-    //For set the finish screen only
+    //Set the finish screen only
     private void setPaintFinishScreen(){
         paint_background = new Paint();
         paint_border_Bottom = new Paint();
@@ -389,6 +401,7 @@ public class Board extends TableLayout {
         text_y_mes = getHeight()/2 - (int)((paint_text_finish_players.descent() + paint_text_finish_players.ascent()) / 2);
         text_y_end = 3*getHeight()/4 - (int)((paint_text_finish_end.descent() + paint_text_finish_end.ascent()) / 2);
     }
+    //Set the graphic elements for the global board (row and col indicators)
     private void setPaintIndicatorText(){
         text_indicator = new Paint();
         text_indicator.setColor(GameManager.getAttributeColor(context,R.attr.colorTextIndicatorBoard));
@@ -423,11 +436,9 @@ public class Board extends TableLayout {
         Typeface customTypeface = ResourcesCompat.getFont(context, R.font.permanent_marker);
         text_indicator.setTypeface(customTypeface);
     }
-
     //Method called for initializing the board cases
     public void initBoard(){
-        //System.out.println("INIT BOARD : " + this);
-        //Log.i(log_tag,"INIT BOARD : " + this);
+        //Create all the views in our model
         TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT);
         this.setLayoutParams(tableParams);
         boolean white;
@@ -442,7 +453,7 @@ public class Board extends TableLayout {
             start_white = !start_white;
         }
     }
-    //Init the game (players and pieces)(called by the manager)
+    //Init the game (players and pieces), need to be called by the manager
     public List<Player> initGame_players(){
         System.out.println("GAME MANAGER INIT");
         List<Player> players = new ArrayList<>();
@@ -484,8 +495,8 @@ public class Board extends TableLayout {
         p1.addPiece(p1_knight2);
         p1.addPiece(p1_bishop2);
 
-        p1_king.addPieceToRockWith(p1_tower1,new Position(0,-1));
-        p1_king.addPieceToRockWith(p1_tower2,new Position(0,1));
+        p1.addRockPieces(p1_king,new Association_rock(p1_tower1,new Position(0,7),new Position(1,7), new Position(2,7)));
+        p1.addRockPieces(p1_king,new Association_rock(p1_tower2,new Position(7,7),new Position(6,7), new Position(5,7)));
 
         Piece p2_pawn1 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
         Piece p2_pawn2 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
@@ -520,8 +531,8 @@ public class Board extends TableLayout {
         p2.addPiece(p2_knight2);
         p2.addPiece(p2_bishop2);
 
-        p2_king.addPieceToRockWith(p2_tower1,new Position(0,-1));
-        p2_king.addPieceToRockWith(p2_tower2,new Position(0,1));
+        p2.addRockPieces(p2_king,new Association_rock(p2_tower1,new Position(0,0),new Position(1,0), new Position(2,0)));
+        p2.addRockPieces(p2_king,new Association_rock(p2_tower2,new Position(7,0),new Position(6,0), new Position(5,0)));
 
         //Put all the pieces in the board
         setAPieces(0,1,p2_pawn1);
@@ -563,12 +574,13 @@ public class Board extends TableLayout {
         commitChanges();
         return players;
     }
-    //Init the game (onclick cases event)(called by the manager)
+    //Init the game (onclick cases event), need to be called by the manager
     public void initGame_onclk(OnClickListener clk){
         for (Case c: cases) {
             c.setOnClickListener(clk);
         }
     }
+    //Create a Case View
     private Case createCase(int col, int row, boolean isWhite){
         TableRow.LayoutParams layout = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
         Case case_tab = new Case(context,null);
@@ -582,11 +594,13 @@ public class Board extends TableLayout {
         return case_tab;
     }
 
+
     /** ======== Manip the Board Model ======== **/
-    //Method called for define if a position for a move on the board is correct or not
+    //Say if a position for a move on the board is correct or not
     public boolean isGoodPos(int x, int y){
         return ((x>=0 && x<nb_col) && (y>=0 && y<nb_row));
     }
+    //Get a Case element with the position on the board, null instead
     public Case getACase(int x, int y){
         if(isGoodPos(x,y)) return cases[y*nb_col+x];
         return null;
@@ -602,7 +616,7 @@ public class Board extends TableLayout {
         }
         return pos;
     }
-    //Clear the board state
+    //Clear the board states
     public void clear(){
         for (Case c: cases) {
             c.clear();
@@ -610,14 +624,13 @@ public class Board extends TableLayout {
     }
     //Set the end of the board
     public void onEndOfGame(String start, String players, String end){
-        System.out.println("BOARD END OF GAME");
-
         this.finishMessage_start = start;
         this.finishMessage_players = players;
         this.finishMessage_end = end;
 
         isFinishScreen = true;
 
+        //If we have the animation on finish screen
         if(GameManager.ANIMATION_FINISH) {
             ValueAnimator animator_background = ValueAnimator.ofFloat(0.0f, 1.0f);
             animator_background.setDuration(this.border_globalDuration);
@@ -640,6 +653,7 @@ public class Board extends TableLayout {
             animator_background.start();
             animator_border.start();
         }else{
+            //Else we just dra with the finish values, and not a ValueAnimator
             animationTimingCompletion_background = 1.0f;
             animationTimingCompletion_border = 1.0f;
             invalidate();
@@ -647,7 +661,7 @@ public class Board extends TableLayout {
     }
     //Set the UI for choice in game board changing
     public void onChangePieceShape(Player curP,Function<Piece,Void> fnc_oclk_choices){
-        //First set the screen to be visible
+        //First set the screen to be "visible"
         this.onScreenView.setVisibility(VISIBLE);
 
         //Next compute onclick for the game changing piece
@@ -664,10 +678,58 @@ public class Board extends TableLayout {
         this.onScreenView.addElementForChoice(new Queen(curP,this.context,  color_primary,color_base,color_border));
         this.onScreenView.addElementForChoice(new Knight(curP,this.context,  color_primary,color_base,color_border));
         this.onScreenView.addElementForChoice(new Bishop(curP,this.context,  color_primary,color_base,color_border,color_secondary));
+
+        //Else commit the changes (clear and recreate UIs)
         this.onScreenView.commitChanges();
     }
+    //Hide the current screen View for chose a Piece for transformation
     public void restart_no_screen_view(){
         this.onScreenView.setVisibility(INVISIBLE);
+    }
+    //Say if there is a piece between two positions
+    public boolean noPiecesBetween(Position p1, Position p2) {
+        if(DEBUG_FOR_BOARD_LOGIC) {
+            System.out.println("NO PIECES BETWEEN : ");
+            System.out.println("START : " + p1);
+            System.out.println("END : " + p2);
+        }
+
+
+        Position incr = p2.difference(p1);
+        int coefX = (incr.getX()<0)? -1 : 1;
+        int coefY = (incr.getY()<0)? -1 : 1;
+
+        if(DEBUG_FOR_BOARD_LOGIC) System.out.println("INCR : " + incr);
+
+        int nbX = coefX * incr.getX();
+        int nbY = coefY * incr.getY();
+
+        if(DEBUG_FOR_BOARD_LOGIC) {
+            System.out.println("nbX : " + nbX);
+            System.out.println("nbY : " + nbY);
+        }
+
+        for (int i = 0; i <= nbY; i++) {
+            for (int j = 0; j <= nbX; j++) {
+                if((i!=0 || j!=0) && (i!=nbY || j!=nbX)) {
+                    Position posToWatch = new Position(p1.getX() + j * coefX, p1.getY() + i * coefY);
+                    if(DEBUG_FOR_BOARD_LOGIC) System.out.println(" => POSTOWATCH : " + posToWatch);
+                    Case curCaseToWatch = cases[posToWatch.getY() * nb_col + posToWatch.getX()];
+
+                    if (curCaseToWatch.getPiece() != null) {
+                        if(DEBUG_FOR_BOARD_LOGIC) System.out.println(" PIECE TO CANCEL : " +curCaseToWatch.getPiece());
+                        return false;
+                    }
+                }else{
+                    if(DEBUG_FOR_BOARD_LOGIC) {
+                        System.out.println(" => POST NOT WATCH incr i : " +i*coefY);
+                        System.out.println(" => POST NOT WATCH incr j : " +j*coefX);
+                    }
+
+                }
+            }
+        }
+        return true;
     }
 
 
@@ -687,15 +749,16 @@ public class Board extends TableLayout {
             addView(tableRow);
         }
     }
+    //Maj the size of the Cases
     public void majSizeCases(int taille_case){
         for (Case c: cases) {
             c.setDessiredDimention(taille_case);
         }
     }
+    //Set the screen view for the Pieces transformations
     public void setOnScreenView(ChangePieceScreen onScreenView) {
         this.onScreenView = onScreenView;
     }
-
 
 
     /** ======== Methods for performing changes on the board and MAJ Model and Layout ======== **/
@@ -707,12 +770,11 @@ public class Board extends TableLayout {
         }
         changedCases.clear();
     }
-    /**Basic methods for create changing on the board**/
-    //Set a piece to the position in param
+
+    /**Basic methods for create changes on the board**/
+    //Set a piece to the param Position
     //Assuming this position to be correct
     public void setAPieces(int col, int row, @Nullable Piece p){
-        //System.out.println("BOARD : SET A PIECE ON : (" +col+","+row+") : " + p);
-        //Log.i(log_tag,"BOARD : SET A PIECE ON : (" +col+","+row+") : " + p);
         Case caseInCase = cases[col+row*nb_col];
         if(!changedCases.contains(caseInCase)){
             changedCases.add(caseInCase);
@@ -722,13 +784,20 @@ public class Board extends TableLayout {
     //Set a possible position (true or false)
     //Assuming this position to be correct
     public void setPossiblePos(int col, int row, boolean pos){
-        //System.out.println("BOARD : SET A POSSIBLE POS ON : (" +col+","+row+") : " + pos);
-        //Log.i(log_tag,"BOARD : SET A POSSIBLE POS ON : (" +col+","+row+") : " + pos);
-        Case caseInCase = cases[col+row*nb_col];
+       Case caseInCase = cases[col+row*nb_col];
         if(!changedCases.contains(caseInCase)){
             changedCases.add(caseInCase);
         }
         caseInCase.setPossible_pos(pos);
+    }
+    //Set a possible position ROCK (Association_rock)
+    //Assuming this position to be correct
+    public void setPossiblePosRock(int col, int row, Association_rock as){
+        Case caseInCase = cases[col+row*nb_col];
+        if(!changedCases.contains(caseInCase)){
+            changedCases.add(caseInCase);
+        }
+        caseInCase.set_rock_elem(as);
     }
     //Set a possible pre selected position (true or false)
     //Assuming this position to be correct
@@ -750,77 +819,79 @@ public class Board extends TableLayout {
         }
         caseInCase.setWith_menace_on_it(men);
     }
-    //Set a possible ComplexMovement on a Case
-    //Assuming this position to be correct
-    public void setComplexMovementCase(int col, int row, MovementComplex mc){
-        Case caseInCase = cases[col+row*nb_col];
-        if(!changedCases.contains(caseInCase)){
-            changedCases.add(caseInCase);
+
+
+    /**ANIMATION TREATMENT**/
+    //Set a list of pieces (on startElem) with a continuous displacement on the board (to endElem)
+    public void animatedDisplacement(List<Case> startElem, List<Case> endElem, int nbELem, AnimatorListenerAdapter onTheEnd){
+        for (int i = 0; i < nbELem; i++) {
+            Case start = startElem.get(i);
+            Case end = endElem.get(i);
+
+            //In this func, we will only perform animation visual effect on the board, the gameplay mecanism is performed by onTheEnd
+            Piece p_dep = start.getPiece();
+
+            if (DEBUG_FOR_BOARD_ANIMATION) {
+                System.out.println("ANIMATED DISPLACEMENT : " + p_dep);
+                System.out.println("CASE START : " + start);
+                System.out.println("CASE END : " + end);
+            }
+
+            if (p_dep != null) {
+                //Now we can perform the continuous movement of the piece
+                isPieceMoving = true;
+                pieceToMove = p_dep;
+
+                //Get the current size of the piece
+                //Need to consider the padding with the current case
+                int dimension = (int) GameManager.convertDpToPixel(getResources().getDimension(R.dimen.case_pieces_padding), context);
+                int w_piece = start.getWidth() - 2 * dimension;
+                int h_piece = start.getHeight() - 2 * dimension;
+
+
+                //Get the position of the two cases depending on their positions in the current Board
+                Rect ovb_start = new Rect();
+                start.getDrawingRect(ovb_start);
+                this.offsetDescendantRectToMyCoords(start, ovb_start);
+                int start_y = ovb_start.top + dimension;
+                int start_x = ovb_start.left + dimension;
+                Rect ovb_end = new Rect();
+                end.getDrawingRect(ovb_end);
+                this.offsetDescendantRectToMyCoords(end, ovb_end);
+                int end_y = ovb_end.top + dimension;
+                int end_x = ovb_end.left + dimension;
+
+                if (DEBUG_FOR_BOARD_ANIMATION) {
+                    System.out.println("=>WIDTH P : " + w_piece);
+                    System.out.println("=>HEIGHT P : " + h_piece);
+                    System.out.println("=>POS START : " + start_x + "," + start_y);
+                    System.out.println("=>POS END : " + end_x + "," + end_y);
+                }
+
+                //Now we can perform all the animation
+                ValueAnimator anim_piece = ValueAnimator.ofFloat(0.0f, 1.0f);
+                anim_piece.setDuration(this.piece_globalDuration);
+                anim_piece.addUpdateListener(animation -> {
+                    float value = (Float) animation.getAnimatedValue();
+                    top_pieceToMove = (int) (start_y + (end_y - start_y) * value);
+                    left_pieceToMove = (int) (start_x + (end_x - start_x) * value);
+                    bottom_pieceToMove = top_pieceToMove + h_piece;
+                    right_pieceToMove = left_pieceToMove + w_piece;
+                    invalidate();
+                });
+                anim_piece.addListener(onTheEnd);
+
+                anim_piece.setInterpolator(new AccelerateInterpolator());
+                anim_piece.start();
+            }
         }
-        caseInCase.setMv_complex(mc);
     }
-
-
-    /*ANIMATION TREATMENT*/
-    //Set a piece on place with a continuous displacement on the board
-    public void animatedDisplacement(Case start, Case end, AnimatorListenerAdapter onTheEnd){
-        //In this func, we will only perform animation visual effect on the board, the gameplay mecanism is performed by onTheEnd
-        Piece p_dep = start.getPiece();
-
-        System.out.println("ANIMATED DISPLACEMENT : " + p_dep);
-        System.out.println("CASE START : " + start);
-        System.out.println("CASE END : " + end);
-
-        if(p_dep != null) {
-            //Now we can perform the continuous movement of the piece
-            isPieceMoving = true;
-            pieceToMove = p_dep;
-
-            //Get the current size of the piece
-            //Need to consider the padding with the current case
-            int dimension = (int) GameManager.convertDpToPixel(getResources().getDimension(R.dimen.case_pieces_padding),context);
-            int w_piece = start.getWidth() - 2*dimension;
-            int h_piece = start.getHeight() - 2*dimension;
-
-
-            //Get the position of the two cases depending on their positions in the current Board
-            Rect ovb_start = new Rect();
-            start.getDrawingRect(ovb_start);
-            this.offsetDescendantRectToMyCoords(start, ovb_start);
-            int start_y = ovb_start.top + dimension;
-            int start_x = ovb_start.left + dimension;
-            Rect ovb_end = new Rect();
-            end.getDrawingRect(ovb_end);
-            this.offsetDescendantRectToMyCoords(end, ovb_end);
-            int end_y = ovb_end.top+dimension;
-            int end_x = ovb_end.left+dimension;
-
-            System.out.println("=>WIDTH P : " + w_piece);
-            System.out.println("=>HEIGHT P : " + h_piece);
-            System.out.println("=>POS START : " + start_x + "," + start_y);
-            System.out.println("=>POS END : " + end_x + "," + end_y);
-
-            //Now we can perform all the animation
-            ValueAnimator anim_piece = ValueAnimator.ofFloat(0.0f, 1.0f);
-            anim_piece.setDuration(this.piece_globalDuration);
-            anim_piece.addUpdateListener(animation -> {
-                float value = (Float) animation.getAnimatedValue();
-                top_pieceToMove = (int) (start_y + (end_y - start_y)*value);
-                left_pieceToMove = (int) (start_x + (end_x - start_x)*value);
-                bottom_pieceToMove = top_pieceToMove+h_piece;
-                right_pieceToMove = left_pieceToMove+w_piece;
-                invalidate();
-            });
-            anim_piece.addListener(onTheEnd);
-
-            anim_piece.setInterpolator(new AccelerateInterpolator());
-            anim_piece.start();
-        }
-    }
+    //Restart the animation
     public void restart_no_animation_context(){
         isPieceMoving = false;
         pieceToMove = null;
     }
+
 
     @Override
     public String toString() {
@@ -831,7 +902,6 @@ public class Board extends TableLayout {
                 ", height=" + getHeight() +
                 ", white_color=" + white_color +
                 ", black_color=" + black_color +
-                ", selection_color=" + selection_color +
                 '}';
     }
 }

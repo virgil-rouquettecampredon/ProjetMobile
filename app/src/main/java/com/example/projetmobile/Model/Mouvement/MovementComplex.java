@@ -6,6 +6,7 @@ import com.example.projetmobile.Model.Shot;
 
 import java.util.List;
 
+@Deprecated
 public abstract class MovementComplex extends Movement<Case> {
 
     public MovementComplex(Action<Case> action, Position start, Position incrementation) {

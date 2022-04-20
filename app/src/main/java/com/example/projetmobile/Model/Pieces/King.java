@@ -21,28 +21,18 @@ import java.util.List;
 
 public class King extends Piece{
 
-    private List<Piece> piecesToRockWith;
-    private List<Position> incrementationPieceToRockWith;
-
     public King(Player p, Context c, int color_fill, int color_plate, int color_stroke, int color_elements) {
         super(p);
         this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_king),color_fill);
         this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_king_plate),color_plate);
         this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_king_elements), color_elements);
         this.appearance.addLayer(ContextCompat.getDrawable(c, R.drawable.piece_king_border), color_stroke);
-        piecesToRockWith = new ArrayList<>();
-        incrementationPieceToRockWith = new ArrayList<>();
     }
     public King(boolean deapCloneOnGame, Piece p, ComposedDrawing appearance) {
         super(deapCloneOnGame, p);
         this.appearance = appearance;
-        piecesToRockWith = new ArrayList<>();
     }
 
-    public void addPieceToRockWith(Piece p, Position pos){
-        this.piecesToRockWith.add(p);
-        this.incrementationPieceToRockWith.add(pos);
-    }
 
     @Override
     public List<Movement<? extends GameObject>> getAllPossibleMvt(int col, int row){
@@ -82,20 +72,6 @@ public class King extends Piece{
             }
         }*/
         return mvt;
-    }
-
-    @Override
-    public List<MovementComplex> getAllPossibleComplexMvt(int col, int row) {
-        List<MovementComplex> mComp = new ArrayList<>();
-
-        if(!movedYet){
-            for (int i = 0; i < piecesToRockWith.size(); i++) {
-                Piece curP = piecesToRockWith.get(i);
-                Position curPosInc = incrementationPieceToRockWith.get(i);
-                mComp.add(new MovementRock(curP,new Position(col,row),curPosInc));
-            }
-        }
-        return mComp;
     }
 
     @Override
