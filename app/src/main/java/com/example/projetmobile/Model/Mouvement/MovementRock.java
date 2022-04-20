@@ -7,6 +7,7 @@ import com.example.projetmobile.Model.Shot;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class MovementRock extends MovementComplex{
 
     private Piece pToWatchFor;

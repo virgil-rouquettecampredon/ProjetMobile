@@ -7,6 +7,7 @@ import com.example.projetmobile.Model.Shot;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class MovementEnPassant extends MovementComplex{
 
     public MovementEnPassant(Action<Case> action, Position start, Position incrementation) {

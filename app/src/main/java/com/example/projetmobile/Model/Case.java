@@ -10,41 +10,41 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.example.projetmobile.Model.Mouvement.MovementComplex;
 import com.example.projetmobile.Model.Pieces.Piece;
 import com.example.projetmobile.R;
 
 public class Case extends View implements GameObject {
-    private Context context;
+    //=== Rendering information
     private Paint paint;
-
     private int desiredDim;
     private int stroke_width;
-
-    //Appearance DATA
     private int dimension;
-
     private int color_white;
     private int color_black;
 
-    //Model DATA
+    //=== Model data
+    //View data
+    private Context context;
+
+    //Model data
     private Piece piece;
+    private Association_rock rock_elem;
     private boolean possible_pos;
     private boolean pre_selected_pos;
     private boolean is_end_case;
     private boolean is_case_with_menace_on_it;
-    private MovementComplex mv_complex;
 
     private boolean white;
     private int column;
     private int row;
 
+    //cpt for drawing count
     private int nb_draw = 0;
 
     public Case(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        dimension = (int) GameManager.convertDpToPixel(getResources().getDimension(R.dimen.case_pieces_padding),context);
+        dimension = (int) GameManager.convertDpToPixel(getResources().getDimension(R.dimen.case_pieces_padding), context);
         paint = new Paint();
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Case, 0, 0);
@@ -59,69 +59,72 @@ public class Case extends View implements GameObject {
 
         color_black = Color.BLACK;
         color_white = Color.WHITE;
+
         pre_selected_pos = false;
-        mv_complex = null;
+        is_end_case = false;
+        is_case_with_menace_on_it = false;
+        rock_elem = null;
+        piece = null;
     }
 
 
-    /** ======== View Methods ======== **/
+    /**
+     * ======== View Methods ========
+     **/
     @Override
     protected void onDraw(Canvas canvas) {
-        //System.out.println("JE DESSINE : " + this);
-        //Draw background color
-        if(white){
-            //paint.setColor(color_white);
+       if (white) {
             canvas.drawColor(color_white);
-        }else{
-            //paint.setColor(color_black);
+        } else {
             canvas.drawColor(color_black);
         }
-        //paint.setStyle(Paint.Style.FILL);
-        //canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
 
-        //Try first to draw the possible menace that a case can possibly contain
+        //Try first to draw the possibly pre_selected information that a case can contain
+        if (pre_selected_pos) {
+            //Draw pre selected pos
+            Board.appearance_confirmation.setBounds(0, 0, getWidth(), getHeight());
+            Board.appearance_confirmation.draw(canvas);
+        } else {
 
-            if (pre_selected_pos) {
-                //System.out.println("DRAW PRE SELECTED POS");
-                //Draw pre selected pos
-                Board.appearence_confirmation.setBounds(0, 0, getWidth(), getHeight());
-                Board.appearence_confirmation.draw(canvas);
-            } else {
-                //Draw possible pos filter
-                if (possible_pos) {
-                    //System.out.println("DRAW POSSIBLE POS");
-                    if (piece != null) {
-                        Board.appearence_possiblepos_eat.setBounds(0, 0, getWidth(), getHeight());
-                        Board.appearence_possiblepos_eat.draw(canvas);
-                    } else {
-                        Board.appearence_possiblepos.setBounds(0, 0, getWidth(), getHeight());
-                        Board.appearence_possiblepos.draw(canvas);
-                    }
-
+            //Draw possible pos filter
+            if (possible_pos) {
+                //Try first to draw if a case with possible position contain a case
+                if (piece != null) {
+                    Board.appearance_possiblepos_eat.setBounds(0, 0, getWidth(), getHeight());
+                    Board.appearance_possiblepos_eat.draw(canvas);
                 } else {
-                    if (is_case_with_menace_on_it) {
-                        Board.appearence_menaced.setBounds(0, 0, getWidth(), getHeight());
-                        Board.appearence_menaced.draw(canvas);
+                    //Then try to see if a case is a possible movement and contain a rock structure
+                    if(rock_elem != null){
+                        Board.appearance_rock.setBounds(0, 0, getWidth(), getHeight());
+                        Board.appearance_rock.draw(canvas);
+                    }else {
+                        Board.appearance_possiblepos.setBounds(0, 0, getWidth(), getHeight());
+                        Board.appearance_possiblepos.draw(canvas);
                     }
                 }
+            } else {
+                //Next try to draw the possible menace that a case can possibly contain
+                if (is_case_with_menace_on_it) {
+                    Board.appearance_menaced.setBounds(0, 0, getWidth(), getHeight());
+                    Board.appearance_menaced.draw(canvas);
+                }
             }
-
+        }
 
         //Draw piece
-        if(piece != null){
-            //System.out.println("DRAW A PIECE : " + piece);
+        if (piece != null) {
             ComposedDrawing drawable = piece.getAppearances();
-            drawable.setBounds(dimension, dimension, getWidth()-dimension, getHeight()-dimension);
+            drawable.setBounds(dimension, dimension, getWidth() - dimension, getHeight() - dimension);
             drawable.draw(canvas);
         }
         nb_draw++;
 
         super.onDraw(canvas);
     }
+
     @Override
-    //Can be used to stop animations and to clean up resources used by the view
+    //Can be used to stop animations and clean up resources used by the view
     protected void onDetachedFromWindow() {
-        //can be used to stop animations and to clean up resources used by the view
         super.onDetachedFromWindow();
     }
     @Override
@@ -169,99 +172,124 @@ public class Case extends View implements GameObject {
     }
 
 
-    /** ======== SETTERS ======== **/
+    /**
+     * ======== SETTERS ========
+     **/
     public void setColor_white(int color_white) {
         this.color_white = color_white;
     }
+
     public void setColor_black(int color_black) {
         this.color_black = color_black;
     }
+
     public void setPossible_pos(boolean possible_pos) {
         this.possible_pos = possible_pos;
     }
+
     public void setPre_selected_pos(boolean pre_selected_pos) {
         this.pre_selected_pos = pre_selected_pos;
     }
+
     public void setWith_menace_on_it(boolean is_case_with_menace_on_it) {
         this.is_case_with_menace_on_it = is_case_with_menace_on_it;
     }
+
     public void setWhite(boolean white) {
         this.white = white;
     }
+
     public void setColumn(int column) {
         this.column = column;
     }
+
     public void setRow(int row) {
         this.row = row;
     }
+
     public void setPiece(Piece piece) {
         this.piece = piece;
     }
-    public Piece getPiece() {
-        return piece;
-    }
+
     public void setDessiredDimention(int desiredDim) {
-        this.stroke_width = desiredDim/8;
+        this.stroke_width = desiredDim / 8;
         this.desiredDim = desiredDim;
     }
+
     public void setEndCase(boolean is_end_case) {
         this.is_end_case = is_end_case;
     }
-    public void setMv_complex(MovementComplex mv_complex) {
-        this.mv_complex = mv_complex;
+
+    public void set_rock_elem(Association_rock rock_data) {
+        this.rock_elem = rock_data;
     }
 
 
-    /** ======== GETTERS ======== **/
+    /**
+     * ======== GETTERS ========
+     **/
     public int getColumn() {
         return column;
     }
+
     public int getRow() {
         return row;
     }
-    public boolean isPre_selected_pos() {
+
+    public boolean is_pre_selected_pos() {
         return pre_selected_pos;
     }
-    public boolean isPossible_pos() {
+
+    public boolean is_possible_pos() {
         return possible_pos;
     }
+
     public boolean is_end_case() {
         return is_end_case;
     }
-    public MovementComplex getMv_complex() {
-        return mv_complex;
+
+    public Association_rock get_rock_position() {
+        return rock_elem;
+    }
+
+    public Piece getPiece() {
+        return piece;
     }
 
 
-    /** ======== UTILITIES FUNCTION ======== **/
-    public void commit_changes(){
-        //System.out.println("CASE : COMMIT CHANGES ON : " + this);
-        //Refresh with invalidate (from UI thread)
-        //Refresh with onPostInvalidate(from non UI thread)
+    /**
+     * ======== UTILITIES FUNCTIONS ========
+     **/
+    public void commit_changes() {
         invalidate();
     }
-    public void clear(){
+
+    public void clear() {
         this.piece = null;
         this.possible_pos = false;
         this.pre_selected_pos = false;
     }
+
     @Override
     public String toString() {
         return "Case{" +
-                "desiredDim=" + desiredDim +
+                "paint=" + paint +
+                ", desiredDim=" + desiredDim +
                 ", stroke_width=" + stroke_width +
                 ", dimension=" + dimension +
                 ", color_white=" + color_white +
                 ", color_black=" + color_black +
+                ", context=" + context +
                 ", piece=" + piece +
+                ", rock_elem=" + rock_elem +
                 ", possible_pos=" + possible_pos +
                 ", pre_selected_pos=" + pre_selected_pos +
+                ", is_end_case=" + is_end_case +
+                ", is_case_with_menace_on_it=" + is_case_with_menace_on_it +
                 ", white=" + white +
                 ", column=" + column +
                 ", row=" + row +
                 ", nb_draw=" + nb_draw +
-                ",GetWidth="+ getWidth()+
-                ",GetHeight="+ getHeight()+
                 '}';
     }
 }

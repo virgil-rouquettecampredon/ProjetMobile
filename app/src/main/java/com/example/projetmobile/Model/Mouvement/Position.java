@@ -31,6 +31,10 @@ public class Position {
         this.y+=p.y;
     }
 
+    public Position difference(Position p){
+        return new Position(this.x - p.x, this.y-p.y);
+    }
+
     @Override
     public String toString() {
         return "Position{" +

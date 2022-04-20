@@ -31,11 +31,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 
@@ -58,6 +61,7 @@ public class ProfileFragment extends Fragment {
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseStorage storage;
     private StorageReference storageRef;
+    private File localFile;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -159,6 +163,9 @@ public class ProfileFragment extends Fragment {
         imageViewAvatar = view.findViewById(R.id.imageViewAvatar);
         imageViewAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SetProfilePictureDialogActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("imagePath", Uri.fromFile(localFile).toString());
+            intent.putExtras(bundle);
             setProfilePictureLauncher.launch(intent);
         });
 
@@ -222,6 +229,8 @@ public class ProfileFragment extends Fragment {
         mDatabase = database.getReference();
         String keyId = user.getUid();
 
+        downloadFile();
+
         mDatabase.child("users").child(keyId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -248,5 +257,35 @@ public class ProfileFragment extends Fragment {
             System.out.println(storageReference.getPath());
             storageReference.putFile(filePath);
         }
+    }
+
+    private void downloadFile(){
+        StorageReference storageReference = storage.getReference().child("images/" + user.getUid()+".jpg");
+        localFile = null;
+        try {
+            localFile = File.createTempFile("images", "jpg");
+            Log.d("BDD*", "downloadFile: " + localFile.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("BDD*", "downloadFile: " + e.getMessage());
+        }
+
+        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                Log.d("BDD*", "onSuccess: " + taskSnapshot.getStorage().getPath());
+                Uri uri = Uri.fromFile(localFile);
+                Log.d("BDD*", "onSuccess: " + uri.toString());
+                imageViewAvatar.setImageURI(Uri.parse(uri.toString()));
+                // Local temp file has been created
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("BDD*", "onFailure: " + exception.getMessage());
+                // Handle any errors
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@ package com.example.projetmobile.Model.Mouvement;
 import com.example.projetmobile.Model.Case;
 import com.example.projetmobile.Model.Pieces.Piece;
 
+@Deprecated
 public class ActionRock implements Action<Case>{
     private Piece p;
 
