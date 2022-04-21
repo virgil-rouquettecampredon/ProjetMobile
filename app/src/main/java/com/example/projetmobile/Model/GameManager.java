@@ -41,11 +41,11 @@ public class GameManager {
 
     //For console printing only
     private static boolean DEBUG_FOR_ONCLK              = false;
-    private static boolean DEBUG_FOR_GAME_LOGIC         = false;
+    private static boolean DEBUG_FOR_GAME_LOGIC         = true;
     private static boolean DEBUG_FOR_GAME_MENACE        = false;
     private static boolean DEBUG_FOR_GAME_ANIMATION     = false;
     private static boolean DEBUG_FOR_GAME_COMPLEXMVT    = false;
-    private static boolean DEBUG_FOR_GAME_ROCK          = false;
+    private static boolean DEBUG_FOR_GAME_ROCK          = true;
 
     //Board of the current game
     private Board board;
@@ -216,13 +216,16 @@ public class GameManager {
                             //Delete precedent position seen
                             for (Position pos : lastPossiblePositions) {
                                 board.setPossiblePos(pos.getX(), pos.getY(), false);
+                                board.setPossiblePosRock(pos.getX(), pos.getY(), null);
                             }
                             lastPossiblePositions.clear();
 
+
                             if (p != null) {
-                                if (DEBUG_FOR_ONCLK)
-                                    System.out.println("CLICK ON A PIECE IN THE BOARD");
                                 //Click on a piece on the board
+                                if (DEBUG_FOR_ONCLK) {
+                                    System.out.println("CLICK ON A PIECE IN THE BOARD");
+                                }
                                 //Send new positions player wanted to see
                                 List<Position> posPos = currentPlayer.getPositionsPiece(p);
                                 for (Position pos : posPos) {
@@ -258,6 +261,8 @@ public class GameManager {
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("<===> START A NEW TURN <===>");
 
         this.currentPlayer = getCurrentPlayer();
+        if (DEBUG_FOR_GAME_LOGIC) System.out.println("CUR PLAYER : " + currentPlayer);
+
 
         //Maj UI for better understanding in interface of current player
         majLayoutPlayerTurn(this.currentPlayer);
@@ -299,14 +304,6 @@ public class GameManager {
 
     //Get a player who get the Piece piece
     private Player getPlayer(Piece piece) {
-        /*for (Player p: players) {
-            for (Piece pp: p.getPiecesPlayer()) {
-                if(pp.equals(piece)){
-                    return p;
-                }
-            }
-        }
-        return null;*/
         return piece.getPossessor();
     }
 
@@ -656,8 +653,7 @@ public class GameManager {
                     transformAPiece(moved, end);
                 } else {
                     //Else go through a normal treatment
-                    //Go through another round
-                    //Start a new turn
+                    //Go through another round and start a new turn
                     if (startANewTurn()) {
                         //If its finished, then stop the treatment
                         board.commitChanges();
@@ -690,7 +686,7 @@ public class GameManager {
         return sList;
     }
 
-    //For perform the in/out piece mecanism on the board
+    //For perform the in/out piece mechanism on the board
     public Player eatAPiece(Piece piece) {
         Player p = getPlayer(piece);
         if (p != null) {
@@ -776,8 +772,8 @@ public class GameManager {
             for (Piece p_player : p.getPiecesToRock()) {
                 if (DEBUG_FOR_GAME_ROCK) System.out.println("PLAYER PIECE ROCK = " + p_player);
 
-                //If this piece hasn't moved yet
-                if (!p_player.isMovedYet()) {
+                //If this piece hasn't moved yet and still alive
+                if (!p_player.isMovedYet() && p.isAlive(p_player)) {
                     Position pos_p = this.board.getPiecePosition(p_player);
                     List<Association_rock> list_assoc = p.getAssoToRockWithPiece(p_player);
                     for (Association_rock as : list_assoc) {
@@ -785,8 +781,8 @@ public class GameManager {
                         if (DEBUG_FOR_GAME_ROCK)
                             System.out.println("PLAYER PIECE TO ROCK = " + to_rock_with);
 
-                        //If the other piece hasn't moved yet
-                        if (!to_rock_with.isMovedYet()) {
+                        //If the other piece hasn't moved yet and still alive
+                        if (!to_rock_with.isMovedYet() && p.isAlive(to_rock_with)) {
                             Position pos_p_to_rock = as.posPieceToRockWith;
                             if (DEBUG_FOR_GAME_ROCK) {
                                 System.out.println(" ->POS DEP : " + pos_p);
@@ -914,11 +910,8 @@ public class GameManager {
      **/
     //Add piece to cimatary player p layout
     private void addCimetaryLayout(Player p, Piece piece) {
-        //System.out.println("GM : MAJ CIMETARIES = " + p);
-        //System.out.println("GM : MAJ CIMETARIES = " + piece);
         int ind = getIndex(p);
         if (ind >= 0) {
-            //System.out.println("CREATE IMG VIEW : " + ind);
 
             if (piece_size < 0)
                 piece_size = this.playersUI.get(ind).getLLDeadPieces().getWidth() / (1 * p.getPiecesPlayer().size());
@@ -944,7 +937,6 @@ public class GameManager {
     }
 
     public void majPlayerLayout() {
-        //System.out.println("MAJ PLAYERS LAYOUT");
         for (int i = 0; i < playersUI.size(); i++) {
             Player p = players.get(i);
             this.playersUI.get(i).getTVPseudo().setText(p.getPseudo());

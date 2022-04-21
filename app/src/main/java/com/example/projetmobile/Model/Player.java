@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-//TODO destroy all complexmovement operator if needed
+
 public class Player implements GameObject{
 
     private String pseudo;
@@ -24,8 +24,6 @@ public class Player implements GameObject{
 
     public Player(String pseudo,int color){
         this.piecesPlayer = new HashMap<>();
-        //this.piecesComplexPlayer = new HashMap<>();
-
         this.rockPieces = new HashMap<>();
 
         this.pseudo = pseudo;
@@ -36,26 +34,23 @@ public class Player implements GameObject{
     public boolean isAlly(Player p){
         return p == this;
     }
+    public int getColor() {
+        return color;
+    }
+    public String getPseudo() {
+        return pseudo;
+    }
 
-    /** ======== Pieces management (Movements) ======== **/
+
+    /** ======== Pieces management ======== **/
     public List<Piece> getPiecesPlayer() {
         return new ArrayList<>(piecesPlayer.keySet());
     }
     public void addPiece(Piece p){
         this.piecesPlayer.put(p, new ArrayList<>());
-        /*Association a = this.piecesComplexPlayer.get(p);
-        if(a!=null){
-            a.isAlive = true;
-        }else{
-            this.piecesComplexPlayer.put(p,new Association(true,new HashMap<>()));
-        }*/
     }
     public void removePiece(Piece p){
         this.piecesPlayer.remove(p);
-        /*Association a = this.piecesComplexPlayer.get(p);
-        if(a!=null){
-            a.isAlive = false;
-        }*/
     }
     public void killAPiece(Piece p){
         this.removePiece(p);
@@ -63,10 +58,11 @@ public class Player implements GameObject{
     }
     public void destroyAPiece(Piece p){
         this.piecesPlayer.remove(p);
-        //this.piecesComplexPlayer.remove(p);
         this.cimetary.remove(p);
     }
     public void reviveAPiece(Piece p){
+        System.out.println("REVIVE A PIECE : " + p);
+
         Iterator<Piece> ite = cimetary.iterator();
         while (ite.hasNext()){
             Piece pDead = ite.next();
@@ -76,6 +72,15 @@ public class Player implements GameObject{
             }
         }
     }
+    public boolean isAlive(Piece p){
+        for (Piece pdead :cimetary) {
+            if(pdead == p) return false;
+        }
+        return true;
+    }
+
+
+    /** ======== Pieces Movement ======== **/
     public void resetPossibleMove(){
         for (Piece p:piecesPlayer.keySet()) {
             piecesPlayer.get(p).clear();
@@ -88,11 +93,9 @@ public class Player implements GameObject{
         List<Position> res = piecesPlayer.get(p);
         return (res == null)? new ArrayList<>() : res;
     }
-    public int getColor() {
-        return color;
-    }
 
 
+    /** ======== Rock Management ======== **/
     public void addRockPieces(Piece rock, Association_rock as){
         List<Association_rock> list = this.rockPieces.get(rock);
         if(list!=null){
@@ -111,7 +114,6 @@ public class Player implements GameObject{
     }
 
 
-
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -123,9 +125,6 @@ public class Player implements GameObject{
 
         Player p = (Player) o;
         return this.pseudo.equals(p.pseudo);
-    }
-    public String getPseudo() {
-        return pseudo;
     }
     @Override
     public String toString() {
