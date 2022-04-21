@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,8 +27,16 @@ SetProfilePictureDialogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_profile_picture_dialog);
 
+        Bundle bundle = getIntent().getExtras();
+        String filePath = bundle.getString("imagePath");
+
 
         previewImageView = findViewById(R.id.previewImageView);
+        Log.d("SetProfilePictureDialogActivity", "filePath: " + filePath);
+
+        if (filePath != null && !filePath.isEmpty()) {
+            previewImageView.setImageURI(Uri.parse(filePath));
+        }
         //TODO mettre la vraie image de profil (BDD ?)
         ActivityResultLauncher<String> getImage = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 resultURI -> {
