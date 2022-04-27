@@ -207,7 +207,6 @@ public class ProfileFragment extends Fragment {
         View editPseudoView = view.findViewById(R.id.editPseudoView);
         editPseudoView.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
-            //TODO récupérer le vrai pseudo
             intent.putExtra(EditTextDialogActivity.editTextPrefillName, pseudo);
             intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.pseudo));
             setFriendPseudoLauncher.launch(intent);
@@ -216,7 +215,6 @@ public class ProfileFragment extends Fragment {
         bioTextView = view.findViewById(R.id.bioTextView);
         bioTextView.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
-            //TODO récupérer la vrai bio
             intent.putExtra(EditTextDialogActivity.editTextPrefillName, bio);
             intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.biography));
             setBioLauncher.launch(intent);

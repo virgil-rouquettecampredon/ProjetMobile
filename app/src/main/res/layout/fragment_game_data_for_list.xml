@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/topLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/primary_box"
+    android:padding="@dimen/drawable_box_margin"
+    android:layout_marginBottom="@dimen/list_dialog_space"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".GameDataForListFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/rankingTextView"
+            android:layout_width="@dimen/list_dialog_icon_size"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/list_dialog_text_icon_size"
+            android:textColor="?attr/colorOnPrimary"
+            android:fontFamily="@font/permanent_marker"
+            android:textSize="@dimen/list_dialog_text_icon_size"
+            android:text="@string/winner_elo" />
+
+        <TextView
+            android:id="@+id/gameNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|start"
+            android:textColor="?attr/colorOnPrimaryVariant"
+            android:textSize="@dimen/list_dialog_text_icon_size"
+            android:layout_marginStart="@dimen/list_dialog_text_icon_size"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="@dimen/list_dialog_versus_text_size"
+            android:text="@string/default_game_name" />
+
+        <TextView
+            android:id="@+id/gameModeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|end"
+            android:textColor="?attr/colorOnPrimaryVariant"
+            android:textSize="@dimen/list_dialog_text_icon_size"
+            android:layout_marginStart="@dimen/list_dialog_text_icon_size"
+            android:layout_marginEnd="@dimen/list_dialog_text_icon_size"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="@dimen/list_dialog_versus_text_size"
+            android:text="@string/default_game_mode" />
+    </LinearLayout>
+</LinearLayout>

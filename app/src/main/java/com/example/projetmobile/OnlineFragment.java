@@ -69,11 +69,15 @@ public class OnlineFragment extends Fragment {
 
         AppCompatButton friendButton = view.findViewById(R.id.friendButton);
         friendButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), GameListActivity.class);
+            startActivity(intent);
+            /*
             Intent intent = new Intent(getActivity(), EditTextDialogActivity.class);
             //TODO récupérer le vrai pseudo
             intent.putExtra(EditTextDialogActivity.editTextPrefillName, getString(R.string.default_pseudo));
             intent.putExtra(EditTextDialogActivity.titleName, getString(R.string.pseudo));
             setFriendPseudoLauncher.launch(intent);
+            */
         });
         
         AppCompatButton backButton = view.findViewById(R.id.backButton);

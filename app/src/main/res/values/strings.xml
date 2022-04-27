@@ -60,8 +60,6 @@
     <string name="game_mode">Mode de jeu</string>
     <string name="waiting_for_acceptation">EN ATTENTE DE L\'ACCEPTATION</string>
     <string name="watermark">ADACorp™</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="try_again_warning">" Vous êtes sur le point de vous rendre, ça serait dommage de laisser votre adversaire l’emporter si facilement "</string>
 
     <string name="finish_screen_start">Partie termininée</string>
@@ -69,4 +67,11 @@
     <string name="finish_screen_winnerMany_end">ont gagné</string>
     <string name="finish_screen_draw_end">égalité</string>
     <string name="on_board_screen">Veuillez choisir une pièce</string>
+    <string name="game_list">Liste des parties</string>
+    <string name="sync_content_description">Synchronizer la liste des parties</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_game_name">Very cool game</string>
+    <string name="default_game_mode">Standard</string>
+    <string name="game_name">Nom de la partie</string>
 </resources>
