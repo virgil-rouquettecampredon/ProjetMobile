@@ -23,11 +23,6 @@ public class GameManagerOnline extends GameManager{
         }
     }
 
-    private static final int QUEEN    = 0;
-    private static final int TOWER    = 1;
-    private static final int BISHOP   = 2;
-    private static final int KNIGHT   = 3;
-
     private List<DB_Shots> shotsToPush;
     private List<DB_Shots> shotsToPerform;
 

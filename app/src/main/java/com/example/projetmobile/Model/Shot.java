@@ -23,6 +23,8 @@ public class Shot {
 
         this.firstMoove = firstMoove;
         this.majAff = majAff;
+
+        IDTransformedPiece = -1;
     }
 
     public Shot(Piece pieceConcerned, Position startPos, Position endPos, boolean majAff, boolean firstMoove) {
@@ -50,6 +52,9 @@ public class Shot {
     }
     public int getIDTransformedPiece() {
         return IDTransformedPiece;
+    }
+    public void setIDTransformedPiece(int IDTransformedPiece) {
+        this.IDTransformedPiece = IDTransformedPiece;
     }
 
     @Override

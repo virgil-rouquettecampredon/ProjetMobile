@@ -35,6 +35,11 @@ import java.util.Map;
 
 
 public class GameManager {
+    protected static final int QUEEN    = 0;
+    protected static final int TOWER    = 1;
+    protected static final int BISHOP   = 2;
+    protected static final int KNIGHT   = 3;
+
     //For animation control
     public static boolean ANIMATION_FINISH  = true;
     public static boolean ANIMATION_PIECE   = true;
@@ -731,22 +736,29 @@ public class GameManager {
         gameStopped = true;
 
         this.board.onChangePieceShape(this.currentPlayer, p -> {
+            int id = -1;
             if (p instanceof Tower) {
+                id = TOWER;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Tower(true, t, p.getAppearances()));
             }
             if (p instanceof Queen) {
+                id = QUEEN;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Queen(true, t, p.getAppearances()));
             }
             if (p instanceof Knight) {
+                id = KNIGHT;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Knight(true, t, p.getAppearances()));
             }
             if (p instanceof Bishop) {
+                id = BISHOP;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Bishop(true, t, p.getAppearances()));
             }
 
             //TO TEST
             //player piece destruction
             t.getPossessor().destroyAPiece(t);
+            //Maj last shot Piece Transformation
+            this.allShots.peek().get(0).setIDTransformedPiece(id);
 
             gameStopped = false;
             this.board.restart_no_screen_view();
