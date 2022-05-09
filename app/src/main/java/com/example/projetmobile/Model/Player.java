@@ -40,7 +40,9 @@ public class Player implements GameObject{
     public String getPseudo() {
         return pseudo;
     }
-
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
 
     /** ======== Pieces management ======== **/
     public List<Piece> getPiecesPlayer() {

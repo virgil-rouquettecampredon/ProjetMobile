@@ -458,8 +458,8 @@ public class Board extends TableLayout {
         System.out.println("GAME MANAGER INIT");
         List<Player> players = new ArrayList<>();
 
-        Player p1 = new Player("JOJO", Color.WHITE);
-        Player p2 = new Player("JORDAN",Color.BLACK);
+        Player p1 = new Player("WHITE", Color.WHITE);
+        Player p2 = new Player("BLACK",Color.BLACK);
         players.add(p1);
         players.add(p2);
         Piece p1_pawn1 = new Pawn(p1,this.context, Color.WHITE,Color.WHITE,Color.BLACK, Piece.DIRECTION.UP);

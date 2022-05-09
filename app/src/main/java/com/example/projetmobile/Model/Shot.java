@@ -11,6 +11,8 @@ public class Shot {
     private Piece eatedPiece;
     private boolean firstMoove;
 
+    private int IDTransformedPiece;
+
     private boolean majAff;
 
     public Shot(Piece pieceConcerned, Position startPos, Position endPos, Piece eatedPiece, boolean majAff, boolean firstMoove) {
@@ -45,6 +47,9 @@ public class Shot {
     }
     public boolean isFirstMoove() {
         return firstMoove;
+    }
+    public int getIDTransformedPiece() {
+        return IDTransformedPiece;
     }
 
     @Override

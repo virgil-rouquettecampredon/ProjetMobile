@@ -40,42 +40,42 @@ public class GameManager {
     public static boolean ANIMATION_PIECE   = true;
 
     //For console printing only
-    private static boolean DEBUG_FOR_ONCLK              = false;
-    private static boolean DEBUG_FOR_GAME_LOGIC         = true;
-    private static boolean DEBUG_FOR_GAME_MENACE        = false;
-    private static boolean DEBUG_FOR_GAME_ANIMATION     = false;
-    private static boolean DEBUG_FOR_GAME_COMPLEXMVT    = false;
-    private static boolean DEBUG_FOR_GAME_ROCK          = true;
+    protected static boolean DEBUG_FOR_ONCLK              = false;
+    protected static boolean DEBUG_FOR_GAME_LOGIC         = true;
+    protected static boolean DEBUG_FOR_GAME_COMPLEXMVT    = false;
+    protected static boolean DEBUG_FOR_GAME_ROCK          = true;
+    protected static boolean DEBUG_FOR_GAME_MENACE        = false;
+    protected static boolean DEBUG_FOR_GAME_ANIMATION     = false;
 
     //Board of the current game
-    private Board board;
-    private Context context;
-    private List<Player> players;
-    private Player currentPlayer;
+    protected Board board;
+    protected Context context;
+    protected List<Player> players;
+    protected Player currentPlayer;
 
-    private List<Position> lastPossiblePositions;
-    private Position lastPosOfPieceSelected;
-    private Position lastPosPreSelected;
+    protected List<Position> lastPossiblePositions;
+    protected Position lastPosOfPieceSelected;
+    protected Position lastPosPreSelected;
 
     //For player overlay
-    private List<GamePlayerOverlayFragment> playersUI;
-    private List<FrameLayout> playersUI_FrameLayout;
-    private int piece_size = -1;
+    protected List<GamePlayerOverlayFragment> playersUI;
+    protected List<FrameLayout> playersUI_FrameLayout;
+    protected int piece_size = -1;
 
-    private int nbTurn = 0;
+    protected int nbTurn = 0;
 
     //For getting all shot from all players
     Deque<List<Shot>> allShots;
 
     //For stop the onclk behavior
-    private boolean gameStopped;
+    protected boolean gameStopped;
 
     //For each piece that is not on an ally team and can menace a victoryCondition piece of the current player
     //Save the case of this Piece to MAJ UI next
-    private List<Position> positionWithDanger;
+    protected List<Position> positionWithDanger;
 
     //For the rock behavior only
-    private Map<Piece, List<Association_rock>> rockPiecePositons;
+    protected Map<Piece, List<Association_rock>> rockPiecePositons;
 
     public GameManager(Context context, Board b) {
         this.board = b;
@@ -290,6 +290,7 @@ public class GameManager {
         //We can independently compute the dangerous Case by calculating the possible position for each dangerous enemy neighbour
         performDanger(this.currentPlayer);
 
+        nbTurn++;
         return this.isFinished();
     }
 
@@ -310,7 +311,6 @@ public class GameManager {
     //For getting the current player to play
     public Player getCurrentPlayer() {
         Player p = this.players.get(nbTurn % this.players.size());
-        nbTurn++;
         return p;
     }
 
@@ -326,7 +326,7 @@ public class GameManager {
         return true;
     }
 
-    public void onEndingGame() {
+    protected void onEndingGame() {
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("GAME IS FINISHED");
 
         String mes_start = "";
@@ -413,7 +413,7 @@ public class GameManager {
         }
     }
 
-    private void performMenaced(Player p) {
+    protected void performMenaced(Player p) {
         if (DEBUG_FOR_GAME_MENACE) System.out.println("JE SUIS MENACE");
 
         //Get all current pos of pieces on the board
@@ -523,7 +523,7 @@ public class GameManager {
         }
     }
 
-    private void performDanger(Player p) {
+    protected void performDanger(Player p) {
         //First reset the precedent treatment
         for (Position pos : positionWithDanger) {
             if (board.isGoodPos(pos.getX(), pos.getY())) {
@@ -554,7 +554,7 @@ public class GameManager {
      * ======== For movements computation ========
      **/
     //For perform a movement on the board (lightMove = true -> move that will be canceled just after : no UI modif, no anim performed ...)
-    public Piece moveAPiece(Position start, Position end, boolean lightMove) {
+    protected Piece moveAPiece(Position start, Position end, boolean lightMove) {
         //Move a piece form start position to end position
 
         //System.out.println("[MOVE A PIECE]");
@@ -588,7 +588,7 @@ public class GameManager {
     }
 
     //For perform a movement with an animation
-    public void moveAPiece_animated(Position start, Position end, boolean lightMove) {
+    protected void moveAPiece_animated(Position start, Position end, boolean lightMove) {
         //Move a piece form start position to end position with animation
         if (DEBUG_FOR_GAME_ANIMATION) System.out.println("[MOVE A PIECE ANIMATION]");
 
@@ -666,7 +666,7 @@ public class GameManager {
     }
 
     //For canceling the last shot performed on the game
-    public List<Shot> cancelAShot() {
+    protected List<Shot> cancelAShot() {
         List<Shot> sList = allShots.pop();
         for (Shot s : sList) {
             //If the last shot was to eat a piece
@@ -687,7 +687,7 @@ public class GameManager {
     }
 
     //For perform the in/out piece mechanism on the board
-    public Player eatAPiece(Piece piece) {
+    protected Player eatAPiece(Piece piece) {
         Player p = getPlayer(piece);
         if (p != null) {
             p.killAPiece(piece);
@@ -695,7 +695,7 @@ public class GameManager {
         return p;
     }
 
-    public Player reviveAPiece(Piece piece) {
+    protected Player reviveAPiece(Piece piece) {
         Player p = getPlayer(piece);
         if (p != null) {
             p.reviveAPiece(piece);
@@ -704,7 +704,7 @@ public class GameManager {
     }
 
     //Computing the possible movement that can perform the pieces of the player
-    public void computePossibleMvts(Player p) {
+    protected void computePossibleMvts(Player p) {
         //First reset all the precedent moves
         p.resetPossibleMove();
 
@@ -725,7 +725,7 @@ public class GameManager {
         }
     }
 
-    public void transformAPiece(Piece t, Position pos) {
+    protected void transformAPiece(Piece t, Position pos) {
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("TRANSFORM A PIECE : " + t);
 
         gameStopped = true;
@@ -743,6 +743,11 @@ public class GameManager {
             if (p instanceof Bishop) {
                 this.board.setAPieces(pos.getX(), pos.getY(), new Bishop(true, t, p.getAppearances()));
             }
+
+            //TO TEST
+            //player piece destruction
+            t.getPossessor().destroyAPiece(t);
+
             gameStopped = false;
             this.board.restart_no_screen_view();
             this.board.commitChanges();
@@ -761,7 +766,7 @@ public class GameManager {
     /**
      * ======== For game rock mechanics ========
      **/
-    private void computeRockInGame(Player p) {
+    protected void computeRockInGame(Player p) {
         //CLEAR first
         rockPiecePositons.clear();
         //Next need to check if p is not menaced
@@ -828,7 +833,7 @@ public class GameManager {
         if (DEBUG_FOR_GAME_ROCK) System.out.println("CPT ROCK IN GAME END");
     }
 
-    public void moveAPiece_rock(Position start, Association_rock as) {
+    protected void moveAPiece_rock(Position start, Association_rock as) {
         //Move a piece form start position to end position by rock
         Case p1_case_start = board.getACase(start.getX(), start.getY());
 
@@ -847,7 +852,7 @@ public class GameManager {
         as.pieceToRockWith.setMoved(true);
     }
 
-    public void moveAPiece_animated_rock(Position start, Association_rock as) {
+    protected void moveAPiece_animated_rock(Position start, Association_rock as) {
         //Move a piece form start position to end position with animation
         if (DEBUG_FOR_GAME_ROCK) System.out.println("[MOVE A PIECE ROCK ANIMATION]");
 
@@ -955,7 +960,7 @@ public class GameManager {
         }
     }
 
-    public void majLayoutPlayerTurn(Player p) {
+    protected void majLayoutPlayerTurn(Player p) {
         resetLayoutColors();
         int ind = getIndex(p);
         if (ind >= 0) {
