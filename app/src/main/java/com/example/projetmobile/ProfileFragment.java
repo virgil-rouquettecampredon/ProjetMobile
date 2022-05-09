@@ -124,6 +124,8 @@ public class ProfileFragment extends Fragment {
                                             }
                                         }
                                     });
+                            deleteFile();
+                            deleteUserInformation();
                         }
                     }
 
@@ -291,5 +293,26 @@ public class ProfileFragment extends Fragment {
                 localFile = null;
             }
         });
+    }
+
+    public void deleteFile(){
+        StorageReference desertRef = storage.getReference().child("images/" + user.getUid()+".jpg");
+
+// Delete the file
+        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
+    }
+
+    public void deleteUserInformation(){
+        database.getReference().child("users").child(user.getUid()).removeValue();
     }
 }

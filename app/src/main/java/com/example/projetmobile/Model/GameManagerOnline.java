@@ -1,10 +1,24 @@
 package com.example.projetmobile.Model;
 
+import static java.lang.Integer.parseInt;
+
 import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Pieces.Piece;
 import com.example.projetmobile.Model.Pieces.Tower;
+import com.example.projetmobile.Rooms;
+import com.example.projetmobile.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +43,13 @@ public class GameManagerOnline extends GameManager{
 
     private boolean isMyTurn;
     private int playerIndex;
+
+    private String nameRoomRef;
+
+    FirebaseDatabase database;
+    DatabaseReference roomRef;
+    DatabaseReference mDatabase;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public GameManagerOnline(Context context, Board b) {
         super(context, b);
@@ -55,6 +76,9 @@ public class GameManagerOnline extends GameManager{
 
     @Override
     public void start() {
+
+        initialiseDataBase();
+
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("GAME MANAGER START");
 
         //Clear the board
@@ -191,16 +215,40 @@ public class GameManagerOnline extends GameManager{
 
     //Function called when current enemy player play a turn
     public void onEnemyPlayerPlay(Position startPosPlayerPlay, Position endPosPlayerPlay, int IDTransformedPiece){
+        final Rooms[] roomsData = new Rooms[1];
+        mDatabase.child("rooms").child(nameRoomRef).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    roomsData[0] = task.getResult().getValue(Rooms.class);
+                }
+            }
+        });
+        //Information take from database to perfom the movement for the others player
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("ENEMY PLAYER PLAY A SHOT");
-        shotsToPerform.add(new DB_Shots(startPosPlayerPlay,endPosPlayerPlay,IDTransformedPiece));
+
+        String piece1 = roomsData[0].getPiece1();
+        String[] move = piece1.split("/");
+        String[] posStart = move[0].split("_");
+        String[] posEnd = move[1].split("_");
+        shotsToPerform.add(new DB_Shots(new Position(parseInt(posStart[0]), parseInt(posStart[1])),new Position(parseInt(posEnd[0]), parseInt(posEnd[1])),parseInt(move[2])));
+
+        // If rock will be performs
+        if (!roomsData[0].getPiece2().equals("")){
+            String piece2 = roomsData[0].getPiece1();
+            String[] move2 = piece2.split("/");
+            String[] posStart2 = move2[0].split("_");
+            String[] posEnd2 = move2[1].split("_");
+            shotsToPerform.add(new DB_Shots(new Position(parseInt(posStart2[0]), parseInt(posStart2[1])),new Position(parseInt(posEnd2[0]), parseInt(posEnd2[1])), -1));
+        }
     }
 
     //Function called when our current player play a turn
     public void onCurrentPlayerPlay(DB_Shots d){
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("PLAYER PLAY A TURN");
-
-        //Perform DATA BASES LOGIC
-        //Inform DB that a shot has been played
 
         shotsToPush.add(d);
     }
@@ -209,12 +257,31 @@ public class GameManagerOnline extends GameManager{
     public void onFinishTurn(){
         //Perform DATA BASES LOGIC on shotsToPush
         //Inform all other players that the current player end his turn
-
+        if (shotsToPush.size() > 0) {
+            roomRef.child("piece1").setValue("" + shotsToPush.get(0).startPosPlayerPlay.getX() + "_" + shotsToPush.get(0).startPosPlayerPlay.getY() + "/" + shotsToPush.get(0).endPosPlayerPlay.getX() + "_" + shotsToPush.get(0).endPosPlayerPlay.getY() + "/" + shotsToPush.get(0).IDTransformedPiece);
+            if (shotsToPush.size() > 1) {
+                roomRef.child("piece2").setValue("" + shotsToPush.get(1).startPosPlayerPlay.getX() + "_" + shotsToPush.get(1).startPosPlayerPlay.getY() + "/" + shotsToPush.get(1).endPosPlayerPlay.getX() + "_" + shotsToPush.get(1).endPosPlayerPlay.getY());
+            }
+            else {
+                roomRef.child("piece2").setValue("");
+            }
+        }
+        roomRef.child("turn").setValue(playerIndex+1);
         shotsToPush.clear();
     }
 
     //Function called when game over (victory if our player win)
     public void onGameFinished(boolean victory){
         // inform other player that this.currentPlayer ((victory)? won : loose)
+    }
+
+    public void setNameRoomRef(String nameRoomRef) {
+        this.nameRoomRef = nameRoomRef;
+    }
+
+    public void initialiseDataBase(){
+        database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
+        roomRef = database.getReference("rooms").child(nameRoomRef);
+        mDatabase = database.getReference();
     }
 }
