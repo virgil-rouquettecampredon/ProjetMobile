@@ -40,6 +40,8 @@ public class GameListFragment extends Fragment {
         private String gameName;
         private String gameMode;
         private String player1;
+        private String piece1;
+        private String piece2;
 
         public GameData() {
         }
@@ -49,6 +51,17 @@ public class GameListFragment extends Fragment {
             this.gameName = gameName;
             this.gameMode = gameMode;
             this.player1 = player1;
+            piece1 = "";
+            piece2 = "";
+
+        }
+
+        public String getPiece1() {
+            return piece1;
+        }
+
+        public String getPiece2() {
+            return piece2;
         }
 
         public long getRanking() {
@@ -100,6 +113,7 @@ public class GameListFragment extends Fragment {
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private long elo;
 
+    ValueEventListener roomListener;
 
 
     private void fetch(ArrayList<GameData> roomsList) {
@@ -112,6 +126,7 @@ public class GameListFragment extends Fragment {
     private void populate() {
         FragmentManager fm = getParentFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
+        System.out.println(data.size());
         for (GameData d : data) {
             GameDataForListFragment gData = GameDataForListFragment.newInstance(d);
             transaction.add(R.id.gameDescriptionReceiver, gData, fragmentTag);
@@ -177,9 +192,13 @@ public class GameListFragment extends Fragment {
 
                         //TODO BDD Créer la partie (ajouter à la liste des parties)
                         roomRef.child(user.getUid()).setValue(inCreationGameData);
+                        roomRef.child(user.getUid()).child("player2").setValue("");
                         roomRef.child(user.getUid()).child("turn").setValue(1);
                         //TODO Lancer la salle de jeu en attente
-                        Intent intent = new Intent(getActivity(), GameActivity.class);
+                        Intent intent = new Intent(getActivity(), GameOnlineActivity.class);
+                        intent.putExtra("gameName", user.getUid());
+                        intent.putExtra("player", "0");
+                        roomRef.removeEventListener(roomListener);
                         startActivity(intent);
                         //TODO donc supprimer ça
                         /*data.add(inCreationGameData);
@@ -247,23 +266,28 @@ public class GameListFragment extends Fragment {
         });
 
         ImageButton syncButton = view.findViewById(R.id.syncButton);
-        syncButton.setOnClickListener(v -> updateRoomsAvailable());
+        syncButton.setOnClickListener(v -> updateList());
 
         //update();
-
+        updateList();
         populateGameMode();
-        updateRoomsAvailable();
 
 
         return view;
     }
 
+
+    public void updateList(){
+        clearGameDataFragment();
+        updateRoomsAvailable();
+        populate();
+    }
+
     public void updateRoomsAvailable(){
-        roomRef.addValueEventListener(new ValueEventListener() {
+        roomListener =  new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 data.clear();
-                clearGameDataFragment();
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 ArrayList<GameData> roomsList = new ArrayList<>();
                 for (DataSnapshot snapshot : children) {
@@ -271,7 +295,6 @@ public class GameListFragment extends Fragment {
                 }
 
                 fetch(roomsList);
-                populate();
             }
 
             @Override
@@ -279,6 +302,9 @@ public class GameListFragment extends Fragment {
                 //Nothing to do
             }
 
-        });
+        };
+        roomRef.addValueEventListener(roomListener);
     }
+
+    //remove eventListener
 }

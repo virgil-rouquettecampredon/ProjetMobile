@@ -176,6 +176,7 @@ public class GameManager {
                                     lastPosPreSelected = null;
                                 } else {
                                     lastPosPreSelected = null;
+                                    onFinishedTurn();
                                     //Start a new turn
                                     if (startANewTurn()) {
                                         //If its finished, then stop the treatment
@@ -193,6 +194,7 @@ public class GameManager {
                                 //No animation
                                 moveAPiece_rock(lastPosOfPieceSelected, as);
                                 lastPosPreSelected = null;
+                                onFinishedTurn();
                                 //Start a new turn
                                 if (startANewTurn()) {
                                     //If its finished, then stop the treatment
@@ -295,7 +297,6 @@ public class GameManager {
         //We can independently compute the dangerous Case by calculating the possible position for each dangerous enemy neighbour
         performDanger(this.currentPlayer);
 
-        nbTurn++;
         return this.isFinished();
     }
 
@@ -376,7 +377,7 @@ public class GameManager {
     /**
      * ======== For game menace mechanics ========
      **/
-    private boolean isMenaced(Player playerCurrent) {
+    protected boolean isMenaced(Player playerCurrent) {
         for (Piece piece : playerCurrent.getPiecesPlayer()) {
             if (piece.isVictoryCondition()) {
                 for (Player p : players) {
@@ -657,6 +658,7 @@ public class GameManager {
                     //Launch the upgrade treatment
                     transformAPiece(moved, end);
                 } else {
+                    onFinishedTurn();
                     //Else go through a normal treatment
                     //Go through another round and start a new turn
                     if (startANewTurn()) {
@@ -764,6 +766,7 @@ public class GameManager {
             this.board.restart_no_screen_view();
             this.board.commitChanges();
 
+            onFinishedTurn();
             //Now we can go to another turn
             //Start a new turn
             if (startANewTurn()) {
@@ -909,6 +912,7 @@ public class GameManager {
                 //Cancel pause moment
                 gameStopped = false;
 
+                onFinishedTurn();
                 //Go through another round
                 //Start a new turn
                 if (startANewTurn()) {
@@ -1002,5 +1006,9 @@ public class GameManager {
             System.out.println("=====> ERROR : Not found color resource by id: " + colorRes);
         }
         return color;
+    }
+
+    public void onFinishedTurn(){
+        nbTurn++;
     }
 }

@@ -41,7 +41,7 @@ public class GameDataForListFragment extends Fragment {
     }
 
     public static GameDataForListFragment newInstance(GameListFragment.GameData gameData) {
-        return newInstance((int)gameData.getRanking(), gameData.getGameName(), gameData.getGameMode(), gameData.getPlayer1());
+        return newInstance((int) gameData.getRanking(), gameData.getGameName(), gameData.getGameMode(), gameData.getPlayer1());
     }
 
     public static GameDataForListFragment newInstance(int param1, String param2, String param3, String param4) {
@@ -75,7 +75,7 @@ public class GameDataForListFragment extends Fragment {
         database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
 
         TextView rankingTextView = view.findViewById(R.id.rankingTextView);
-        String rankingString = ""+ranking;
+        String rankingString = "" + ranking;
         rankingTextView.setText(rankingString);
 
         TextView gameNameTextView = view.findViewById(R.id.gameNameTextView);
@@ -100,17 +100,9 @@ public class GameDataForListFragment extends Fragment {
     }
 
     private void eventListener() {
-        roomRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Intent intent = new Intent(getActivity(), GameActivity.class);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //error
-            }
-        });
+        Intent intent = new Intent(getActivity(), GameOnlineActivity.class);
+        intent.putExtra("gameName", player1);
+        intent.putExtra("player", "1");
+        startActivity(intent);
     }
 }

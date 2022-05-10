@@ -1,19 +1,20 @@
 package com.example.projetmobile;
 
 public class Rooms {
-    String player1;
-    String player2;
-    String gameMode;
-    String gameName;
-    long ranking;
-    long turn;
-    String piece1;
-    String piece2;
+    private String player1;
+    private String player2;
+    private String gameMode;
+    private String gameName;
+    private long ranking;
+    private long turn;
+    private String piece1;
+    private String piece2;
+    private String loose;
 
     public Rooms() {
     }
 
-    public Rooms(String player1, String player2, String gameMode, String gameName, long ranking, long turn, String piece1, String piece2) {
+    public Rooms(String player1, String player2, String gameMode, String gameName, long ranking, long turn, String piece1, String piece2, String loose) {
         this.player1 = player1;
         this.player2 = player2;
         this.gameMode = gameMode;
@@ -22,6 +23,7 @@ public class Rooms {
         this.turn = turn;
         this.piece1 = piece1;
         this.piece2 = piece2;
+        this.loose = loose;
     }
 
     public String getPlayer1() {
@@ -86,5 +88,23 @@ public class Rooms {
 
     public void setPiece2(String piece2) {
         this.piece2 = piece2;
+    }
+
+    @Override
+    public String toString() {
+        return "Rooms{" +
+                "player1='" + player1 + '\'' +
+                ", player2='" + player2 + '\'' +
+                ", gameMode='" + gameMode + '\'' +
+                ", gameName='" + gameName + '\'' +
+                ", ranking=" + ranking +
+                ", turn=" + turn +
+                ", piece1='" + piece1 + '\'' +
+                ", piece2='" + piece2 + '\'' +
+                '}';
+    }
+
+    public String getLoose() {
+        return loose;
     }
 }
