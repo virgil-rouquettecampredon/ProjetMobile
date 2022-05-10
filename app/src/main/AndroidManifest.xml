@@ -29,7 +29,8 @@
         <activity
             android:name=".GameActivity"
             android:exported="false"
-            android:theme="@style/AppBlueActivityTheme" />
+            android:theme="@style/AppBlueActivityTheme"
+            />
         <activity
             android:name=".MenuBurgerActivity"
             android:exported="false"

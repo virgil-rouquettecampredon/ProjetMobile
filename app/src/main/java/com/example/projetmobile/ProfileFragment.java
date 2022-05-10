@@ -298,7 +298,7 @@ public class ProfileFragment extends Fragment {
     public void deleteFile(){
         StorageReference desertRef = storage.getReference().child("images/" + user.getUid()+".jpg");
 
-// Delete the file
+        // Delete the file
         desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

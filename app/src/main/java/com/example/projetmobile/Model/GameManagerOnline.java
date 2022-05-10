@@ -3,6 +3,7 @@ package com.example.projetmobile.Model;
 import static java.lang.Integer.parseInt;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import com.example.projetmobile.Model.Pieces.Piece;
 import com.example.projetmobile.Rooms;
 import com.example.projetmobile.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +59,15 @@ public class GameManagerOnline extends GameManager {
     private String nameRoomRef;
 
     FirebaseDatabase database;
-    private DataSnapshot dataSnap;
     DatabaseReference roomRef;
     DatabaseReference mDatabase;
     private DatabaseReference playerDatabase;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+
+    private File localFile;
+    private File localFile2;
 
     private String piece1;
     private String piece2;
@@ -89,9 +101,15 @@ public class GameManagerOnline extends GameManager {
     @Override
     public void start() {
 
+        //Initialise all DB structures for online managing
         initialiseDataBase();
 
+        //Loading Pseudo player
         initialiseDataPlayer();
+
+        //Loading Avatar Image
+        downloadFilePlayer1(player1);
+        downloadFilePlayer2(player2);
 
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("GAME MANAGER START");
 
@@ -373,6 +391,8 @@ public class GameManagerOnline extends GameManager {
         roomRef = database.getReference("rooms").child(nameRoomRef);
         mDatabase = database.getReference("rooms").child(nameRoomRef);
         playerDatabase = database.getReference("users");
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
     }
 
     public void turnPlayerListerner() {
@@ -404,5 +424,71 @@ public class GameManagerOnline extends GameManager {
         super.onEndingGame();
         roomRef.child("loose").setValue("yes");
         roomRef.child("turn").setValue(2 - playerIndex);
+    }
+
+    public void setImage(int id, Uri uri){
+        this.playersUI.get(id).getImgPlayer().setImageURI(uri);
+    }
+
+    private void downloadFilePlayer1(String player){
+        StorageReference storageReference = storage.getReference().child("images/" + player+".jpg");
+        localFile = null;
+        try {
+            localFile = File.createTempFile("images", "jpg");
+            Log.d("BDD*", "downloadFile: " + localFile.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("BDD*", "downloadFile: " + e.getMessage());
+        }
+
+        storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                Log.d("BDD*", "onSuccess: " + taskSnapshot.getStorage().getPath());
+                Uri uri = Uri.fromFile(localFile);
+                Log.d("BDD*", "onSuccess: " + uri.toString());
+                setImage(0,Uri.parse(uri.toString()));
+                // Local temp file has been created
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("BDD*", "onFailure: " + exception.getMessage());
+                // Handle any errors
+                localFile = null;
+            }
+        });
+    }
+
+    private void downloadFilePlayer2(String player){
+        StorageReference storageReference = storage.getReference().child("images/" + player+".jpg");
+        localFile2 = null;
+        try {
+            localFile2 = File.createTempFile("images", "jpg");
+            Log.d("BDD*", "downloadFile: " + localFile2.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("BDD*", "downloadFile: " + e.getMessage());
+        }
+
+        storageReference.getFile(localFile2).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                Log.d("BDD*", "onSuccess: " + taskSnapshot.getStorage().getPath());
+                Uri uri = Uri.fromFile(localFile2);
+                Log.d("BDD*", "onSuccess: " + uri.toString());
+                setImage(1,Uri.parse(uri.toString()));
+                // Local temp file has been created
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.d("BDD*", "onFailure: " + exception.getMessage());
+                // Handle any errors
+                localFile2 = null;
+            }
+        });
     }
 }

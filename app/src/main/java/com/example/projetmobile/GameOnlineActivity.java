@@ -32,6 +32,8 @@ import java.util.ArrayList;
 public class GameOnlineActivity extends AppCompatActivity {
     public final static String fragmentTag = "GAMEFRAGMENT";
 
+    private static boolean isManagerComputedYet = false;
+
     private GameFragment gameFragment;
     private static GameManagerOnline gm;
 
