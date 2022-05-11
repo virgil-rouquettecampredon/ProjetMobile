@@ -1,6 +1,7 @@
 package com.example.projetmobile.Model;
 
 import static java.lang.Integer.parseInt;
+import static java.lang.Math.abs;
 
 import android.content.Context;
 import android.net.Uri;
@@ -30,8 +31,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class GameManagerOnline extends GameManager {
 
@@ -74,6 +78,10 @@ public class GameManagerOnline extends GameManager {
     private String loose;
     private String player1;
     private String player2;
+    private String pseudoPlayer2;
+    private String pseudoPlayer1;
+    private long eloPlayer1;
+    private long eloPlayer2;
 
     public GameManagerOnline(Context context, Board b) {
         super(context, b);
@@ -139,6 +147,8 @@ public class GameManagerOnline extends GameManager {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     setPlayerDatas(0, task.getResult().getValue(User.class).getPseudo());
+                    eloPlayer1 = task.getResult().getValue(User.class).getElo();
+                    pseudoPlayer1 = task.getResult().getValue(User.class).getPseudo();
                 }
             }
         });
@@ -149,7 +159,8 @@ public class GameManagerOnline extends GameManager {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     setPlayerDatas(1, task.getResult().getValue(User.class).getPseudo());
-
+                    eloPlayer2 = task.getResult().getValue(User.class).getElo();
+                    pseudoPlayer2 = task.getResult().getValue(User.class).getPseudo();
                 }
             }
         });
@@ -300,6 +311,27 @@ public class GameManagerOnline extends GameManager {
 
             //Compute local winner
             super.onEndingGame();
+            if (playerIndex == 1) {
+                //Set the data in DB for all players
+                long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player2, true);
+                addHistoryGame(player2, nbTurn, "win", pseudoPlayer1, eloDiff);
+
+                long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player1, false);
+                addHistoryGame(player1, nbTurn, "loose", pseudoPlayer2, eloDiff2);
+            }
+            else {
+                //Set the data in DB for all players
+                long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player1, true);
+                addHistoryGame(player1, nbTurn, "win", pseudoPlayer2, eloDiff);
+
+                long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player2, false);
+                addHistoryGame(player2, nbTurn, "loose", pseudoPlayer1, eloDiff2);
+            }
+
+            //wait 10 seconds before going to the next step
+
+            //deleteRoomsInformation();
+
         }
         shotsToPerform.clear();
     }
@@ -415,10 +447,6 @@ public class GameManagerOnline extends GameManager {
     }
 
 
-    void isEnemyLose() {
-
-    }
-
     @Override
     protected void onEndingGame() {
         super.onEndingGame();
@@ -490,5 +518,48 @@ public class GameManagerOnline extends GameManager {
                 localFile2 = null;
             }
         });
+    }
+
+    public void addHistoryGame(String player, long nbCoup, String haveWin, String opponent, long eloDiff){
+        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyyHH:mm:ss");
+        Date date = new Date();
+        String dateFormatted = formatter.format(date).toString();
+
+        database.getReference().child("history").child(player).child(dateFormatted).child("nbCoup").setValue(nbCoup);
+        database.getReference().child("history").child(player).child(dateFormatted).child("haveWin").setValue(haveWin);
+        database.getReference().child("history").child(player).child(dateFormatted).child("opponent").setValue(opponent);
+        database.getReference().child("history").child(player).child(dateFormatted).child("eloDiff").setValue(eloDiff);
+    }
+
+    public void deleteRoomsInformation(){
+        database.getReference().child("rooms").child(nameRoomRef).removeValue();
+    }
+
+    //Return the elo loose or win for the history game
+    public long eloInflated(long eloWinner, long eloLooser, String player, boolean winner){
+        //Do random number between 5 and 15
+        Random random = new Random();
+        int randomNumber = random.nextInt(10) + 5;
+
+        int eloWin = 0;
+        int eloLoose = 0;
+
+        if(eloWinner < eloLooser){
+            eloWin = (int)(((int)eloLooser - (int)eloWinner)/3) + randomNumber * 2;
+            eloLoose = (int)(((int)eloLooser - (int)eloWinner)/3) + (int)((long)randomNumber * 1.5);
+        }
+        else {
+            eloWin = (int)(((int)eloWinner - (int)eloLooser)/5) + (int)((long)randomNumber * 0.5);
+            eloLoose = (int)(((int)eloWinner - (int)eloLooser)/5) + (int)((long)randomNumber * 0.25);
+        }
+
+        if(winner) {
+            database.getReference().child("users").child(player).child("elo").setValue(eloWinner + eloWin);
+            return eloWin;
+        }
+        else {
+            database.getReference().child("users").child(player).child("elo").setValue(eloLooser - eloLoose);
+            return - eloLoose;
+        }
     }
 }

@@ -291,7 +291,9 @@ public class GameListFragment extends Fragment {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 ArrayList<GameData> roomsList = new ArrayList<>();
                 for (DataSnapshot snapshot : children) {
-                    roomsList.add(new GameData((long)snapshot.child("ranking").getValue(), (String) snapshot.child("gameName").getValue(), (String)snapshot.child("gameMode").getValue(), (String) snapshot.child("player1").getValue()));
+                    if (snapshot.child("player2").getValue().equals("")) {
+                        roomsList.add(new GameData((long) snapshot.child("ranking").getValue(), (String) snapshot.child("gameName").getValue(), (String) snapshot.child("gameMode").getValue(), (String) snapshot.child("player1").getValue()));
+                    }
                 }
 
                 fetch(roomsList);
