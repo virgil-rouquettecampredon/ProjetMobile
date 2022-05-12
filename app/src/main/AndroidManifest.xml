@@ -12,13 +12,14 @@
 
         <activity
             android:name=".GameOnlineActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".GameListActivity"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
-            android:configChanges="orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@style/SplashScreenAnimation">
             <intent-filter>
@@ -30,7 +31,8 @@
         <activity
             android:name=".GameActivity"
             android:exported="false"
-            android:theme="@style/AppBlueActivityTheme" />
+            android:theme="@style/AppBlueActivityTheme"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".MenuBurgerActivity"
             android:exported="false"

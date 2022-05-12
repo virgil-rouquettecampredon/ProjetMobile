@@ -14,6 +14,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -92,6 +94,13 @@ public class GameOnlineActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        //look rotation
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         ImageView imageView = findViewById(R.id.menuBurgerToggle);
         imageView.setOnClickListener(v -> {

@@ -98,6 +98,10 @@ public class GameManager {
         this.rockPiecePositons = new HashMap<>();
     }
 
+    public boolean notYetPlayed() {
+        return allShots.isEmpty();
+    }
+
 
     /**
      * ======== For launch and play a game ========

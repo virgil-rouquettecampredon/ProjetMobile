@@ -53,7 +53,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
         System.out.println("LAUNCH SPLASH ACTIVITY SCREEN");
         System.out.println("LOGO_STARTUP_DELAY_DROPDOWN : " + LOGO_STARTUP_DELAY_DROPDOWN);
         System.out.println("LOGO_ANIM_DURATION_DROPDOWN : " + LOGO_ANIM_DURATION_DROPDOWN);
@@ -72,12 +71,12 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         animationStarted = false;
 
-        land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        /*land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (land) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        }*/
 
         //At the end of all the timer, we launch the main activity
         new Handler().postDelayed(new Runnable() {
