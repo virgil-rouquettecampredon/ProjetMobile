@@ -291,7 +291,8 @@ public class GameListFragment extends Fragment {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 ArrayList<GameData> roomsList = new ArrayList<>();
                 for (DataSnapshot snapshot : children) {
-                    if (snapshot.child("player2").getValue().equals("")) {
+                    Object value = snapshot.child("player2").getValue();
+                    if (value != null && value.equals("")) {
                         roomsList.add(new GameData((long) snapshot.child("ranking").getValue(), (String) snapshot.child("gameName").getValue(), (String) snapshot.child("gameMode").getValue(), (String) snapshot.child("player1").getValue()));
                     }
                 }
@@ -305,6 +306,7 @@ public class GameListFragment extends Fragment {
             }
 
         };
+        roomRef.removeEventListener(roomListener);
         roomRef.addValueEventListener(roomListener);
     }
 

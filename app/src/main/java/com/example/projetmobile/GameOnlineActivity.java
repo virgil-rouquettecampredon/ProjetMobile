@@ -2,18 +2,23 @@ package com.example.projetmobile;
 
 import static java.lang.Integer.parseInt;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.projetmobile.Model.Board;
 import com.example.projetmobile.Model.ChangePieceScreen;
@@ -36,21 +41,62 @@ public class GameOnlineActivity extends AppCompatActivity {
 
     private GameFragment gameFragment;
     private static GameManagerOnline gm;
+    private String gameName;
+
+    private ActivityResultLauncher<Intent> menuBurgerLauncher;
+
+    ValueEventListener wait2PlayerListener;
+
+    //https://stackoverflow.com/questions/6413700/android-proper-way-to-use-onbackpressed-with-toast
+    private long backPressedTime = 0;
+    private long backPressedTimeResetDelay = 2000;
 
     FirebaseDatabase database;
     DatabaseReference roomRef;
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+    private void OnMenuBurgerGameModeSelect(String gameMode) {
+        Toast.makeText(this, gameMode, Toast.LENGTH_SHORT).show();
+    }
+
+    private void OnMenuBurgerTryAgain() {
+        Toast.makeText(this, "Try again", Toast.LENGTH_SHORT).show();
+    }
+
+    private void OnMenuBurgerQuit() {
+        Toast.makeText(this, "Quit", Toast.LENGTH_SHORT).show();
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blue_background);
 
+        menuBurgerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        String resultType = data.getStringExtra(MenuBurgerActivity.resultTypeName);
+                        switch (resultType) {
+                            case MenuBurgerActivity.resultTypeGameMode:
+                                OnMenuBurgerGameModeSelect(data.getStringExtra(MenuBurgerActivity.gameModeName));
+                                break;
+                            case MenuBurgerActivity.resultTypeTryAgain:
+                                OnMenuBurgerTryAgain();
+                                break;
+                            case MenuBurgerActivity.resultTypeQuit:
+                                OnMenuBurgerQuit();
+                                break;
+                        }
+                    }
+                });
+
         ImageView imageView = findViewById(R.id.menuBurgerToggle);
         imageView.setOnClickListener(v -> {
             Intent intent = new Intent(GameOnlineActivity.this, MenuBurgerActivity.class);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            menuBurgerLauncher.launch(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this));
         });
 
         FragmentManager fm = getSupportFragmentManager();
@@ -80,7 +126,7 @@ public class GameOnlineActivity extends AppCompatActivity {
 
             Intent intent = this.getIntent();
 
-            String gameName = intent.getStringExtra("gameName");
+            gameName = intent.getStringExtra("gameName");
             int player = parseInt(intent.getStringExtra("player"));
 
             Log.d("GameOnlineActivity", "gameName: " + gameName);
@@ -115,7 +161,7 @@ public class GameOnlineActivity extends AppCompatActivity {
     }
 
     private void wait2Player() {
-        roomRef.child("player2").addValueEventListener(new ValueEventListener() {
+        wait2PlayerListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.getValue().equals("")){
@@ -130,6 +176,36 @@ public class GameOnlineActivity extends AppCompatActivity {
                 //Nothing to do
             }
 
-        });
+        };
+        roomRef.child("player2").removeEventListener(wait2PlayerListener);
+        roomRef.child("player2").addValueEventListener(wait2PlayerListener);
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        roomRef.child("player2").removeEventListener(wait2PlayerListener);
+        if (gm.getPlayer2() == null || gm.getPlayer2().isEmpty()) {
+            deleteRoomsInformation();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        long time = System.currentTimeMillis();
+        if (time - backPressedTime > backPressedTimeResetDelay) {
+            backPressedTime = time;
+            Toast.makeText(this, getString(R.string.confirm_back_press), Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+
+    public void deleteRoomsInformation(){
+        database.getReference().child("rooms").child(gameName).removeValue();
     }
 }

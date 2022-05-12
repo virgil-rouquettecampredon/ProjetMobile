@@ -232,6 +232,9 @@ public class GameManagerOnline extends GameManager {
     public void setPlayer2(String player2) {
         this.player2 = player2;
     }
+    public String getPlayer2() {
+        return this.player2;
+    }
 
     //Function to perform enemy's shots
     private void playAllEnemyShots() {

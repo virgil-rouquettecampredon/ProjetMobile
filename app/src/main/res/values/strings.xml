@@ -56,11 +56,14 @@
     <string name="directory_content_description">A folder icon</string>
     <string name="selection">Selection</string>
     <string name="change_game_mode">Changer de\nmode de jeu</string>
+    <string name="change_game_mode_inline">Changer de mode de jeu</string>
     <string name="try_again">Recommencer</string>
+    <string name="quit">Quitter</string>
     <string name="game_mode">Mode de jeu</string>
     <string name="waiting_for_acceptation">EN ATTENTE DE L\'ACCEPTATION</string>
     <string name="watermark">ADACorp™</string>
-    <string name="try_again_warning">" Vous êtes sur le point de vous rendre, ça serait dommage de laisser votre adversaire l’emporter si facilement "</string>
+    <string name="try_again_warning">Pour recommencer, vous êtes sur le point de vous rendre. Ça serait dommage de laisser votre adversaire l’emporter si facilement</string>
+    <string name="quit_warning">Pour quitter, vous êtes sur le point de vous rendre. Ça serait dommage de laisser votre adversaire l’emporter si facilement</string>
 
     <string name="finish_screen_start">Partie termininée</string>
     <string name="finish_screen_winnerOne_end">a gagné</string>
@@ -74,4 +77,5 @@
     <string name="default_game_name">Very cool game</string>
     <string name="default_game_mode">Standard</string>
     <string name="game_name">Nom de la partie</string>
+    <string name="confirm_back_press">Appuyez encore sur retour pour quitter.</string>
 </resources>

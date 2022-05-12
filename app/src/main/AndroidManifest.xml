@@ -9,6 +9,7 @@
         android:roundIcon="@drawable/better_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetMobile">
+
         <activity
             android:name=".GameOnlineActivity"
             android:exported="false" />
@@ -29,8 +30,7 @@
         <activity
             android:name=".GameActivity"
             android:exported="false"
-            android:theme="@style/AppBlueActivityTheme"
-            />
+            android:theme="@style/AppBlueActivityTheme" />
         <activity
             android:name=".MenuBurgerActivity"
             android:exported="false"

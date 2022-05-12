@@ -53,6 +53,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
         System.out.println("LAUNCH SPLASH ACTIVITY SCREEN");
         System.out.println("LOGO_STARTUP_DELAY_DROPDOWN : " + LOGO_STARTUP_DELAY_DROPDOWN);
         System.out.println("LOGO_ANIM_DURATION_DROPDOWN : " + LOGO_ANIM_DURATION_DROPDOWN);

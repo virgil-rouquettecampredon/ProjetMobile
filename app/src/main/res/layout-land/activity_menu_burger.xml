@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:layout_marginTop="@dimen/menu_burger_button_space"
-            android:text="@string/change_game_mode"/>
+            android:text="@string/change_game_mode_inline"/>
 
         <Button
             android:id="@+id/tryAgainButton"
@@ -42,6 +42,16 @@
             android:layout_weight="1"
             android:layout_marginTop="@dimen/menu_burger_button_space"
             android:text="@string/try_again"/>
+
+        <Button
+            android:id="@+id/quitButton"
+            style="@style/btn_menu_default"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/menu_burger_button_space"
+            android:text="@string/quit"/>
 
         <Button
             android:id="@+id/backButton"

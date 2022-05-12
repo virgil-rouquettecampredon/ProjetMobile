@@ -19,8 +19,15 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 
 public class MenuBurgerActivity extends AppCompatActivity {
+    public static final String resultTypeGameMode = "GAME_MODE";
+    public static final String resultTypeTryAgain = "TRY_AGAIN";
+    public static final String resultTypeQuit = "QUIT";
+    public static final String resultTypeName = "RESULT_TYPE";
+    public static final String gameModeName = "GAME_MODE";
+
     private ActivityResultLauncher<Intent> selectorLauncher;
     private ActivityResultLauncher<Intent> tryAgainWarningLauncher;
+    private ActivityResultLauncher<Intent> quitWarningLauncher;
     private ArrayList<String> gameModes;
 
     private void populateGameMode() {
@@ -42,10 +49,14 @@ public class MenuBurgerActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    //TODO Changer le mode de jeu
                     Intent data = result.getData();
-                    int resultId = data.getIntExtra(EditTextDialogActivity.resultName, 0);
-                    Toast.makeText(this, gameModes.get(resultId), Toast.LENGTH_SHORT).show();
+                    int resultID = data.getIntExtra(EditTextDialogActivity.resultName, 0);
+                    String resultMode = gameModes.get(resultID);
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(resultTypeName, resultTypeGameMode);
+                    resultIntent.putExtra(gameModeName, resultMode);
+                    setResult(RESULT_OK, resultIntent);
+                    supportFinishAfterTransition();
                 }
             });
 
@@ -53,7 +64,21 @@ public class MenuBurgerActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(resultTypeName, resultTypeTryAgain);
+                    setResult(RESULT_OK, resultIntent);
+                    supportFinishAfterTransition();
+                }
+            });
+
+        quitWarningLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(resultTypeName, resultTypeQuit);
+                    setResult(RESULT_OK, resultIntent);
+                    supportFinishAfterTransition();
                 }
             });
 
@@ -69,18 +94,30 @@ public class MenuBurgerActivity extends AppCompatActivity {
         Button tryAgainButton = findViewById(R.id.tryAgainButton);
         tryAgainButton.setOnClickListener(v -> {
             Intent intent = new Intent(MenuBurgerActivity.this, TextViewDialogActivity.class);
-            intent.putExtra(TextViewDialogActivity.titleName, getString(R.string.warning));
+            intent.putExtra(TextViewDialogActivity.titleName, getString(R.string.try_again));
             intent.putExtra(TextViewDialogActivity.textName, getString(R.string.try_again_warning));
             tryAgainWarningLauncher.launch(intent);
         });
 
+        Button quitButton = findViewById(R.id.quitButton);
+        quitButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuBurgerActivity.this, TextViewDialogActivity.class);
+            intent.putExtra(TextViewDialogActivity.titleName, getString(R.string.quit));
+            intent.putExtra(TextViewDialogActivity.textName, getString(R.string.quit_warning));
+            quitWarningLauncher.launch(intent);
+        });
+
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            setResult(RESULT_CANCELED, resultIntent);
             supportFinishAfterTransition();
         });
 
         View menuBurgerToggle = findViewById(R.id.menuBurgerToggle);
         menuBurgerToggle.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            setResult(RESULT_CANCELED, resultIntent);
             supportFinishAfterTransition();
         });
     }
