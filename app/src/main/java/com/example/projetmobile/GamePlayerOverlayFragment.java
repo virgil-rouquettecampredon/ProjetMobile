@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import android.widget.TextView;
 public class GamePlayerOverlayFragment extends Fragment {
     private LinearLayout LLDeadPieces;
     private TextView TVPseudo;
+    private ImageView imgPlayer;
 
     public GamePlayerOverlayFragment() {}
 
@@ -37,6 +39,7 @@ public class GamePlayerOverlayFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_game_player_overlay, container, false);
         LLDeadPieces = v.findViewById(R.id.dead_pieces);
         TVPseudo = v.findViewById(R.id.textViewPseudo);
+        imgPlayer = v.findViewById(R.id.imageViewAvatar);
         return v;
     }
 
@@ -47,4 +50,6 @@ public class GamePlayerOverlayFragment extends Fragment {
     public TextView getTVPseudo() {
         return TVPseudo;
     }
+
+    public ImageView getImgPlayer(){return imgPlayer;}
 }

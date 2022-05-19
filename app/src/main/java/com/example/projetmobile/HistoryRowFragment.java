@@ -18,18 +18,14 @@ public class HistoryRowFragment extends Fragment {
 
     private static final String ISAWIN_PARAM = "ISAWIN_PARAM";
     private static final String ELOCHANGEAMOUT_PARAM = "ELOCHANGEAMOUT_PARAM";
-    private static final String DATE_PARAM = "DATE_PARAM";
     private static final String ADVERSARYPSEUDO_PARAM = "ADVERSARYPSEUDO_PARAM";
-    private static final String GAMETIME_PARAM = "GAMETIME_PARAM";
     private static final String GAMETURNCOUNT_PARAM = "GAMETURNCOUNT_PARAM";
     private static final String WINTYPE_PARAM = "WINTYPE_PARAM";
     private static final String ISOPEN_PARAM = "ISOPEN_PARAM";
 
     private boolean isAWin;
     private String eloChangeAmount;
-    private String date;
     private String adversaryPseudo;
-    private String gameTime;
     private String gameTurnCount;
     private String winType;
     private boolean isOpen;
@@ -39,15 +35,13 @@ public class HistoryRowFragment extends Fragment {
     }
 
     public static HistoryRowFragment newInstance(HistoryDialogActivity.HistoryData data) {
-        return newInstance(data.isAWin, data.eloChangeAmount, data.date, data.adversaryPseudo, data.gameTime, data.gameTurnCount, data.winType);
+        return newInstance(data.isAWin, data.eloChangeAmount, data.adversaryPseudo, data.gameTurnCount, data.winType);
     }
 
     public static HistoryRowFragment newInstance(
               boolean isAWin,
              String eloChangeAmount,
-             String date,
              String adversaryPseudo,
-             String gameTime,
              String gameTurnCount,
              String winType
     ) {
@@ -55,9 +49,7 @@ public class HistoryRowFragment extends Fragment {
         Bundle args = new Bundle();
         args.putBoolean(ISAWIN_PARAM, isAWin);
         args.putString(ELOCHANGEAMOUT_PARAM, eloChangeAmount);
-        args.putString(DATE_PARAM, date);
         args.putString(ADVERSARYPSEUDO_PARAM, adversaryPseudo);
-        args.putString(GAMETIME_PARAM, gameTime);
         args.putString(GAMETURNCOUNT_PARAM, gameTurnCount);
         args.putString(WINTYPE_PARAM, winType);
         args.putBoolean(ISOPEN_PARAM, false);
@@ -71,9 +63,7 @@ public class HistoryRowFragment extends Fragment {
         if (getArguments() != null) {
             isAWin           = getArguments().getBoolean(ISAWIN_PARAM);
             eloChangeAmount  = getArguments().getString(ELOCHANGEAMOUT_PARAM);
-            date             = getArguments().getString(DATE_PARAM);
             adversaryPseudo  = getArguments().getString(ADVERSARYPSEUDO_PARAM);
-            gameTime         = getArguments().getString(GAMETIME_PARAM);
             gameTurnCount    = getArguments().getString(GAMETURNCOUNT_PARAM);
             winType          = getArguments().getString(WINTYPE_PARAM);
             isOpen           = getArguments().getBoolean(ISOPEN_PARAM);
@@ -90,7 +80,6 @@ public class HistoryRowFragment extends Fragment {
     private void open(View arrowImageView, LinearLayout toOpenLinearLayout) {
         arrowImageView.setRotation(90);
 
-        addTextView(getString(R.string.time) + " : " + gameTime, toOpenLinearLayout);
         addTextView(getString(R.string.turn_number) + " : " + gameTurnCount, toOpenLinearLayout);
         if (isAWin) {
             addTextView(getString(R.string.win_type) + " : " + winType, toOpenLinearLayout);
@@ -134,9 +123,6 @@ public class HistoryRowFragment extends Fragment {
 
         TextView adversaryPseudoTextView = view.findViewById(R.id.adversaryPseudoTextView);
         adversaryPseudoTextView.setText(adversaryPseudo);
-
-        TextView dateTextView = view.findViewById(R.id.dateTextView);
-        dateTextView.setText(date);
 
         LinearLayout toOpenLinearLayout = view.findViewById(R.id.toOpenLinearLayout);
         View arrowImageView = view.findViewById(R.id.arrowImageView);

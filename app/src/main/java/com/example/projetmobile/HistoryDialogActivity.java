@@ -1,13 +1,25 @@
 package com.example.projetmobile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -16,18 +28,14 @@ public class HistoryDialogActivity extends AppCompatActivity {
     public static class HistoryData {
         public boolean isAWin;
         public String eloChangeAmount;
-        public String date;
         public String adversaryPseudo;
-        public String gameTime;
         public String gameTurnCount;
         public String winType;
 
-        public HistoryData(boolean isAWin, String eloChangeAmount, String date, String adversaryPseudo, String gameTime, String gameTurnCount, String winType) {
+        public HistoryData(boolean isAWin, String eloChangeAmount, String adversaryPseudo, String gameTurnCount, String winType) {
             this.isAWin = isAWin;
             this.eloChangeAmount = eloChangeAmount;
-            this.date = date;
             this.adversaryPseudo = adversaryPseudo;
-            this.gameTime = gameTime;
             this.gameTurnCount = gameTurnCount;
             this.winType = winType;
         }
@@ -35,12 +43,16 @@ public class HistoryDialogActivity extends AppCompatActivity {
 
     private ArrayList<HistoryData> allHistoryData;
 
-    private void retreiveRanking() {
+    FirebaseDatabase database;
+    DatabaseReference mDatabase;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    private ValueEventListener roomListener;
+
+    private void retreiveRanking(ArrayList<HistoryData> allhistoryFromDB) {
         //TODO BDD
-        for (int i = 0; i < 50; i++) {
-            HistoryData data = new HistoryData(Math.random() < 0.5, ""+ (int) (Math.random() * 20), "Il y a "+i+" heures", "DarkVirgil"+(int) (Math.random() * 50), (int) (Math.random() * 2)+"h"+(int) (Math.random() * 60), ""+((int) (Math.random() * 100)+50), "Echec et mat");
-            allHistoryData.add(data);
-        }
+        allHistoryData.clear();
+        allHistoryData.addAll(allhistoryFromDB);
     }
 
     private void populate() {
@@ -70,8 +82,55 @@ public class HistoryDialogActivity extends AppCompatActivity {
             finish();
         });
 
+        /**DATABASE Information**/
+        database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
+        mDatabase = database.getReference();
+        String keyId = user.getUid();
+
+        mDatabase.child("users").child(keyId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+
+                }
+            }
+        });
+        /**END DATABASE Information**/
+
         allHistoryData = new ArrayList<>();
-        retreiveRanking();
-        populate();
+        updateHistory();
+    }
+
+    public void updateHistory(){
+        roomListener =  new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                ArrayList<HistoryData> historyList = new ArrayList<>();
+                for (DataSnapshot snapshot : children) {
+                    HistoryData data;
+                    if (snapshot.child("haveWin").getValue().toString().equals("win")) {
+                        data = new HistoryData(true, snapshot.child("eloDiff").getValue().toString(), (String)snapshot.child("opponent").getValue(), snapshot.child("nbCoup").getValue().toString(), "Echec et mat");
+                    }
+                    else{
+                        data = new HistoryData(false, snapshot.child("eloDiff").getValue().toString(), (String)snapshot.child("opponent").getValue(), snapshot.child("nbCoup").getValue().toString(), "Echec et mat");
+                    }
+                    historyList.add(data);
+                }
+
+                retreiveRanking(historyList);
+                populate();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //Nothing to do
+            }
+
+        };
+        mDatabase.child("history").child(user.getUid()).addValueEventListener(roomListener);
     }
 }

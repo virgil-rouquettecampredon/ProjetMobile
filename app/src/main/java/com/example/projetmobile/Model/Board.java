@@ -593,6 +593,13 @@ public class Board extends TableLayout {
         case_tab.setEndCase(row == 0 || row == (nb_row-1));
         return case_tab;
     }
+    //Reset all drawing in a board
+    public void redrawBoard(){
+        for (Case c: cases) {
+            changedCases.add(c);
+        }
+        commitChanges();
+    }
 
 
     /** ======== Manip the Board Model ======== **/

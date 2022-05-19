@@ -71,12 +71,12 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         animationStarted = false;
 
-        land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        /*land = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (land) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        }*/
 
         //At the end of all the timer, we launch the main activity
         new Handler().postDelayed(new Runnable() {

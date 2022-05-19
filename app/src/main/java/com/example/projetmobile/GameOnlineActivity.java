@@ -1,5 +1,7 @@
 package com.example.projetmobile;
 
+import static java.lang.Integer.parseInt;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -11,55 +13,60 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.hardware.TriggerEventListener;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.OrientationEventListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.projetmobile.Model.Board;
 import com.example.projetmobile.Model.ChangePieceScreen;
 import com.example.projetmobile.Model.GameManager;
+import com.example.projetmobile.Model.GameManagerOnline;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class GameActivity extends AppCompatActivity implements SensorEventListener {
+import java.util.ArrayList;
+
+public class GameOnlineActivity extends AppCompatActivity {
     public final static String fragmentTag = "GAMEFRAGMENT";
 
+    private static boolean isManagerComputedYet = false;
+
     private GameFragment gameFragment;
-    private static GameManager gm;
+    private static GameManagerOnline gm;
+    private String gameName;
 
     private ActivityResultLauncher<Intent> menuBurgerLauncher;
 
-    //Detection de la secousse
-    private final double jerkRequired = 100.0;
-    private SensorManager sensorManager;
-    private Sensor accelerometter;
-    private TriggerEventListener triggerEventListener;
-    private float[] previousAcceleration;
+    ValueEventListener wait2PlayerListener;
 
+    //https://stackoverflow.com/questions/6413700/android-proper-way-to-use-onbackpressed-with-toast
+    private long backPressedTime = 0;
+    private long backPressedTimeResetDelay = 2000;
+
+    FirebaseDatabase database;
+    DatabaseReference roomRef;
+    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     private void OnMenuBurgerGameModeSelect(String gameMode) {
         Toast.makeText(this, gameMode, Toast.LENGTH_SHORT).show();
     }
 
     private void OnMenuBurgerTryAgain() {
-        restartGame();
+        Toast.makeText(this, "Try again", Toast.LENGTH_SHORT).show();
     }
 
     private void OnMenuBurgerQuit() {
+        Toast.makeText(this, "Quit", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -88,9 +95,16 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
                 });
 
+        //look rotation
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         ImageView imageView = findViewById(R.id.menuBurgerToggle);
         imageView.setOnClickListener(v -> {
-            Intent intent = new Intent(GameActivity.this, MenuBurgerActivity.class);
+            Intent intent = new Intent(GameOnlineActivity.this, MenuBurgerActivity.class);
             menuBurgerLauncher.launch(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this));
         });
 
@@ -104,26 +118,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             transaction.add(R.id.fragment_container, gameFragment, fragmentTag);
             transaction.commit();
         }
-
-
-        //look rotation
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-        accelerometter = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        if (accelerometter == null) {
-            Toast.makeText(this, "Pas d'accelerometre :(", Toast.LENGTH_SHORT).show();
-        }
-
-        previousAcceleration = new float[3];
-        previousAcceleration[0] = 0;
-        previousAcceleration[1] = 0;
-        previousAcceleration[2] = 0;
     }
 
     @Override
@@ -132,20 +126,25 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         //Lunch the game
         System.out.println("=============> LUNCH THE GAME");
 
-        createGame();
-    }
-
-
-    private void createGame() {
         //Board b = (Board) findViewById(R.id.board_game);
         Board b = gameFragment.getFrag_board().getBoard();
         ChangePieceScreen wrapper = gameFragment.getFrag_board().getScreenGameWrapper();
         b.setOnScreenView(wrapper);
 
         if(b!=null) {
-            b.redrawBoard();
 
-            gm = new GameManager(getBaseContext(), b);
+            Intent intent = this.getIntent();
+
+            gameName = intent.getStringExtra("gameName");
+            int player = parseInt(intent.getStringExtra("player"));
+
+            Log.d("GameOnlineActivity", "gameName: " + gameName);
+            Log.d("GameOnlineActivity", "player: " + player);
+
+            database = FirebaseDatabase.getInstance("https://mobile-a37ba-default-rtdb.europe-west1.firebasedatabase.app");
+            roomRef = database.getReference("rooms").child(gameName);
+
+            gm = new GameManagerOnline(getBaseContext(), b);
 
             System.out.println("FR Player 1 pseudo : "  + gameFragment.getFrag_p1().getTVPseudo());
             System.out.println("FR Player 1 dead : "    + gameFragment.getFrag_p1().getLLDeadPieces());
@@ -154,49 +153,68 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
             gm.addPlayerInterfaceElement(gameFragment.getFrag_p1(), gameFragment.getFrameLayout_p1());
             gm.addPlayerInterfaceElement(gameFragment.getFrag_p2(), gameFragment.getFrameLayout_p2());
+            gm.setNameRoomRef(gameName);
+            gm.setPlayerIndex(player);
 
-            gm.start();
+            if (player == 0) {
+                System.out.println("J attends le second joueur");
+                gm.setPlayer1(gameName);
+                wait2Player();
+            }
+            else {
+                gm.setPlayer1(gameName);
+                gm.setPlayer2(user.getUid());
+                gm.start();
+            }
         }
     }
 
-    private void restartGame() {
-        createGame();
+    private void wait2Player() {
+        wait2PlayerListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.getValue().equals("")){
+                    System.out.println("=============> ONDATA CHANGE");
+                    gm.setPlayer2(dataSnapshot.getValue().toString());
+                    gm.start();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //Nothing to do
+            }
+
+        };
+        roomRef.child("player2").removeEventListener(wait2PlayerListener);
+        roomRef.child("player2").addValueEventListener(wait2PlayerListener);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        float x, y, z;
-        x = sensorEvent.values[0] - previousAcceleration[0];
-        y = sensorEvent.values[1] - previousAcceleration[1];
-        z = sensorEvent.values[2] - previousAcceleration[2];
-        double length = Math.sqrt(x*x+y*y+z*z);
 
-        boolean greatJerk = length > jerkRequired;
-        if (greatJerk) {
-            restartGame();
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        roomRef.child("player2").removeEventListener(wait2PlayerListener);
+        if (gm.getPlayer2() == null || gm.getPlayer2().isEmpty()) {
+            deleteRoomsInformation();
         }
-
-        previousAcceleration[0] = sensorEvent.values[0];
-        previousAcceleration[1] = sensorEvent.values[1];
-        previousAcceleration[2] = sensorEvent.values[2];
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
+    public void onBackPressed() {
+        long time = System.currentTimeMillis();
+        if (time - backPressedTime > backPressedTimeResetDelay) {
+            backPressedTime = time;
+            Toast.makeText(this, getString(R.string.confirm_back_press), Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(GameActivity.this, accelerometter, SensorManager.SENSOR_DELAY_UI);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
+    public void deleteRoomsInformation(){
+        database.getReference().child("rooms").child(gameName).removeValue();
     }
 }
