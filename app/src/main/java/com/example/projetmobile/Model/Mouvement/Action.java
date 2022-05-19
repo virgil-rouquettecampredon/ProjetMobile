@@ -1,6 +1,5 @@
 package com.example.projetmobile.Model.Mouvement;
 
-import com.example.projetmobile.Model.ComposedDrawing;
 import com.example.projetmobile.Model.GameObject;
 
 //TO perform specila action on displacement

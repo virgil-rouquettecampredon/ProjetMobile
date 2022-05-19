@@ -10,7 +10,6 @@ import com.example.projetmobile.Model.Mouvement.ActionDeplacement;
 import com.example.projetmobile.Model.Mouvement.ActionEat;
 import com.example.projetmobile.Model.Mouvement.Movement;
 import com.example.projetmobile.Model.Mouvement.MovementPiece;
-import com.example.projetmobile.Model.Mouvement.MovementPoint;
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Player;
 import com.example.projetmobile.R;

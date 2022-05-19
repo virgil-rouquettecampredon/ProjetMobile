@@ -1,7 +1,5 @@
 package com.example.projetmobile.Model.Mouvement;
 
-import androidx.annotation.NonNull;
-
 import com.example.projetmobile.Model.Case;
 import com.example.projetmobile.Model.ComposedDrawing;
 

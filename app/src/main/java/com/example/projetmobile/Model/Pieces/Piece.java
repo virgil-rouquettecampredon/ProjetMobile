@@ -3,7 +3,6 @@ package com.example.projetmobile.Model.Pieces;
 import com.example.projetmobile.Model.ComposedDrawing;
 import com.example.projetmobile.Model.GameObject;
 import com.example.projetmobile.Model.Mouvement.Movement;
-import com.example.projetmobile.Model.Mouvement.MovementComplex;
 import com.example.projetmobile.Model.Player;
 
 import java.util.ArrayList;

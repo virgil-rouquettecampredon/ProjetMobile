@@ -1,9 +1,6 @@
 package com.example.projetmobile.Model.Mouvement;
 
-import android.graphics.drawable.Drawable;
-
 import com.example.projetmobile.Model.Board;
-import com.example.projetmobile.Model.ComposedDrawing;
 import com.example.projetmobile.Model.GameObject;
 
 import java.util.List;

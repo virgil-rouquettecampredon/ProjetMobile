@@ -170,7 +170,7 @@ public class GameManager {
                                 Piece pMoved = moveAPiece(lastPosOfPieceSelected, lastPosPreSelected, false);
 
                                 //We need to check if the movement need an upgrade treatment
-                                if (c.is_end_case() && pMoved.canBeTransformed()) {
+                                if (c.is_end_case() && pMoved.canBeTransformed() && pMoved.getPossessor() == currentPlayer) {
                                     //Launch the upgrade treatment
                                     transformAPiece(pMoved, lastPosPreSelected);
                                     lastPosPreSelected = null;
@@ -653,7 +653,7 @@ public class GameManager {
                 gameStopped = false;
 
                 //We need to check if the movement need an upgrade treatment
-                if (end_case.is_end_case() && moved.canBeTransformed()) {
+                if (end_case.is_end_case() && moved.canBeTransformed() && moved.getPossessor() == currentPlayer) {
                     //Launch the upgrade treatment
                     transformAPiece(moved, end);
                 } else {
@@ -731,6 +731,7 @@ public class GameManager {
     }
 
     protected void transformAPiece(Piece t, Position pos) {
+
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("TRANSFORM A PIECE : " + t);
 
         gameStopped = true;

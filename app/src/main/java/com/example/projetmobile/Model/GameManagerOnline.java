@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.example.projetmobile.Model.Mouvement.Position;
 import com.example.projetmobile.Model.Pieces.Piece;
-import com.example.projetmobile.Model.Pieces.Tower;
 
 import java.util.ArrayList;
 import java.util.List;
