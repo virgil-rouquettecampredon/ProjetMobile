@@ -78,4 +78,9 @@
     <string name="default_game_mode">Standard</string>
     <string name="game_name">Nom de la partie</string>
     <string name="confirm_back_press">Appuyez encore sur retour pour quitter.</string>
+    <string name="wrong_pasword">Mauvais mot de passe. Réessayez.</string>
+    <string name="game_full">Partie pleine !</string>
+    <string name="game_animation">Animations de jeu</string>
+    <string name="yes">oui</string>
+    <string name="no">non</string>
 </resources>

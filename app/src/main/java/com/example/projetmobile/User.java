@@ -7,6 +7,7 @@ public class User {
     private String email;
     private String bio;
     private Long elo;
+    private Long useAnimations;
 
     public User() {
     }
@@ -17,7 +18,7 @@ public class User {
         this.email = email;
         this.bio = "Un g@meur avec un @ à la place du a";
         this.elo = new Long(1000);
-
+        this.useAnimations = new Long(0);
     }
 
     public String getBio() {
@@ -51,4 +52,8 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Long getUseAnimations() {return useAnimations;}
+
+    public void setUseAnimations(Long uses) {this.useAnimations = uses;}
 }

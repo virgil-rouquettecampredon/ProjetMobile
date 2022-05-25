@@ -484,6 +484,9 @@ public class ConnectionFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), MainMenuActivity.class);
                             startActivity(intent);
                         }
+                        else {
+                            Toast.makeText(getActivity(), R.string.wrong_pasword, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
