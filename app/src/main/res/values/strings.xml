@@ -78,4 +78,7 @@
     <string name="default_game_mode">Standard</string>
     <string name="game_name">Nom de la partie</string>
     <string name="confirm_back_press">Appuyez encore sur retour pour quitter.</string>
+    <string name="authentication_failed">"Echec d'authentification. "</string>
+    <string name="pasword_too_short">Mot de passe trop court (6 character minimum).</string>
+    <string name="unaivailable_email">Email invalide.</string>
 </resources>
