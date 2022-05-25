@@ -83,4 +83,7 @@
     <string name="game_animation">Animations de jeu</string>
     <string name="yes">oui</string>
     <string name="no">non</string>
+    <string name="authentication_failed">"Echec d'authentification. "</string>
+    <string name="pasword_too_short">Mot de passe trop court (6 character minimum).</string>
+    <string name="unaivailable_email">Email invalide.</string>
 </resources>
