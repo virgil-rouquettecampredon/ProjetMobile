@@ -11,7 +11,11 @@ import androidx.annotation.NonNull;
 
 import com.example.projetmobile.GameListFragment;
 import com.example.projetmobile.Model.Mouvement.Position;
+import com.example.projetmobile.Model.Pieces.Bishop;
+import com.example.projetmobile.Model.Pieces.Knight;
 import com.example.projetmobile.Model.Pieces.Piece;
+import com.example.projetmobile.Model.Pieces.Queen;
+import com.example.projetmobile.Model.Pieces.Tower;
 import com.example.projetmobile.Rooms;
 import com.example.projetmobile.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -245,6 +249,8 @@ public class GameManagerOnline extends GameManager{
                 int idTransform = shotsToPerform.get(0).IDTransformedPiece;
 
                 Case c = board.getACase(startPos.getX(), startPos.getY());
+                Piece pieceToMove = c.getPiece();
+
                 //Perform move
                 if (DEBUG_FOR_GAME_LOGIC) System.out.println("SIMPLE MOVE");
 
@@ -266,6 +272,14 @@ public class GameManagerOnline extends GameManager{
                     }
                 }
                 //Perform transformation (if needed)
+
+                if(idTransform>=0){
+                    Player ennemy = this.players.get((1 - this.playerIndex));
+                    this.transformEnnemyPiece(ennemy,idTransform,pieceToMove,endPos);
+                }
+
+                this.board.commitChanges();
+
             } else {
                 //rock move
                 if (DEBUG_FOR_GAME_LOGIC) System.out.println("ROCK MOVE");
@@ -336,6 +350,31 @@ public class GameManagerOnline extends GameManager{
         }
         shotsToPerform.clear();
     }
+
+    public void transformEnnemyPiece(Player player,int id,Piece oldP,Position pos){
+        Piece newP = null;
+        switch (id) {
+            case  TOWER :
+                newP = new Tower(true, oldP, player.getAppearance(TOWER));
+                break;
+            case QUEEN :
+                newP = new Queen(true, oldP, player.getAppearance(QUEEN));
+                break;
+            case KNIGHT :
+                newP = new Knight(true, oldP, player.getAppearance(KNIGHT));
+                break;
+            case BISHOP :
+                newP = new Bishop(true, oldP, player.getAppearance(BISHOP));
+                break;
+        }
+
+        this.board.setAPieces(pos.getX(), pos.getY(), newP);
+        //player piece destruction
+        oldP.getPossessor().destroyAPiece(oldP);
+        //Maj last shot Piece Transformation
+        this.allShots.peek().get(0).setIDTransformedPiece(id);
+    }
+
 
     //Function called when current enemy player play a turn
     public void onEnemyPlayerPlay() {

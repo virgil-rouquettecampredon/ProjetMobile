@@ -12,6 +12,7 @@ import java.util.Set;
 
 
 public class Player implements GameObject{
+    private Map<Integer, ComposedDrawing> appearancesPieceToTransform;
 
     private String pseudo;
     private Map<Piece, List<Position>> piecesPlayer;
@@ -29,6 +30,8 @@ public class Player implements GameObject{
         this.pseudo = pseudo;
         this.color = color;
         this.cimetary = new ArrayList<>();
+
+        appearancesPieceToTransform = new HashMap<>();
     }
 
     public boolean isAlly(Player p){
@@ -115,6 +118,14 @@ public class Player implements GameObject{
         return this.rockPieces.get(p);
     }
 
+
+    /** ======== Pieces Transformation ======== **/
+    public void addAppearancePiece(int appearanceID, ComposedDrawing appearance){
+        this.appearancesPieceToTransform.put(appearanceID,appearance);
+    }
+    public ComposedDrawing getAppearance(int appearanceID){
+        return this.appearancesPieceToTransform.get(appearanceID);
+    }
 
     @Override
     public boolean equals(Object o) {
