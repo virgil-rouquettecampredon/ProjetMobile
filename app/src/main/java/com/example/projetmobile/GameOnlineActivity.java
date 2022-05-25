@@ -201,7 +201,6 @@ public class GameOnlineActivity extends AppCompatActivity {
 
         progressBar = new ProgressBar(GameOnlineActivity.this);
         progressBar.setIndeterminateTintList(ColorStateList.valueOf(GameManager.getAttributeColor(GameOnlineActivity.this, R.attr.colorTertiaryVariant)));
-        //progressBar.setBackgroundColor(GameManager.getAttributeColor(GameOnlineActivity.this, R.attr.colorTertiary));
         LinearLayout layout = gameFragment.getFrag_p2().getView().findViewById(R.id.dead_pieces);
         layout.addView(progressBar);
     }
