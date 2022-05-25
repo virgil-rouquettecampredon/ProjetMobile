@@ -151,6 +151,7 @@ public class GameManagerOnline extends GameManager{
                     setPlayerDatas(0, task.getResult().getValue(User.class).getPseudo());
                     eloPlayer1 = task.getResult().getValue(User.class).getElo();
                     pseudoPlayer1 = task.getResult().getValue(User.class).getPseudo();
+                    //GameManager.ANIMATION_PIECE = task.getResult().getValue(User.class).getUseAnimation();
                 }
             }
         });
