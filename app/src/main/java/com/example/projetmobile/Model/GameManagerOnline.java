@@ -674,6 +674,8 @@ public class GameManagerOnline extends GameManager{
         this.gameStopped = true;
         this.board.onEndOfGame(mes_start, mes_mid, mes_end);
 
+        //roomRef.child("turn").removeEventListener(gameListener);
+        //roomRef.child("loose").removeEventListener(looseListener);
         roomRef.child("loose").setValue(1 - playerIndex);
         isFinished = true;
         //roomRef.child("turn").setValue(2 - playerIndex);
