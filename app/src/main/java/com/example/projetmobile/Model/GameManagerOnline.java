@@ -659,7 +659,7 @@ public class GameManagerOnline extends GameManager{
 
         roomRef.child("loose").setValue("yes");
         roomRef.child("turn").setValue(2 - playerIndex);
-        this.performHistoryLooser();
+        //this.performHistoryLooser();
     }
 
     public void winByFF(){
@@ -787,12 +787,18 @@ public class GameManagerOnline extends GameManager{
         int eloLoose = 0;
 
         if(eloWinner < eloLooser){
-            eloWin = (int)(((int)eloLooser - (int)eloWinner)/3) + randomNumber * 2;
-            eloLoose = (int)(((int)eloLooser - (int)eloWinner)/3) + (int)((long)randomNumber * 1.5);
+            float eloCoeffDiff = ((float)(eloLooser - eloWinner))/3.0f;
+            eloCoeffDiff = (eloCoeffDiff<0)? 0 : (eloCoeffDiff>15)? 15 : eloCoeffDiff;
+
+            eloWin      = (int)eloCoeffDiff  + (randomNumber * 2);
+            eloLoose    = (int)eloCoeffDiff  + (int)((float) randomNumber * 1.5);
         }
         else {
-            eloWin = (int)(((int)eloWinner - (int)eloLooser)/5) + (int)((long)randomNumber * 0.5);
-            eloLoose = (int)(((int)eloWinner - (int)eloLooser)/5) + (int)((long)randomNumber * 0.25);
+            float eloCoeffDiff = ((float)(eloLooser - eloWinner))/5.0f;
+            eloCoeffDiff = (eloCoeffDiff<0)? 0 : (eloCoeffDiff>15)? 15 : eloCoeffDiff;
+
+            eloWin      = (int)eloCoeffDiff  + (int)((float)randomNumber * .5);
+            eloLoose    = (int)eloCoeffDiff  + (int)((float) randomNumber * .25);
         }
 
         if(winner) {
