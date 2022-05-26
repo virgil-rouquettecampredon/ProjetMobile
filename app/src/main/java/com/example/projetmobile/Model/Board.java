@@ -619,6 +619,8 @@ public class Board extends TableLayout {
     }
 
 
+
+
     /** ======== Manip the Board Model ======== **/
     //Say if a position for a move on the board is correct or not
     public boolean isGoodPos(int x, int y){
@@ -754,6 +756,12 @@ public class Board extends TableLayout {
             }
         }
         return true;
+    }
+
+    public void resetBoardScreens(){
+        isFinishScreen = false;
+        invalidate();
+        restart_no_screen_view();
     }
 
 
