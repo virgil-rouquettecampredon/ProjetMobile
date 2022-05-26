@@ -80,9 +80,12 @@ public class GameManagerOnline extends GameManager{
 
     private ValueEventListener gameListener;
     private ValueEventListener looseListener;
+    private ValueEventListener pieceListener;
 
     private File localFile;
     private File localFile2;
+
+    private int valeur = 0;
 
     private String piece1;
     private String piece2;
@@ -139,6 +142,7 @@ public class GameManagerOnline extends GameManager{
 
         //Clear the board
         this.board.clear();
+        valeur = 0;
 
         //Init the board
         this.players = this.board.initGame_players();
@@ -148,6 +152,9 @@ public class GameManagerOnline extends GameManager{
 
         turnPlayerListerner();
         loosePlayerListerner();
+        if (playerIndex == 0){
+            piecePlayerListerner();
+        }
 
         if (startANewTurn()) {
             onEndingGame();
@@ -393,6 +400,10 @@ public class GameManagerOnline extends GameManager{
 
         roomRef.child("turn").removeEventListener(gameListener);
         roomRef.child("loose").removeEventListener(looseListener);
+        if (playerIndex == 0){
+            roomRef.child("piece1").removeEventListener(pieceListener);
+        }
+        roomRef.child("loose").removeEventListener(looseListener);
         isFinished = true;
         deleteRoomsInformation();
     }
@@ -568,12 +579,13 @@ public class GameManagerOnline extends GameManager{
             roomRef.child("piece2").setValue("");
         }
 
-        if (playerIndex == 0) {
-            roomRef.child("turn").setValue(2);
-        } else {
-            Log.d("SyncToDB", "trurn player" + 1);
-            roomRef.child("turn").setValue(1);
-        }
+
+        //if (playerIndex == 0) {
+        //    roomRef.child("turn").setValue(2);
+        //} else {
+        //    Log.d("SyncToDB", "turn player" + 1);
+        //    roomRef.child("turn").setValue(1);
+        //}
         shotsToPush.clear();
 
     }
@@ -628,6 +640,33 @@ public class GameManagerOnline extends GameManager{
             public void onCancelled(@NonNull DatabaseError error) {}
         };
         roomRef.child("loose").addValueEventListener(looseListener);
+    }
+
+    public void piecePlayerListerner() {
+       pieceListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (valeur > 0){
+                    roomRef.child("turn").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.getResult().getValue(Long.class) == 1){
+                                roomRef.child("turn").setValue(2);
+                            }
+                            else {
+                                roomRef.child("turn").setValue(1);
+                            }
+                        }
+                    });
+                }
+                else{
+                    valeur++;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        };
+        roomRef.child("piece1").addValueEventListener(pieceListener);
     }
 
     @Override
