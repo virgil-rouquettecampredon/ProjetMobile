@@ -133,4 +133,10 @@ public class HistoryDialogActivity extends AppCompatActivity {
         };
         mDatabase.child("history").child(user.getUid()).addValueEventListener(roomListener);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDatabase.child("history").child(user.getUid()).removeEventListener(roomListener);
+    }
 }

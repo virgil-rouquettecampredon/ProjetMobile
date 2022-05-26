@@ -117,4 +117,12 @@ public class RankingDialogActivity extends AppCompatActivity {
         };
         mDatabase.child("users").addValueEventListener(roomListener);
     }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDatabase.child("users").removeEventListener(roomListener);
+    }
 }

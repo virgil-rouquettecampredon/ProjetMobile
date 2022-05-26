@@ -102,7 +102,7 @@ public class HistoryRowFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history_row, container, false);
 
-        String eloChangeAmountText;
+        String eloChangeAmountText = "";
 
         ImageView winLoseImageView = view.findViewById(R.id.winLoseImageView);
         if (isAWin) {
@@ -114,7 +114,6 @@ public class HistoryRowFragment extends Fragment {
             winLoseImageView.setImageResource(R.drawable.cross);
             int crossPading = (int) getResources().getDimension(R.dimen.cross_padding);
             winLoseImageView.setPadding(crossPading, crossPading, crossPading, crossPading);
-            eloChangeAmountText = "-";
         }
         eloChangeAmountText += eloChangeAmount;
 

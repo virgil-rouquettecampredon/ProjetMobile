@@ -66,6 +66,8 @@ public class GameManagerOnline extends GameManager{
     private boolean isMyTurn;
     private int playerIndex;
 
+    private boolean isFinished;
+
     private String nameRoomRef;
 
     FirebaseDatabase database;
@@ -76,12 +78,15 @@ public class GameManagerOnline extends GameManager{
     private FirebaseStorage storage;
     private StorageReference storageRef;
 
+    private ValueEventListener gameListener;
+    private ValueEventListener looseListener;
+
     private File localFile;
     private File localFile2;
 
     private String piece1;
     private String piece2;
-    private String loose;
+    private long loose;
     private String player1;
     private String player2;
     private String pseudoPlayer2;
@@ -94,11 +99,16 @@ public class GameManagerOnline extends GameManager{
 
         shotsToPush = new ArrayList<>();
         shotsToPerform = new ArrayList<>();
+        isFinished = false;
     }
 
     //Call once before game start
     public void setStartingPlayer() {
         playerIndex = 0;
+    }
+
+    public boolean isGameFinished() {
+        return isFinished;
     }
 
     //Function for changing player name
@@ -137,6 +147,7 @@ public class GameManagerOnline extends GameManager{
         this.currentPlayer = players.get(playerIndex);
 
         turnPlayerListerner();
+        loosePlayerListerner();
 
         if (startANewTurn()) {
             onEndingGame();
@@ -362,7 +373,7 @@ public class GameManagerOnline extends GameManager{
         shotsToPerform.clear();
     }
 
-    private void performHistoryWinner(typeVict){
+    private void performHistoryWinner(String typeVict){
         if (playerIndex == 1) {
             //Set the data in DB for all players
             long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player2, true);
@@ -379,24 +390,11 @@ public class GameManagerOnline extends GameManager{
             long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player2, false);
             addHistoryGame(player2, nbTurn, "loose", pseudoPlayer1, eloDiff2, typeVict);
         }
-    }
 
-    private void performHistoryLooser(){
-        if (playerIndex == 0) {
-            //Set the data in DB for all players
-            long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player2, true);
-            addHistoryGame(player2, nbTurn, "win", pseudoPlayer1, eloDiff);
-            long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player1, false);
-            addHistoryGame(player1, nbTurn, "loose", pseudoPlayer2, eloDiff2);
-        }
-        else {
-            //Set the data in DB for all players
-            long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player1, true);
-            addHistoryGame(player1, nbTurn, "win", pseudoPlayer2, eloDiff);
-
-            long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player2, false);
-            addHistoryGame(player2, nbTurn, "loose", pseudoPlayer1, eloDiff2);
-        }
+        roomRef.child("turn").removeEventListener(gameListener);
+        roomRef.child("loose").removeEventListener(looseListener);
+        isFinished = true;
+        deleteRoomsInformation();
     }
 
     public void transformEnnemyPiece(Player player,int id,Piece oldP,Position pos){
@@ -509,9 +507,9 @@ public class GameManagerOnline extends GameManager{
                 } else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                     loose = task.getResult().getValue(Rooms.class).getLoose();
-                    if (loose != null) {
-                        Log.d("Firebase", "the enemy player has loose");
-                        winByFF();
+                    if (loose == playerIndex) {
+                        // Log.d("Firebase", "the enemy player has loose");
+                        // winByFF();
                     } else {
                         piece1 = task.getResult().getValue(Rooms.class).getPiece1();
                         if(!piece1.equals("")) {
@@ -561,6 +559,7 @@ public class GameManagerOnline extends GameManager{
             if (shotsToPush.size() > 1) {
                 roomRef.child("piece2").setValue("" + shotsToPush.get(1).startPosPlayerPlay.getX() + "_" + shotsToPush.get(1).startPosPlayerPlay.getY() + "/" + shotsToPush.get(1).endPosPlayerPlay.getX() + "_" + shotsToPush.get(1).endPosPlayerPlay.getY());
             } else {
+                Log.d("SyncToDB", "push pieces");
                 roomRef.child("piece2").setValue("");
             }
         }else{
@@ -572,9 +571,11 @@ public class GameManagerOnline extends GameManager{
         if (playerIndex == 0) {
             roomRef.child("turn").setValue(2);
         } else {
+            Log.d("SyncToDB", "trurn player" + 1);
             roomRef.child("turn").setValue(1);
         }
         shotsToPush.clear();
+
     }
 
     //Function called when game over (victory if our player win)
@@ -597,21 +598,36 @@ public class GameManagerOnline extends GameManager{
     }
 
     public void turnPlayerListerner() {
-        roomRef.child("turn").addValueEventListener(new ValueEventListener() {
+        gameListener = new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 System.out.println("TURN CHANGED");
                 System.out.println("Snapshot VAL    : " + dataSnapshot.getValue());
                 System.out.println("NB TURN         : " + nbTurn);
                 System.out.println("PLAYER INDEX    : " + playerIndex);
 
-                if ((long) dataSnapshot.getValue() == playerIndex + 1 && nbTurn + playerIndex > 0) {
+                if (dataSnapshot.getValue() != null && (long) dataSnapshot.getValue() == playerIndex + 1 && nbTurn + playerIndex > 0) {
                     onEnemyPlayerPlay();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
-        });
+        };
+        roomRef.child("turn").addValueEventListener(gameListener);
+    }
+
+    public void loosePlayerListerner() {
+        looseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null && (long) dataSnapshot.getValue() == playerIndex) {
+                    winByFF();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        };
+        roomRef.child("loose").addValueEventListener(looseListener);
     }
 
     @Override
@@ -621,6 +637,7 @@ public class GameManagerOnline extends GameManager{
         roomRef.child("piece1").setValue("");
         roomRef.child("piece2").setValue("");
         roomRef.child("turn").setValue(2 - playerIndex);
+        isFinished = true;
     }
 
     @Override
@@ -657,8 +674,9 @@ public class GameManagerOnline extends GameManager{
         this.gameStopped = true;
         this.board.onEndOfGame(mes_start, mes_mid, mes_end);
 
-        roomRef.child("loose").setValue("yes");
-        roomRef.child("turn").setValue(2 - playerIndex);
+        roomRef.child("loose").setValue(1 - playerIndex);
+        isFinished = true;
+        //roomRef.child("turn").setValue(2 - playerIndex);
         //this.performHistoryLooser();
     }
 
@@ -694,6 +712,7 @@ public class GameManagerOnline extends GameManager{
         this.gameStopped = true;
         this.board.onEndOfGame(mes_start, mes_mid, mes_end);
         this.performHistoryWinner("Abandonner");
+        isFinished = true;
     }
 
     public void setImage(int id, Uri uri){
@@ -774,7 +793,7 @@ public class GameManagerOnline extends GameManager{
         database.getReference().child("history").child(player).child(dateFormatted).child("TypeVictoire").setValue(typeVict);
     }
 
-    public void deleteRoomsInformation(){
+    public void deleteRoomsInformation() {
         database.getReference().child("rooms").child(nameRoomRef).removeValue();
     }
 

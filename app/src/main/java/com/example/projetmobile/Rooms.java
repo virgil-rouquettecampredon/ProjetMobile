@@ -9,12 +9,12 @@ public class Rooms {
     private long turn;
     private String piece1;
     private String piece2;
-    private String loose;
+    private long loose;
 
     public Rooms() {
     }
 
-    public Rooms(String player1, String player2, String gameMode, String gameName, long ranking, long turn, String piece1, String piece2, String loose) {
+    public Rooms(String player1, String player2, String gameMode, String gameName, long ranking, long turn, String piece1, String piece2, long loose) {
         this.player1 = player1;
         this.player2 = player2;
         this.gameMode = gameMode;
@@ -104,7 +104,7 @@ public class Rooms {
                 '}';
     }
 
-    public String getLoose() {
+    public long getLoose() {
         return loose;
     }
 }

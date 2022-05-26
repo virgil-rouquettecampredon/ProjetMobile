@@ -310,5 +310,15 @@ public class GameListFragment extends Fragment {
         roomRef.addValueEventListener(roomListener);
     }
 
-    //remove eventListener
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        roomRef.removeEventListener(roomListener);
+    }
 }

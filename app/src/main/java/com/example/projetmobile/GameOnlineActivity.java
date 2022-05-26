@@ -76,7 +76,9 @@ public class GameOnlineActivity extends AppCompatActivity {
 
     private void OnMenuBurgerQuit() {
         Toast.makeText(this, "Quit", Toast.LENGTH_SHORT).show();
-        gm.onFFGame();
+        if (gm.getPlayer2() != null) {
+            gm.onFFGame();
+        }
         //onDestroy();
         finish();
     }
@@ -189,6 +191,8 @@ public class GameOnlineActivity extends AppCompatActivity {
                     gm.setPlayer2(dataSnapshot.getValue().toString());
                     gm.start();
                     progressBar.setVisibility(View.GONE);
+
+                    roomRef.child("player2").removeEventListener(wait2PlayerListener);
                 }
             }
 
@@ -210,7 +214,9 @@ public class GameOnlineActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        roomRef.child("player2").removeEventListener(wait2PlayerListener);
+        if (wait2PlayerListener != null ) {
+            roomRef.child("player2").removeEventListener(wait2PlayerListener);
+        }
         if (gm.getPlayer2() == null || gm.getPlayer2().isEmpty()) {
             deleteRoomsInformation();
         }
@@ -222,8 +228,9 @@ public class GameOnlineActivity extends AppCompatActivity {
             backPressedTime = time;
             Toast.makeText(this, getString(R.string.confirm_back_press), Toast.LENGTH_SHORT).show();
         } else {
-            gm.onFFGame();
-            onDestroy();
+            if (gm.getPlayer2() != null && !gm.isGameFinished()) {
+                gm.onFFGame();
+            }
             super.onBackPressed();
         }
     }
