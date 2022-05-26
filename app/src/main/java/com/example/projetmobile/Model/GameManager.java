@@ -35,10 +35,6 @@ import java.util.Map;
 
 
 public class GameManager {
-    protected static final int QUEEN    = 0;
-    protected static final int TOWER    = 1;
-    protected static final int BISHOP   = 2;
-    protected static final int KNIGHT   = 3;
 
     //For animation control
     public static boolean ANIMATION_FINISH  = true;
@@ -46,9 +42,9 @@ public class GameManager {
 
     //For console printing only
     protected static boolean DEBUG_FOR_ONCLK              = false;
-    protected static boolean DEBUG_FOR_GAME_LOGIC         = true;
+    protected static boolean DEBUG_FOR_GAME_LOGIC         = false;
     protected static boolean DEBUG_FOR_GAME_COMPLEXMVT    = false;
-    protected static boolean DEBUG_FOR_GAME_ROCK          = true;
+    protected static boolean DEBUG_FOR_GAME_ROCK          = false;
     protected static boolean DEBUG_FOR_GAME_MENACE        = false;
     protected static boolean DEBUG_FOR_GAME_ANIMATION     = false;
 
@@ -339,9 +335,9 @@ public class GameManager {
     protected void onEndingGame() {
         if (DEBUG_FOR_GAME_LOGIC) System.out.println("GAME IS FINISHED");
 
-        String mes_start = "";
-        String mes_mid = "";
-        String mes_end = "";
+        String mes_start    = "";
+        String mes_mid      = "";
+        String mes_end      = "";
 
         //Perform the end of the game
         if (this.isMenaced(this.currentPlayer)) {
@@ -377,6 +373,39 @@ public class GameManager {
         this.board.onEndOfGame(mes_start, mes_mid, mes_end);
     }
 
+    protected void onFFGame() {
+        //Need to inform other players that we loose
+        String mes_start    = "";
+        String mes_mid      = "";
+        String mes_end      = "";
+
+        List<Player> playersWin = new ArrayList<>();
+        for (Player p : players) {
+            if (!p.isAlly(currentPlayer)) {
+                playersWin.add(p);
+            }
+        }
+
+        if (playersWin.size() == 1) {
+            mes_start = this.context.getString(R.string.finish_screen_start);
+            mes_mid = playersWin.get(0).getPseudo();
+            mes_end = this.context.getString(R.string.finish_screen_winnerOne_end);
+        } else {
+            mes_start = this.context.getString(R.string.finish_screen_start);
+
+            String res = "";
+            for (Player p : playersWin) {
+                res += p.getPseudo() + "-";
+            }
+            StringBuffer sb = new StringBuffer(res);
+            sb.deleteCharAt(sb.length() - 1);
+
+            mes_mid = sb.toString();
+            mes_end = this.context.getString(R.string.finish_screen_winnerMany_end);
+        }
+        this.board.onEndOfGame(mes_start, mes_mid, mes_end);
+    }
+
 
     /**
      * ======== For game menace mechanics ========
@@ -402,7 +431,7 @@ public class GameManager {
     }
 
     //For getting all the piece that menace our victory condition piece
-    private void cptMenace(Player playerCurrent) {
+    protected void cptMenace(Player playerCurrent) {
         //Res of the search
         for (Piece piece : playerCurrent.getPiecesPlayer()) {
             if (piece.isVictoryCondition()) {
@@ -745,19 +774,19 @@ public class GameManager {
         this.board.onChangePieceShape(this.currentPlayer, p -> {
             int id = -1;
             if (p instanceof Tower) {
-                id = TOWER;
+                id = Board.TOWER;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Tower(true, t, p.getAppearances()));
             }
             if (p instanceof Queen) {
-                id = QUEEN;
+                id = Board.QUEEN;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Queen(true, t, p.getAppearances()));
             }
             if (p instanceof Knight) {
-                id = KNIGHT;
+                id = Board.KNIGHT;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Knight(true, t, p.getAppearances()));
             }
             if (p instanceof Bishop) {
-                id = BISHOP;
+                id = Board.BISHOP;
                 this.board.setAPieces(pos.getX(), pos.getY(), new Bishop(true, t, p.getAppearances()));
             }
 
@@ -935,15 +964,15 @@ public class GameManager {
      * ======== For layout MAJ (UI) ========
      **/
     //Add piece to cimatary player p layout
-    private void addCimetaryLayout(Player p, Piece piece) {
+    protected void addCimetaryLayout(Player p, Piece piece) {
         int ind = getIndex(p);
         if (ind >= 0) {
 
-            if (piece_size < 0)
-                piece_size = this.playersUI.get(ind).getLLDeadPieces().getWidth() / (1 * p.getPiecesPlayer().size());
-
+            if (piece_size < 0) piece_size = this.playersUI.get(ind).getLLDeadPieces().getWidth() / (1 * p.getPiecesPlayer().size());
             ImageView img = new ImageView(this.context);
-            img.setImageDrawable(piece.getAppearances());
+
+            Piece pAdd= (piece.getLastShape() !=null)? piece.getLastShape() : piece;
+            img.setImageDrawable(pAdd.getAppearances());
 
             LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(piece_size, piece_size);
             img.setLayoutParams(ll);

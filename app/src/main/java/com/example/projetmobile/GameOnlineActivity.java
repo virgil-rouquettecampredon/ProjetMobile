@@ -67,6 +67,8 @@ public class GameOnlineActivity extends AppCompatActivity {
 
     private void OnMenuBurgerQuit() {
         Toast.makeText(this, "Quit", Toast.LENGTH_SHORT).show();
+        gm.onFFGame();
+        //onDestroy();
         finish();
     }
 
@@ -190,8 +192,6 @@ public class GameOnlineActivity extends AppCompatActivity {
         roomRef.child("player2").addValueEventListener(wait2PlayerListener);
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -200,7 +200,6 @@ public class GameOnlineActivity extends AppCompatActivity {
             deleteRoomsInformation();
         }
     }
-
     @Override
     public void onBackPressed() {
         long time = System.currentTimeMillis();
@@ -208,11 +207,11 @@ public class GameOnlineActivity extends AppCompatActivity {
             backPressedTime = time;
             Toast.makeText(this, getString(R.string.confirm_back_press), Toast.LENGTH_SHORT).show();
         } else {
+            gm.onFFGame();
+            onDestroy();
             super.onBackPressed();
         }
     }
-
-
 
     public void deleteRoomsInformation(){
         database.getReference().child("rooms").child(gameName).removeValue();

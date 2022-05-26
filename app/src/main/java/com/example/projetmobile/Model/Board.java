@@ -12,9 +12,11 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.Transformation;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -37,9 +39,14 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Board extends TableLayout {
+    public static final int QUEEN    = 0;
+    public static final int TOWER    = 1;
+    public static final int BISHOP   = 2;
+    public static final int KNIGHT   = 3;
+
     //For console printing only
-    private static boolean DEBUG_FOR_BOARD_LOGIC = false;
-    private static boolean DEBUG_FOR_BOARD_ANIMATION = false;
+    private static boolean DEBUG_FOR_BOARD_LOGIC        = false;
+    private static boolean DEBUG_FOR_BOARD_ANIMATION    = false;
 
 
     //=== Appearance for the board case type
@@ -498,6 +505,11 @@ public class Board extends TableLayout {
         p1.addRockPieces(p1_king,new Association_rock(p1_tower1,new Position(0,7),new Position(1,7), new Position(2,7)));
         p1.addRockPieces(p1_king,new Association_rock(p1_tower2,new Position(7,7),new Position(6,7), new Position(5,7)));
 
+        p1.addAppearancePiece(QUEEN,p1_queen.getAppearances());
+        p1.addAppearancePiece(TOWER,p1_tower1.getAppearances());
+        p1.addAppearancePiece(BISHOP,p1_bishop1.getAppearances());
+        p1.addAppearancePiece(KNIGHT,p1_knight1.getAppearances());
+
         Piece p2_pawn1 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
         Piece p2_pawn2 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
         Piece p2_pawn3 = new Pawn(p2,this.context,  Color.BLACK,Color.WHITE,Color.BLACK, Piece.DIRECTION.DOWN);
@@ -533,6 +545,11 @@ public class Board extends TableLayout {
 
         p2.addRockPieces(p2_king,new Association_rock(p2_tower1,new Position(0,0),new Position(1,0), new Position(2,0)));
         p2.addRockPieces(p2_king,new Association_rock(p2_tower2,new Position(7,0),new Position(6,0), new Position(5,0)));
+
+        p2.addAppearancePiece(QUEEN,p2_queen.getAppearances());
+        p2.addAppearancePiece(TOWER,p2_tower1.getAppearances());
+        p2.addAppearancePiece(BISHOP,p2_bishop1.getAppearances());
+        p2.addAppearancePiece(KNIGHT,p2_knight1.getAppearances());
 
         //Put all the pieces in the board
         setAPieces(0,1,p2_pawn1);
@@ -838,6 +855,11 @@ public class Board extends TableLayout {
             //In this func, we will only perform animation visual effect on the board, the gameplay mecanism is performed by onTheEnd
             Piece p_dep = start.getPiece();
 
+            //Log.d("BOARD ANIMATED DISPLACEMENT", "DEP(" + start.getColumn() +","+ start.getRow() + ")");
+            //Log.d("BOARD ANIMATED DISPLACEMENT", "DEP(" + start + ")");
+            //Log.d("BOARD ANIMATED DISPLACEMENT", "END(" + end.getColumn() +","+ end.getRow() + ")");
+            //Log.d("BOARD ANIMATED DISPLACEMENT", "END(" + end + ")");
+
             if (DEBUG_FOR_BOARD_ANIMATION) {
                 System.out.println("ANIMATED DISPLACEMENT : " + p_dep);
                 System.out.println("CASE START : " + start);
@@ -898,7 +920,6 @@ public class Board extends TableLayout {
         isPieceMoving = false;
         pieceToMove = null;
     }
-
 
     @Override
     public String toString() {

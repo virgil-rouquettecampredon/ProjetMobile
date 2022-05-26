@@ -66,7 +66,7 @@ public class Player implements GameObject{
         this.cimetary.remove(p);
     }
     public void reviveAPiece(Piece p){
-        System.out.println("REVIVE A PIECE : " + p);
+        //System.out.println("REVIVE A PIECE : " + p);
 
         Iterator<Piece> ite = cimetary.iterator();
         while (ite.hasNext()){
