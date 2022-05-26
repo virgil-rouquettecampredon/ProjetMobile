@@ -353,7 +353,7 @@ public class GameManagerOnline extends GameManager{
 
             //Compute local winner
             super.onEndingGame();
-            this.performHistoryWinner();
+            this.performHistoryWinner("Echec et Mat");
 
             //wait 10 seconds before going to the next step
             //deleteRoomsInformation();
@@ -362,22 +362,22 @@ public class GameManagerOnline extends GameManager{
         shotsToPerform.clear();
     }
 
-    private void performHistoryWinner(){
+    private void performHistoryWinner(typeVict){
         if (playerIndex == 1) {
             //Set the data in DB for all players
             long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player2, true);
-            addHistoryGame(player2, nbTurn, "win", pseudoPlayer1, eloDiff);
+            addHistoryGame(player2, nbTurn, "win", pseudoPlayer1, eloDiff, typeVict);
 
             long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player1, false);
-            addHistoryGame(player1, nbTurn, "loose", pseudoPlayer2, eloDiff2);
+            addHistoryGame(player1, nbTurn, "loose", pseudoPlayer2, eloDiff2, typeVict);
         }
         else {
             //Set the data in DB for all players
             long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player1, true);
-            addHistoryGame(player1, nbTurn, "win", pseudoPlayer2, eloDiff);
+            addHistoryGame(player1, nbTurn, "win", pseudoPlayer2, eloDiff, typeVict);
 
             long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player2, false);
-            addHistoryGame(player2, nbTurn, "loose", pseudoPlayer1, eloDiff2);
+            addHistoryGame(player2, nbTurn, "loose", pseudoPlayer1, eloDiff2, typeVict);
         }
     }
 
@@ -693,7 +693,7 @@ public class GameManagerOnline extends GameManager{
         }
         this.gameStopped = true;
         this.board.onEndOfGame(mes_start, mes_mid, mes_end);
-        this.performHistoryWinner();
+        this.performHistoryWinner("Abandonner");
     }
 
     public void setImage(int id, Uri uri){
@@ -762,7 +762,7 @@ public class GameManagerOnline extends GameManager{
         });
     }
 
-    public void addHistoryGame(String player, long nbCoup, String haveWin, String opponent, long eloDiff){
+    public void addHistoryGame(String player, long nbCoup, String haveWin, String opponent, long eloDiff, String typeVict){
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyyHH:mm:ss");
         Date date = new Date();
         String dateFormatted = formatter.format(date).toString();
@@ -771,6 +771,7 @@ public class GameManagerOnline extends GameManager{
         database.getReference().child("history").child(player).child(dateFormatted).child("haveWin").setValue(haveWin);
         database.getReference().child("history").child(player).child(dateFormatted).child("opponent").setValue(opponent);
         database.getReference().child("history").child(player).child(dateFormatted).child("eloDiff").setValue(eloDiff);
+        database.getReference().child("history").child(player).child(dateFormatted).child("TypeVictoire").setValue(typeVict);
     }
 
     public void deleteRoomsInformation(){

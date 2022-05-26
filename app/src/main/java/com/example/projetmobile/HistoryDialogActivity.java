@@ -113,10 +113,10 @@ public class HistoryDialogActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : children) {
                     HistoryData data;
                     if (snapshot.child("haveWin").getValue().toString().equals("win")) {
-                        data = new HistoryData(true, snapshot.child("eloDiff").getValue().toString(), (String)snapshot.child("opponent").getValue(), snapshot.child("nbCoup").getValue().toString(), "Echec et mat");
+                        data = new HistoryData(true, snapshot.child("eloDiff").getValue().toString(), (String)snapshot.child("opponent").getValue(), snapshot.child("nbCoup").getValue().toString(), snapshot.child("TypeVictoire").getValue().toString());
                     }
                     else{
-                        data = new HistoryData(false, snapshot.child("eloDiff").getValue().toString(), (String)snapshot.child("opponent").getValue(), snapshot.child("nbCoup").getValue().toString(), "Echec et mat");
+                        data = new HistoryData(false, snapshot.child("eloDiff").getValue().toString(), (String)snapshot.child("opponent").getValue(), snapshot.child("nbCoup").getValue().toString(), snapshot.child("TypeVictoire").getValue().toString());
                     }
                     historyList.add(data);
                 }
