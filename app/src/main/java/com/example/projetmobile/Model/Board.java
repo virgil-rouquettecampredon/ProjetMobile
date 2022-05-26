@@ -756,6 +756,12 @@ public class Board extends TableLayout {
         return true;
     }
 
+    public void resetBoardScreens(){
+        isFinishScreen = false;
+        invalidate();
+        restart_no_screen_view();
+    }
+
 
     /** ======== For layout rendering ======== **/
     //Init the board XML appearance

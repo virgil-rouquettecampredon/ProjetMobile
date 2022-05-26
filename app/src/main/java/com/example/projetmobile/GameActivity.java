@@ -144,6 +144,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         if(b!=null) {
             b.redrawBoard();
+            b.resetBoardScreens();
 
             gm = new GameManager(getBaseContext(), b);
 
