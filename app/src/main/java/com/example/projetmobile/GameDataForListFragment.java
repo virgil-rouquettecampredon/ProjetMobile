@@ -3,8 +3,10 @@ package com.example.projetmobile;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -90,10 +94,24 @@ public class GameDataForListFragment extends Fragment {
             //JOIN THE GAME WHEN CLICKED
             //ENTER THE INFORMATION INTO DATABASE
             roomRef = database.getReference("rooms").child(player1).child("player2");
-            roomRef.setValue(user.getUid());
-            eventListener();
-
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            roomRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        String player2 = task.getResult().getValue(String.class);
+                        if (player2.equals("")) {
+                            roomRef.setValue(user.getUid());
+                            eventListener();
+                        }
+                        else {
+                            Toast.makeText(getActivity(), R.string.game_full, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
         });
 
         return view;

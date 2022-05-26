@@ -15,11 +15,16 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.projetmobile.Model.Board;
@@ -38,6 +43,7 @@ import java.util.ArrayList;
 
 public class GameOnlineActivity extends AppCompatActivity {
     public final static String fragmentTag = "GAMEFRAGMENT";
+    ActivityResultLauncher<Intent> animationActivityLauncher;
 
     private static boolean isManagerComputedYet = false;
 
@@ -46,6 +52,9 @@ public class GameOnlineActivity extends AppCompatActivity {
     private String gameName;
 
     private ActivityResultLauncher<Intent> menuBurgerLauncher;
+
+    //https://stackoverflow.com/questions/45373007/progressdialog-is-deprecated-what-is-the-alternate-one-to-use
+    ProgressBar progressBar;
 
     ValueEventListener wait2PlayerListener;
 
@@ -179,6 +188,7 @@ public class GameOnlineActivity extends AppCompatActivity {
                     System.out.println("=============> ONDATA CHANGE");
                     gm.setPlayer2(dataSnapshot.getValue().toString());
                     gm.start();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -190,6 +200,11 @@ public class GameOnlineActivity extends AppCompatActivity {
         };
         roomRef.child("player2").removeEventListener(wait2PlayerListener);
         roomRef.child("player2").addValueEventListener(wait2PlayerListener);
+
+        progressBar = new ProgressBar(GameOnlineActivity.this);
+        progressBar.setIndeterminateTintList(ColorStateList.valueOf(GameManager.getAttributeColor(GameOnlineActivity.this, R.attr.colorTertiaryVariant)));
+        LinearLayout layout = gameFragment.getFrag_p2().getView().findViewById(R.id.dead_pieces);
+        layout.addView(progressBar);
     }
 
     @Override

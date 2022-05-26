@@ -437,7 +437,16 @@ public class ConnectionFragment extends Fragment {
 
         //MDP FORGET
         tv_mdp_forget.setOnClickListener(v -> {
-            mdp_forget_next(view.getContext(), et_pseudo);
+            String email = et_email.getText().toString();
+
+            if (!email_checking(email)) {
+                Toast.makeText(view.getContext(), getString(R.string.unaivailable_email), Toast.LENGTH_SHORT).show();
+                et_mail_empty = true;
+                set_missing_editText(et_email, view.getContext());
+            } else {
+                mdp_forget_next(view.getContext(), email);
+            }
+
         });
 
         backButton.setOnClickListener(v -> {
@@ -484,6 +493,9 @@ public class ConnectionFragment extends Fragment {
                             Intent intent = new Intent(getActivity(), MainMenuActivity.class);
                             startActivity(intent);
                         }
+                        else {
+                            Toast.makeText(getActivity(), R.string.wrong_pasword, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
@@ -501,25 +513,25 @@ public class ConnectionFragment extends Fragment {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                    Toast.makeText(ct, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show();
+                    String message = getString(R.string.authentication_failed);
+                    if (psw.length() < 6) {
+                        message += getString(R.string.pasword_too_short);
+                    }
+                    else {
+                        message += getString(R.string.unaivailable_email);
+                    }
+                    Toast.makeText(ct, message,
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    private void mdp_forget_next(Context c, EditText edt_pseudo) {
-        String pseudo = edt_pseudo.getText().toString();
+    private void mdp_forget_next(Context c, String email) {
+        //TODO générer lien et envoyer mail
+        Toast.makeText(c, "Not yet implemented", Toast.LENGTH_SHORT).show();
 
-        if (pseudo.equals("")) {
-            Toast.makeText(c, getString(R.string.forgot_psw_msgtoast_nopseudo), Toast.LENGTH_SHORT).show();
-            et_mail_empty = true;
-            set_missing_editText(edt_pseudo, c);
-        } else {
-            Toast.makeText(c, getString(R.string.forgot_psw_msgtoast) + " " + pseudo, Toast.LENGTH_SHORT).show();
-            et_mail_empty = false;
-            set_normal_editText(edt_pseudo, c);
-        }
+        //Toast.makeText(c, getString(R.string.forgot_psw_msgtoast), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -536,6 +548,7 @@ public class ConnectionFragment extends Fragment {
     private static boolean email_maj_carac_domain_name = false;
 
     private boolean email_checking(String email) {
+        /*
         String elem_post = "[" + ((email_maj_carac) ? "A-Za-z" : "a-z") + ((email_digit_carac) ? "0-9" : "") + ((email_dashes_carac) ? "_-" : "") + "]";
         String elem_pre = "[" + ((email_maj_carac) ? "A-Za-z" : "a-z") + ((email_digit_carac) ? "0-9" : "") + ((email_dashes_carac) ? "-" : "") + "]";
         String domain_name = "[" + ((email_maj_carac_domain_name) ? "A-Za-z" : "a-z") + "]";
@@ -559,12 +572,33 @@ public class ConnectionFragment extends Fragment {
                         + "{"
                         + email_nb_carac_min_domain
                         + ","
-                        + ((email_nb_carac_max_domain < 0) ? "" : email_maj_carac_domain_name + "")
+                        + email_nb_carac_max_domain//((email_nb_carac_max_domain < 0) ? "" : email_maj_carac_domain_name + "")
                         + "})$";
 
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+        */
+        String[] name_adress = email.split("@");
+        if (name_adress.length != 2) {
+            return false;
+        }
+        if (name_adress[0].length() < 1) {
+            return false;
+        }
+        if (name_adress[1].length() < 2) {
+            return false;
+        }
+        String[] domain_ext = name_adress[1].split("\\.");
+        if (domain_ext.length < 2) {
+            return false;
+        }
+        for (String s : domain_ext) {
+            if (s.length() < 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void updateUI(FirebaseUser currUser, String email, String pseudo, String psw) {

@@ -40,6 +40,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 
 
 public class ProfileFragment extends Fragment {
@@ -47,6 +48,7 @@ public class ProfileFragment extends Fragment {
     ActivityResultLauncher<Intent> setBioLauncher;
     ActivityResultLauncher<Intent> warnDeleteLauncher;
     ActivityResultLauncher<Intent> setProfilePictureLauncher;
+    ActivityResultLauncher<Intent> setPreferencesLauncher;
 
     TextView textViewPseudo;
     TextView bioTextView;
@@ -55,6 +57,7 @@ public class ProfileFragment extends Fragment {
 
     String pseudo;
     String bio;
+    Boolean useAnimation;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
@@ -152,6 +155,17 @@ public class ProfileFragment extends Fragment {
                                 }
                             }
                         });
+
+        setPreferencesLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        int resultID = data.getIntExtra(EditTextDialogActivity.resultName, 0);
+                        useAnimation = resultID == 0;
+                        mDatabase.child("users").child(user.getUid()).child("useAnimations").setValue(resultID);
+                    }
+                });
     }
 
     @Override
@@ -177,7 +191,14 @@ public class ProfileFragment extends Fragment {
 
         MaterialButton preferencesButton = view.findViewById(R.id.preferencesButton);
         preferencesButton.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Not yet implemented", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), SelectorDialogActivity.class);
+            intent.putExtra(SelectorDialogActivity.titleName, getString(R.string.game_animation));
+            ArrayList<String> selection = new ArrayList<>(2);
+            selection.add(getString(R.string.yes));
+            selection.add(getString(R.string.no));
+            intent.putExtra(SelectorDialogActivity.choicesName, selection);
+            intent.putExtra(SelectorDialogActivity.checkedIdName, (useAnimation) ? 0 : 1);
+            setPreferencesLauncher.launch(intent);
         });
 
         MaterialButton historyButton = view.findViewById(R.id.historyButton);
@@ -244,6 +265,7 @@ public class ProfileFragment extends Fragment {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                     bio = task.getResult().getValue(User.class).getBio();
                     pseudo = task.getResult().getValue(User.class).getPseudo();
+                    useAnimation = task.getResult().getValue(User.class).getUseAnimations() == 0;
                     textViewPseudo.setText(task.getResult().getValue(User.class).getPseudo());
                     bioTextView.setText(task.getResult().getValue(User.class).getBio());
                     textViewPoints.setText(task.getResult().getValue(User.class).getElo().toString());
