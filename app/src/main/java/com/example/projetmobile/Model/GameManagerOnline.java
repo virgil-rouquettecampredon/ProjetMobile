@@ -45,8 +45,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class GameManagerOnline extends GameManager{
-    class DB_Shots{
+public class GameManagerOnline extends GameManager {
+    class DB_Shots {
 
         Position startPosPlayerPlay;
         Position endPosPlayerPlay;
@@ -152,7 +152,7 @@ public class GameManagerOnline extends GameManager{
 
         turnPlayerListerner();
         loosePlayerListerner();
-        if (playerIndex == 0){
+        if (playerIndex == 0) {
             piecePlayerListerner();
         }
 
@@ -209,7 +209,8 @@ public class GameManagerOnline extends GameManager{
         //Stop game if needed
         gameStopped = !isMyTurn;
 
-        if (DEBUG_FOR_GAME_LOGIC) System.out.println("GAME STATE : " + ((gameStopped) ? "STOPPED" : "YOUR TURN !"));
+        if (DEBUG_FOR_GAME_LOGIC)
+            System.out.println("GAME STATE : " + ((gameStopped) ? "STOPPED" : "YOUR TURN !"));
 
         //Maj UI for better understanding in interface of current player
         majLayoutPlayerTurn(getCurrentPlayer());
@@ -240,7 +241,7 @@ public class GameManagerOnline extends GameManager{
             performDanger(this.currentPlayer);
 
             return this.isFinished();
-        }else {
+        } else {
             for (Position pos : positionWithDanger) {
                 if (board.isGoodPos(pos.getX(), pos.getY())) {
                     this.board.setPossibleCaseWithMenaceOnIt(pos.getX(), pos.getY(), false);
@@ -274,9 +275,11 @@ public class GameManagerOnline extends GameManager{
     public void setPlayer1(String player1) {
         this.player1 = player1;
     }
+
     public void setPlayer2(String player2) {
         this.player2 = player2;
     }
+
     public String getPlayer2() {
         return this.player2;
     }
@@ -287,9 +290,9 @@ public class GameManagerOnline extends GameManager{
         if (!shotsToPerform.isEmpty()) {
             if (shotsToPerform.size() == 1) {
 
-                Position startPos   = shotsToPerform.get(0).startPosPlayerPlay;
-                Position endPos     = shotsToPerform.get(0).endPosPlayerPlay;
-                int idTransform     = shotsToPerform.get(0).IDTransformedPiece;
+                Position startPos = shotsToPerform.get(0).startPosPlayerPlay;
+                Position endPos = shotsToPerform.get(0).endPosPlayerPlay;
+                int idTransform = shotsToPerform.get(0).IDTransformedPiece;
 
                 //Log.d("PLAY ALL ENEMY SHOT", "PS(" + startPos.getX() + "," + startPos.getY() + ")");
                 //Log.d("PLAY ALL ENEMY SHOT", "PE(" + endPos.getX() + "," + endPos.getY() + ")");
@@ -318,9 +321,9 @@ public class GameManagerOnline extends GameManager{
                     }
                 }
                 //Perform transformation (if needed)
-                if(idTransform>=0){
+                if (idTransform >= 0) {
                     Player ennemy = this.players.get((1 - this.playerIndex));
-                    this.transformEnnemyPiece(ennemy,idTransform,pieceToMove,endPos);
+                    this.transformEnnemyPiece(ennemy, idTransform, pieceToMove, endPos);
                 }
 
                 this.board.commitChanges();
@@ -380,7 +383,7 @@ public class GameManagerOnline extends GameManager{
         shotsToPerform.clear();
     }
 
-    private void performHistoryWinner(String typeVict){
+    private void performHistoryWinner(String typeVict) {
         if (playerIndex == 1) {
             //Set the data in DB for all players
             long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player2, true);
@@ -388,8 +391,7 @@ public class GameManagerOnline extends GameManager{
 
             long eloDiff2 = eloInflated(eloPlayer2, eloPlayer1, player1, false);
             addHistoryGame(player1, nbTurn, "loose", pseudoPlayer2, eloDiff2, typeVict);
-        }
-        else {
+        } else {
             //Set the data in DB for all players
             long eloDiff = eloInflated(eloPlayer2, eloPlayer1, player1, true);
             addHistoryGame(player1, nbTurn, "win", pseudoPlayer2, eloDiff, typeVict);
@@ -398,32 +400,27 @@ public class GameManagerOnline extends GameManager{
             addHistoryGame(player2, nbTurn, "loose", pseudoPlayer1, eloDiff2, typeVict);
         }
 
-        roomRef.child("turn").removeEventListener(gameListener);
-        roomRef.child("loose").removeEventListener(looseListener);
-        if (playerIndex == 0){
-            roomRef.child("piece1").removeEventListener(pieceListener);
-        }
-        roomRef.child("loose").removeEventListener(looseListener);
+        deleteAllListener();
         isFinished = true;
         deleteRoomsInformation();
     }
 
-    public void transformEnnemyPiece(Player player,int id,Piece oldP,Position pos){
+    public void transformEnnemyPiece(Player player, int id, Piece oldP, Position pos) {
         //Log.d("MOVE AN ENNEMY PIECE", "ID : " + id);
         //Log.d("MOVE AN ENNEMY PIECE", "POS(" + pos.getX() + "," + pos.getY() + ")");
 
         Piece newP = null;
         switch (id) {
-            case  Board.TOWER :
+            case Board.TOWER:
                 newP = new Tower(true, oldP, player.getAppearance(Board.TOWER));
                 break;
-            case Board.QUEEN :
+            case Board.QUEEN:
                 newP = new Queen(true, oldP, player.getAppearance(Board.QUEEN));
                 break;
-            case Board.KNIGHT :
+            case Board.KNIGHT:
                 newP = new Knight(true, oldP, player.getAppearance(Board.KNIGHT));
                 break;
-            case Board.BISHOP :
+            case Board.BISHOP:
                 newP = new Bishop(true, oldP, player.getAppearance(Board.BISHOP));
                 break;
         }
@@ -487,9 +484,9 @@ public class GameManagerOnline extends GameManager{
                 //Log.d("MOVE AN ANIMATED PIECE ENEMY (END)", "" + possibly_eaten);
 
                 //Perform transformation (if needed)
-                if(idTransform>=0){
+                if (idTransform >= 0) {
                     Player ennemy = players.get((1 - playerIndex));
-                    transformEnnemyPiece(ennemy,idTransform,moved,end);
+                    transformEnnemyPiece(ennemy, idTransform, moved, end);
                 }
 
                 onFinishedTurn();
@@ -517,31 +514,28 @@ public class GameManagerOnline extends GameManager{
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    loose = task.getResult().getValue(Rooms.class).getLoose();
-                    if (loose == playerIndex) {
-                        // Log.d("Firebase", "the enemy player has loose");
-                        // winByFF();
-                    } else {
-                        piece1 = task.getResult().getValue(Rooms.class).getPiece1();
-                        if(!piece1.equals("")) {
+                    piece1 = task.getResult().getValue(Rooms.class).getPiece1();
+                    if (!piece1.equals("")) {
 
-                            String[] move = piece1.split("/");
-                            String[] posStart = move[0].split("_");
-                            String[] posEnd = move[1].split("_");
-                            shotsToPerform.add(new DB_Shots(new Position(parseInt(posStart[0]), parseInt(posStart[1])), new Position(parseInt(posEnd[0]), parseInt(posEnd[1])), parseInt(move[2])));
+                        String[] move = piece1.split("/");
+                        String[] posStart = move[0].split("_");
+                        String[] posEnd = move[1].split("_");
+                        shotsToPerform.add(new DB_Shots(new Position(parseInt(posStart[0]), parseInt(posStart[1])), new Position(parseInt(posEnd[0]), parseInt(posEnd[1])), parseInt(move[2])));
+                        Log.d("FIREBASE", "PIECE1: " + piece1);
+                        piece2 = task.getResult().getValue(Rooms.class).getPiece2();
 
-                            piece2 = task.getResult().getValue(Rooms.class).getPiece2();
-                            if (!piece2.equals("")) {
-                                String[] move2 = piece2.split("/");
-                                String[] posStart2 = move2[0].split("_");
-                                String[] posEnd2 = move2[1].split("_");
-                                shotsToPerform.add(new DB_Shots(new Position(parseInt(posStart2[0]), parseInt(posStart2[1])), new Position(parseInt(posEnd2[0]), parseInt(posEnd2[1])), -1));
-                            }
+                        Log.d("FIREBASE", "PIECE2: " + piece2);
+                        if (!piece2.equals("")) {
+                            String[] move2 = piece2.split("/");
+                            String[] posStart2 = move2[0].split("_");
+                            String[] posEnd2 = move2[1].split("_");
+                            shotsToPerform.add(new DB_Shots(new Position(parseInt(posStart2[0]), parseInt(posStart2[1])), new Position(parseInt(posEnd2[0]), parseInt(posEnd2[1])), -1));
                         }
-                        piece1 = "";
-                        piece2 = "";
-                        playAllEnemyShots();
                     }
+                    piece1 = "";
+                    piece2 = "";
+                    playAllEnemyShots();
+
                 }
             }
         });
@@ -573,7 +567,7 @@ public class GameManagerOnline extends GameManager{
                 Log.d("SyncToDB", "push pieces");
                 roomRef.child("piece2").setValue("");
             }
-        }else{
+        } else {
             System.out.println("0 SHOT");
             roomRef.child("piece1").setValue("");
             roomRef.child("piece2").setValue("");
@@ -622,8 +616,10 @@ public class GameManagerOnline extends GameManager{
                     onEnemyPlayerPlay();
                 }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         };
         roomRef.child("turn").addValueEventListener(gameListener);
     }
@@ -636,35 +632,37 @@ public class GameManagerOnline extends GameManager{
                     winByFF();
                 }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         };
         roomRef.child("loose").addValueEventListener(looseListener);
     }
 
     public void piecePlayerListerner() {
-       pieceListener = new ValueEventListener() {
+        pieceListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (valeur > 0){
+                if (valeur > 0) {
                     roomRef.child("turn").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.getResult().getValue(Long.class) == 1){
+                            if (task.getResult().getValue(Long.class) == 1) {
                                 roomRef.child("turn").setValue(2);
-                            }
-                            else {
+                            } else {
                                 roomRef.child("turn").setValue(1);
                             }
                         }
                     });
-                }
-                else{
+                } else {
                     valeur++;
                 }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         };
         roomRef.child("piece1").addValueEventListener(pieceListener);
     }
@@ -673,6 +671,7 @@ public class GameManagerOnline extends GameManager{
     protected void onEndingGame() {
         super.onEndingGame();
         //roomRef.child("loose").setValue("yes");
+        deleteAllListener();
         roomRef.child("piece1").setValue("");
         roomRef.child("piece2").setValue("");
         roomRef.child("turn").setValue(2 - playerIndex);
@@ -682,9 +681,9 @@ public class GameManagerOnline extends GameManager{
     @Override
     public void onFFGame() {
         //Need to inform other players that we loose
-        String mes_start    = "Vous avez abandonné";
-        String mes_mid      = "";
-        String mes_end      = "";
+        String mes_start = "Vous avez abandonné";
+        String mes_mid = "";
+        String mes_end = "";
 
         List<Player> playersWin = new ArrayList<>();
         for (Player p : players) {
@@ -721,10 +720,10 @@ public class GameManagerOnline extends GameManager{
         //this.performHistoryLooser();
     }
 
-    public void winByFF(){
-        String mes_start    = "Vous avez gagné";
-        String mes_mid      = "";
-        String mes_end      = "";
+    public void winByFF() {
+        String mes_start = "Vous avez gagné";
+        String mes_mid = "";
+        String mes_end = "";
 
         List<Player> playersWin = new ArrayList<>();
         for (Player p : players) {
@@ -750,18 +749,28 @@ public class GameManagerOnline extends GameManager{
             mes_mid = sb.toString();
             mes_end = "ont abandonné";
         }
+        deleteAllListener();
         this.gameStopped = true;
         this.board.onEndOfGame(mes_start, mes_mid, mes_end);
         this.performHistoryWinner("Abandonner");
         isFinished = true;
     }
 
-    public void setImage(int id, Uri uri){
+    public void setImage(int id, Uri uri) {
         this.playersUI.get(id).getImgPlayer().setImageURI(uri);
     }
 
-    private void downloadFilePlayer1(String player){
-        StorageReference storageReference = storage.getReference().child("images/" + player+".jpg");
+    public void deleteAllListener() {
+        roomRef.child("turn").removeEventListener(gameListener);
+        roomRef.child("loose").removeEventListener(looseListener);
+        if (playerIndex == 0) {
+            roomRef.child("piece1").removeEventListener(pieceListener);
+        }
+        roomRef.child("loose").removeEventListener(looseListener);
+    }
+
+    private void downloadFilePlayer1(String player) {
+        StorageReference storageReference = storage.getReference().child("images/" + player + ".jpg");
         localFile = null;
         try {
             localFile = File.createTempFile("images", "jpg");
@@ -778,7 +787,7 @@ public class GameManagerOnline extends GameManager{
                 Log.d("BDD*", "onSuccess: " + taskSnapshot.getStorage().getPath());
                 Uri uri = Uri.fromFile(localFile);
                 Log.d("BDD*", "onSuccess: " + uri.toString());
-                setImage(0,Uri.parse(uri.toString()));
+                setImage(0, Uri.parse(uri.toString()));
                 // Local temp file has been created
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -791,8 +800,8 @@ public class GameManagerOnline extends GameManager{
         });
     }
 
-    private void downloadFilePlayer2(String player){
-        StorageReference storageReference = storage.getReference().child("images/" + player+".jpg");
+    private void downloadFilePlayer2(String player) {
+        StorageReference storageReference = storage.getReference().child("images/" + player + ".jpg");
         localFile2 = null;
         try {
             localFile2 = File.createTempFile("images", "jpg");
@@ -809,7 +818,7 @@ public class GameManagerOnline extends GameManager{
                 Log.d("BDD*", "onSuccess: " + taskSnapshot.getStorage().getPath());
                 Uri uri = Uri.fromFile(localFile2);
                 Log.d("BDD*", "onSuccess: " + uri.toString());
-                setImage(1,Uri.parse(uri.toString()));
+                setImage(1, Uri.parse(uri.toString()));
                 // Local temp file has been created
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -822,7 +831,7 @@ public class GameManagerOnline extends GameManager{
         });
     }
 
-    public void addHistoryGame(String player, long nbCoup, String haveWin, String opponent, long eloDiff, String typeVict){
+    public void addHistoryGame(String player, long nbCoup, String haveWin, String opponent, long eloDiff, String typeVict) {
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyyHH:mm:ss");
         Date date = new Date();
         String dateFormatted = formatter.format(date).toString();
@@ -839,7 +848,7 @@ public class GameManagerOnline extends GameManager{
     }
 
     //Return the elo loose or win for the history game
-    public long eloInflated(long eloWinner, long eloLooser, String player, boolean winner){
+    public long eloInflated(long eloWinner, long eloLooser, String player, boolean winner) {
         //Do random number between 5 and 15
         Random random = new Random();
         int randomNumber = random.nextInt(10) + 5;
@@ -847,28 +856,26 @@ public class GameManagerOnline extends GameManager{
         int eloWin = 0;
         int eloLoose = 0;
 
-        if(eloWinner < eloLooser){
-            float eloCoeffDiff = ((float)(eloLooser - eloWinner))/3.0f;
-            eloCoeffDiff = (eloCoeffDiff<0)? 0 : (eloCoeffDiff>15)? 15 : eloCoeffDiff;
+        if (eloWinner < eloLooser) {
+            float eloCoeffDiff = ((float) (eloLooser - eloWinner)) / 3.0f;
+            eloCoeffDiff = (eloCoeffDiff < 0) ? 0 : (eloCoeffDiff > 15) ? 15 : eloCoeffDiff;
 
-            eloWin      = (int)eloCoeffDiff  + (randomNumber * 2);
-            eloLoose    = (int)eloCoeffDiff  + (int)((float) randomNumber * 1.5);
+            eloWin = (int) eloCoeffDiff + (randomNumber * 2);
+            eloLoose = (int) eloCoeffDiff + (int) ((float) randomNumber * 1.5);
+        } else {
+            float eloCoeffDiff = ((float) (eloLooser - eloWinner)) / 5.0f;
+            eloCoeffDiff = (eloCoeffDiff < 0) ? 0 : (eloCoeffDiff > 15) ? 15 : eloCoeffDiff;
+
+            eloWin = (int) eloCoeffDiff + (int) ((float) randomNumber * .5);
+            eloLoose = (int) eloCoeffDiff + (int) ((float) randomNumber * .25);
         }
-        else {
-            float eloCoeffDiff = ((float)(eloLooser - eloWinner))/5.0f;
-            eloCoeffDiff = (eloCoeffDiff<0)? 0 : (eloCoeffDiff>15)? 15 : eloCoeffDiff;
 
-            eloWin      = (int)eloCoeffDiff  + (int)((float)randomNumber * .5);
-            eloLoose    = (int)eloCoeffDiff  + (int)((float) randomNumber * .25);
-        }
-
-        if(winner) {
+        if (winner) {
             database.getReference().child("users").child(player).child("elo").setValue(eloWinner + eloWin);
             return eloWin;
-        }
-        else {
+        } else {
             database.getReference().child("users").child(player).child("elo").setValue(eloLooser - eloLoose);
-            return - eloLoose;
+            return -eloLoose;
         }
     }
 }
