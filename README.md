@@ -27,7 +27,8 @@ To realize this project, we wanted to take up a [previously developed project](h
 [<img align="center" src="./presentations/french.png" width="50" height="50"/>](./presentations/Rapport_Mobile_CLEMENT_REINDERS_ROUQUETTE--CAMPREDON.pdf)
 
 ## Build and Launch : 
-You need to copy the files from `copyToBuild` to the build folder.
+The project was realized on `Android studio BumbleBee`. We recommend that you do this to start our project.
+[Application files folder](https://github.com/virgil-rouquettecampredon/ProjetMobile/tree/master/app/src/main).
 
 ## Special mentions
 We would like to thank __Theo Bargiacchi__ for the realization of our logo.
