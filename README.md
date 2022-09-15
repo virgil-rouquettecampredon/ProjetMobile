@@ -28,6 +28,7 @@ To realize this project, we wanted to take up a [previously developed project](h
 
 ## Build and Launch : 
 The project was realized on `Android studio BumbleBee`. We recommend that you do this to start our project.
+<br>
 [Application files folder](https://github.com/virgil-rouquettecampredon/ProjetMobile/tree/master/app/src/main).
 
 ## Special mentions
