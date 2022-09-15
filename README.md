@@ -1,7 +1,7 @@
 # CHESSBURGER __2__
 
 <p align="center">
-<img align="center" src="./production/logo_chessburger_2.png"/>
+<img align="center" src="./presentations/logo_chessburger_2.png"/>
 </p>
 
 ## Presentation
@@ -23,6 +23,8 @@ To realize this project, we wanted to take up a [previously developed project](h
 - The application in Java.
 - The server part (FireBase).
 - A WEB client.
+- A report :  &emsp;&emsp;&emsp;&nbsp;
+[<img align="center" src="./presentations/french.png" width="50" height="50"/>](./presentations/Rapport_Mobile_CLEMENT_REINDERS_ROUQUETTE--CAMPREDON.pdf)
 
 ## Build and Launch : 
 You need to copy the files from `copyToBuild` to the build folder.
@@ -32,5 +34,5 @@ We would like to thank __Theo Bargiacchi__ for the realization of our logo.
 
 
 <p align="center">
-<img align="center" src="./production/logo.png" width="500" height="500"/>
+<img align="center" src="./presentations/logo.png" width="500" height="500"/>
 </p>
