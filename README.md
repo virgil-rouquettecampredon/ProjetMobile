@@ -1,7 +1,7 @@
 # CHESSBURGER __2__
 
 <p align="center">
-<img align="center" src="./production/logo_chessburger_2.png" width="800" height="800"/>
+<img align="center" src="./production/logo_chessburger_2.png"/>
 </p>
 
 ## Presentation
@@ -28,9 +28,9 @@ To realize this project, we wanted to take up a [previously developed project](h
 You need to copy the files from `copyToBuild` to the build folder.
 
 ## Special mentions
-We would like to thank Theo Bargiacchi for the realization of our logo.
+We would like to thank __Theo Bargiacchi__ for the realization of our logo.
 
 
 <p align="center">
-<img align="center" src="./production/logo.png"/>
+<img align="center" src="./production/logo.png" width="500" height="500"/>
 </p>
