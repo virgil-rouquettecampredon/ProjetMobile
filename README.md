@@ -22,7 +22,7 @@ To realize this project, we wanted to take up a [previously developed project](h
 - All the visuals used, except for the logo.
 - The application in Java.
 - The server part (FireBase).
-- A [WEB client](https://github.com/virgil-rouquettecampredon/PROJET-TERL3).
+- A [WEB client](https://github.com/virgil-rouquettecampredon/ChessBurger2_Web_Client).
 - A report :  &emsp;&emsp;&emsp;
 [<img align="center" src="./presentations/french.png" width="50" height="50"/>](./presentations/Rapport_Mobile_CLEMENT_REINDERS_ROUQUETTE--CAMPREDON.pdf)
 
